@@ -1,0 +1,14 @@
+<?php
+  // -----
+  // Type: Example Configuration File [Configuration File]
+  // Filename: example_config.php
+  //
+  // Author: Jeremy Gooch
+  //
+  // -----
+  //***** START ***** DB Credentials *****
+  // smart-grocery
+define("SMART_GROCERY_DB_SERVER", "XXXXXXXXXXX");
+define("SMART_GROCERY_DB_USER", "XXXXXXXXXXX");
+define("SMART_GROCERY_DB_PASS", "XXXXXXXXXXX");
+define("SMART_GROCERY_DB_NAME", "XXXXXXXXXXX");
