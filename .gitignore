@@ -2,6 +2,7 @@
 logs/*
 error.log
 config/config.php
+receipts/*
 
 
 *~
