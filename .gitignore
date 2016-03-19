@@ -1,5 +1,7 @@
+# Logs and config files
 logs/*
 error.log
+config/config.php
 
 
 *~
