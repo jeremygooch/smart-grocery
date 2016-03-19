@@ -1,7 +1,5 @@
 <?php
 
-
-
 class processReceipts{
   public function __construct() {}
   public function extractText($image_url) {
