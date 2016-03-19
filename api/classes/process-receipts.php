@@ -8,7 +8,7 @@ class processReceipts{
     $ch = curl_init($grocr);
     curl_setopt($ch, CURLOPT_POST, true);
     curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/json'));
-    curl_setopt($ch, CURLOPT_POSTFIELDS, (array('image_url'=>$image_url)));
+    curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode(array('image_url'=>$image_url)));
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 
     $res = curl_exec($ch);

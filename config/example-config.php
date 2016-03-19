@@ -15,4 +15,14 @@ define("SG_DB_PASS", "XXXXXXXX");
 define("SG_DB_NAME", "XXXXXXXX");
 
 
+
+// ******************************************
+// The site url (i.e. localhost)
+// ******************************************
+define("SITE_URL", "XXXXXXXXXX");
+
+
+
+
 include_once("../api/classes/monitor.php");
+include_once("../api/classes/process-receipts.php");
