@@ -16,6 +16,7 @@
    *
    */
 
+
   //Collect data from HTTP Request
 $postdata = file_get_contents("php://input");
 $request = json_decode($postdata, true);
@@ -47,58 +48,40 @@ case "inventory":
     //Get Branch Data
   case "getLatestScan":
 
-    /* $curl = curl_init(); */
-    /* curl_setopt_array($curl, */
-    /*                   array( */
-    /*                         CURLOPT_RETURNTRANSFER => 1, */
-    /*                         CURLOPT_URL => 'curl -X POST http://localhost:5000/v1/ocr -d \'{"image_url": "http://jeremygooch.com/ocr/20160226_200114.jpg"}\' -H "Content-Type: application/json"' */
-    /*                         )); */
 
-    /* $resp = curl_exec($curl); */
-    /* curl_close($curl); */
+    $url = 'http://local.grocr.com:5000/v1/ocr';
+    $ch = curl_init($url);
+    curl_setopt($ch, CURLOPT_POST, true);
+    curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/json'));
+    curl_setopt($ch, CURLOPT_POSTFIELDS, (array('image_url'=>'http://jeremygooch.com/ocr/gmic-out.jpg')));
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 
-    
-    $curl = curl_init();
-    /* curl -X POST http://localhost:5000/v1/ocr -d '{"image_url": "http://jeremygooch.com/ocr/20160226_200114.jpg"}' -H "Content-Type: application/json" */
-    curl_setopt_array($curl, array(
-                                   CURLOPT_URL => ' http\:\/\/localhost\:5000\/v1\/ocr',
-                                   CURLOPT_POST => 1,
-                                   CURLOPT_POSTFIELDS => array('image_url'=>'http://jeremygooch.com/ocr/gmic-out.jpg')
-                                   ));
-    // Set the content type
-    curl_setopt($curl, CURLOPT_HTTPHEADER, array('Content-Type: application/json','Content-length: 250'));
+    $res = curl_exec($ch);
+    curl_close($ch);
 
-    // Send the request & save response to $resp
-    $resp = curl_exec($curl);
-    if($resp === false) {
-      error_log('Curl error: ' . curl_error($curl));
-    } else {
-      error_log('Operation completed without any errors');
+
+    if ($res) {
+      $ocrData = json_decode($res);
+
+      if ($ocrData->error) {
+        header('Content-Type: application/json');
+        echo ($res);
+        die();
+      }
+
     }
 
-    
-    // Close request to clear up some resources
-    curl_close($curl);
 
-
-
-
-
-    
-
-
-    /* $resp = 'you win life!'; */
-    $data = array("code"=>"200", "message"=>"success", "data"=>array($resp));
-    
-    /* //Load branch() Class */
-    /* $branch = new branch(); */
-    /* //Get Branch Data */
-    /* $data = $branch->get_branch_data($request[data][branch_id]); */
-
+    // ////////////////////////////////////////////////////////////////
+    // ////////////////////////////////////////////////////////////////
+    // RESPONSE
+    // ERROR: "{  "error": "Did you mean to send: {'image_url': 'some_jpeg_url'}"}"
+    // ////////////////////////////////////////////////////////////////
+    // ////////////////////////////////////////////////////////////////
 
     //Send JSON Response
     header('Content-Type: application/json');
-    echo json_encode($data);
+    echo ($res);
     break;
   }
   break;

@@ -5,7 +5,6 @@ var testData = {
 
 sg.makePostCall("api/index.php", testData)
     .success(function(data){
-        console.log('done?');
         console.log(data);
     })
     .fail(function(sender, message, details){
