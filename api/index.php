@@ -46,32 +46,6 @@ case "inventory":
   case "getLatestScan":
 
 
-    /* $url = 'http://local.grocr.com:5000/v1/ocr'; */
-    /* $ch = curl_init($url); */
-    /* curl_setopt($ch, CURLOPT_POST, true); */
-    /* curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/json')); */
-    /* curl_setopt($ch, CURLOPT_POSTFIELDS, (array('image_url'=>'http://jeremygooch.com/ocr/gmic-out.jpg'))); */
-    /* curl_setopt($ch, CURLOPT_RETURNTRANSFER, true); */
-
-    /* $res = curl_exec($ch); */
-    /* curl_close($ch); */
-
-
-    /* if ($res) { */
-    /*   $ocrData = json_decode($res); */
-
-    /*   if ($ocrData->error) { */
-    /*     header('Content-Type: application/json'); */
-    /*     echo ($res); */
-    /*     die(); */
-    /*   } */
-
-    /* } */
-
-    /* //Send JSON Response */
-    /* header('Content-Type: application/json'); */
-    /* echo ($res); */
-    /* break; */
   }
   break;
 case 'NEXT':

@@ -9,7 +9,7 @@ $f = new FileAlterationMonitor($receipt_path);
 
 // Setup class for interacting with uploaded receipts
 $process = new processReceipts();
-$receiptURL = SITE_URL . '/receipts/';
+$receiptURL = '/receipts/';
 
 
 while (TRUE) {
@@ -18,7 +18,6 @@ while (TRUE) {
   if ($newFiles = $f->getNewFiles()) {
     // Code to handle new files
     // $newFiles is an array that contains added files
-    /* error_log(print_r($newFiles)); */
 
     for ($i=0; $i< count($newFiles); ++$i) {
       $extractText = $process->extractText($receiptURL . $newFiles[$i]);

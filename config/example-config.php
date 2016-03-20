@@ -18,9 +18,11 @@ define("SG_DB_NAME", "XXXXXXXX");
 
 // ******************************************
 // The site url (i.e. localhost)
+// NOTE: Do not include a trailing slash
 // ******************************************
 define("SITE_URL", "XXXXXXXXXX");
-
+define("SITE_RESOURCE_NAME", "XXXXXXXXXX");
+define("IMG_ARCHIVE_PATH", "XXXXXXXXXX"); // Absolute Path
 
 
 
