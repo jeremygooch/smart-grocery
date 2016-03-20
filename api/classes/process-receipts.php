@@ -1,7 +1,9 @@
 <?php
 
 class processReceipts{
-  public function __construct() {}
+  public function __construct() {
+      $this->gdao = new genericDAO();
+  }
   public function extractText($image_url) {
 
     $grocr = 'http://local.grocr.com:5000/v1/ocr';
@@ -34,19 +36,89 @@ class processReceipts{
       /* rename("/home/jgooch/smart-grocery" . $image_url, IMG_ARCHIVE_PATH); */
 
 
-
+      /* error_log(print_r($ocrData->output, 1)); */
       // Break the results apart
       $itmList = explode("\n", $ocrData->output);
-      $clnList = array();
+      $clnList = array(); // For final output
+      
       for ($i = 0; $i < count($itmList); $i++) {
-        if ($itmList[$i] != '') {
-          $words = explode(" ", $itmList[$i]);
+        $clnList[$i] = array(); // For this row
+        $words = explode(" ", $itmList[$i]);
+        // Make sure we have more than one word on this row. If there is only
+        // one word, this is likely a serial number or gibbirish so we dont 
+        // have to wast time looking in the DB for a match
+        if (count($words) > 1) {
           for ($x = 0; $x < count($words); $x++) {
-            // Find matches against words first
+            $word = $words[$x];
+            $word = trim($word);
+
+            // Make sure we have at least 2 characters to work with
+            if (strlen($word) > 1) {
+              // Find matches against words first
+              $label = $this->gdao->mysql_sanitize($word);
+              $query = "SELECT id FROM spellings WHERE label = '$label'";
+              $wordMatch = $this->gdao->queryOne($query);
+
+              if ($wordMatch) {
+                $clnList[$i][$x] = $label;
+              } else {
+                // Compare against the alternative spellings to see if we can clean this one up
+                $altQuery = "SELECT spelling_id FROM spellings_alternatives_ref WHERE alt_spelling = '$label'";
+                $altWordMatch = $this->gdao->queryOne($altQuery);
+                if ($altWordMatch) {
+                  $altSpellingId = $altWordMatch;
+                    
+                  // We matched an alternative spelling, replace the word
+                  $swapQuery = "SELECT label FROM spellings WHERE id = '$altSpellingId'";
+                  $swapWord = $this->gdao->queryOne($swapQuery);
+
+                  if ($swapWord) {
+                    $clnList[$i][$x] = $swapWord;
+                  }
+                }
+              }
+            }
           }
         }
-        // If Not matches, drop the row like a bad habit!
       }
+
+      /* error_log(print_r($clnList)); */
+
+      // Figure out what we bought
+      $purchasedItems = array();
+      for ($i = 0; $i < count($clnList); ++$i) {
+        if (count($clnList[$i]) > 0) {
+          $row = array_values($clnList[$i]); // Drop empty items
+          $sentence = '';
+          for ($x = 0; $x < count($row); ++$x) {
+            $sentence .= $row[$x];
+            if ($x != count($row)) {
+              // Add a space
+              $sentence .= " ";
+            }
+          }
+          // Try to match this against an inventory item
+          $label = $this->gdao->mysql_sanitize($sentence);
+
+          $invItmRefQuery = "SELECT inventory_items_id FROM inventory_item_ref where label = '$label'";
+          $getInvItemId = $this->gdao->queryOne($invItmRefQuery);
+
+
+          if ($getInvItemId) {
+            $invItmQuery = "SELECT * FROM inventory_items WHERE id = '$getInvItemId'";
+            $invItm = $this->gdao->queryAll($invItmQuery);
+            error_log(print_r($invItm));
+
+            /* error_log($label . ' ' . $getInvItemId . ' :: ' . $invDesc); */
+          }
+
+
+        }
+      }
+      
+      unset($gdao);
+
+
 
 
       
