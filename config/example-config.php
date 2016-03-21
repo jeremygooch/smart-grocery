@@ -9,10 +9,10 @@
    *
    */
 
-define("SG_DB_SERVER", "XXXXXXXX");
-define("SG_DB_USER", "XXXXXXXX");
-define("SG_DB_PASS", "XXXXXXXX");
-define("SG_DB_NAME", "XXXXXXXX");
+define("DB_SERVER", "XXXXXXXX");
+define("DB_USER", "XXXXXXXX");
+define("DB_PASS", "XXXXXXXX");
+define("DB_NAME", "XXXXXXXX");
 
 
 
