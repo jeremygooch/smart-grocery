@@ -26,5 +26,6 @@ define("IMG_ARCHIVE_PATH", "XXXXXXXXXX"); // Absolute Path
 
 
 
+include_once("../api/DAO/genericDAO.php");
 include_once("../api/classes/monitor.php");
 include_once("../api/classes/process-receipts.php");
