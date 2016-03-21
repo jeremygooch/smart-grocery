@@ -2,7 +2,7 @@
 logs/*
 error.log
 config/config.php
-receipts/*
+receipts/*.*
 env/
 *.pyc
 
