@@ -3,6 +3,8 @@ logs/*
 error.log
 config/config.php
 receipts/*
+env/
+ocr_server/*.pyc
 
 
 *~
