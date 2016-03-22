@@ -1,5 +1,30 @@
 <?php
 
+if (array_key_exists(1, $argv)) {
+  $option = $argv[1];
+  if (array_key_exists(2, $argv)) {
+    $parameter = $argv[2];
+  } else {
+    echo("Please specify a type \n");
+    die();
+  }
+}
+
+if (isset($option)) {
+  switch ($option) {
+  case '-d':
+    echo ("Debug mode on \n");
+    switch ($parameter) {
+    case 'ocr':
+      echo("OCR monitoring\n");
+    }
+    break;
+  default:
+    echo('Incorrect option specified.');
+    die();
+  }
+}
+
 include_once("../config/config.php");
 
 $receipt_path = "../receipts/";
