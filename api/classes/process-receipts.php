@@ -5,7 +5,7 @@ class processReceipts{
       $this->gdao = new genericDAO();
   }
   public function extractText($image_url) {
-
+    error_log(SITE_URL . $image_url);
     $grocr = 'http://local.grocr.com:5000/v1/ocr';
     $ch = curl_init($grocr);
     curl_setopt($ch, CURLOPT_POST, true);
@@ -23,7 +23,7 @@ class processReceipts{
       if (array_key_exists('error', $ocrData)) {
         header('Content-Type: application/json');
         echo ($res);
-        die();
+        return $res;
       }
       
       // ////////////////////////////////////////////
@@ -82,7 +82,6 @@ class processReceipts{
         }
       }
 
-      /* error_log(print_r($clnList)); */
 
       // Figure out what we bought
       $purchasedItems = array();
@@ -107,12 +106,12 @@ class processReceipts{
           if ($getInvItemId) {
             $invItmQuery = "SELECT * FROM inventory_items WHERE id = '$getInvItemId'";
             $invItm = $this->gdao->queryAll($invItmQuery);
+
+
+
+
             error_log(print_r($invItm));
-
-            /* error_log($label . ' ' . $getInvItemId . ' :: ' . $invDesc); */
           }
-
-
         }
       }
       

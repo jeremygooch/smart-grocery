@@ -19,8 +19,10 @@ while (TRUE) {
     // Code to handle new files
     // $newFiles is an array that contains added files
 
-    for ($i=0; $i< count($newFiles); ++$i) {
-      $extractText = $process->extractText($receiptURL . $newFiles[$i]);
+    $files = array_values($newFiles); // Clean up the array
+    
+    for ($i=0; $i< count($files); ++$i) {
+      $extractText = $process->extractText($receiptURL . $files[$i]);
     }
   }
 
