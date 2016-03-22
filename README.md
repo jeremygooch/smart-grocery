@@ -130,6 +130,13 @@ Next, install a typical LAMP stack. PHP version 5.5.x or higher. MySQL version 1
 ```sh
 php watch_dir.php
 ```
+6. Install GIMP and the G'MIC plugin
+```
+sudo add-apt-repository ppa:ferramroberto/gimp
+sudo apt-get update
+sudo apt-get install gimp
+sudo apt-get install gmic gimp-gmic
+```
 
 ## Test with sample uploaded receipt
-TBD
+Upload image of receipt in portrait mode to the receipts/ directory.
