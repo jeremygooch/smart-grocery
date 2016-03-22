@@ -2,7 +2,7 @@
 
 class processReceipts{
   public function __construct() {
-      $this->gdao = new genericDAO();
+    $this->gdao = new genericDAO();
   }
   public function extractText($image_url) {
     
@@ -62,19 +62,11 @@ class processReceipts{
               if ($wordMatch) {
                 $clnList[$i][$x] = $label;
               } else {
-                // Compare against the alternative spellings to see if we can clean this one up
-                $altQuery = "SELECT spelling_id FROM spellings_alternatives_ref WHERE alt_spelling = '$label'";
-                $altWordMatch = $this->gdao->queryOne($altQuery);
-                if ($altWordMatch) {
-                  $altSpellingId = $altWordMatch;
-                    
-                  // We matched an alternative spelling, replace the word
-                  $swapQuery = "SELECT label FROM spellings WHERE id = '$altSpellingId'";
-                  $swapWord = $this->gdao->queryOne($swapQuery);
+                $swapQuery = "SELECT s.label FROM spellings AS s LEFT JOIN spellings_alternatives_ref AS sa ON s.id=sa.spelling_id WHERE sa.alt_spelling = '$label';";
+                $swapWord = $this->gdao->queryOne($swapQuery);
 
-                  if ($swapWord) {
-                    $clnList[$i][$x] = $swapWord;
-                  }
+                if ($swapWord) {
+                  $clnList[$i][$x] = $swapWord;
                 }
               }
             }
@@ -129,4 +121,4 @@ class processReceipts{
     
   }
 
-}
+  }
