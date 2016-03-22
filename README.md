@@ -3,7 +3,6 @@
 ## Setting up the OCR Server
 
 1. Install the dependencies. The following instructions (and the basic OCR server) are based off of the great blog article: https://realpython.com/blog/python/setting-up-a-simple-ocr-server/.
-+ Install necessary libraries 
 ```sh
 sudo apt-get update
 sudo apt-get install autoconf automake libtool
@@ -22,14 +21,16 @@ sudo apt-get install python2.7-dev
 sudo apt-get install tk8.5 tcl8.5 tk8.5-dev tcl8.5-dev
 sudo apt-get build-dep python-imaging --fix-missing
 ```
+Please note, you can install libtiff5-dev if libtiff4-dev is not available in your repos.
 
-+ Install Imagemagick
+2. Install Imagemagick
 ```sh
 sudo apt-get install imagemagick
 ```
 
-+ Install Leptonica
+3. Install Leptonica
 ```sh
+cd
 wget http://www.leptonica.org/source/leptonica-1.70.tar.gz
 tar -zxvf leptonica-1.70.tar.gz
 cd leptonica-1.70/
@@ -40,7 +41,7 @@ sudo make install
 sudo ldconfig
 ```
 
-+ Install Tesseract
+4. Install Tesseract
 ```sh
 cd ..
 wget https://tesseract-ocr.googlecode.com/files/tesseract-ocr-3.02.02.tar.gz
@@ -53,12 +54,12 @@ sudo make install
 sudo ldconfig
 ```
 
-+ Setup an Environment Variable for Tesseract data
+5. Setup an Environment Variable for Tesseract data
 ```sh
 export TESSDATA_PREFIX=/usr/local/share/
 ```
 
-+ Get the Tesseract English Package
+6. Get the Tesseract English Package
 ```sh
 cd ..
 wget https://tesseract-ocr.googlecode.com/files/tesseract-ocr-3.02.eng.tar.gz
@@ -66,22 +67,23 @@ tar -xf tesseract-ocr-3.02.eng.tar.gz
 sudo cp -r tesseract-ocr/tessdata $TESSDATA_PREFIX
 ```
 
-+ Clone this repository and cd into it
+7. Clone this repository and cd into it
 ```sh
 sudo apt-get install python-virtualenv
 virtualenv env
 source env/bin/activate
 pip install -r requirements.txt
 pip install pytesseract
+pip install flask
 ```
 
-2. Start the OCR Server
+8. Start the OCR Server
 ```sh
 python ocr_server/app.py
 ```
 
 ## Setup the HTTP server
-Next, install a typical LAMP stack. PHP version 5.5.x or higher. MySQL version 14.xx or higher. Please note this has only been tested on Ubuntu 14.04.
+Next, install a typical LAMP stack. PHP version 5.5.x or higher. MySQL version 14.xx or higher. Please note this has only been tested on Ubuntu 14.04 and 15.04.
 
 1. Setup your vhost to point to the correct location for both apache and the OCR server. Update your error and access log file paths. Also, dont forget to update your hosts files.
 
@@ -105,7 +107,7 @@ Next, install a typical LAMP stack. PHP version 5.5.x or higher. MySQL version 1
 ## -- Smart Grocery OCR VHost Example -- ##
 <VirtualHost *:80>
   ServerAdmin admin@smartgrocery.com
-  ServerName local.smartgrocery.com
+  ServerName local.grocr.com
   ServerAlias local.grocr.com
   DocumentRoot /home/{user}/smart-grocery/ocr_server/
   ErrorLog /home/{user}/smart-grocery/logs/error.log
