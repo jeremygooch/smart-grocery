@@ -4,7 +4,7 @@ class processReceipts{
   public function __construct() {
     $this->gdao = new genericDAO();
   }
-  public function extractText($image_url) {
+  public function extractText($image_url, $debug) {
     
     $grocr = 'http://local.grocr.com:5000/v1/ocr';
     $ch = curl_init($grocr);
@@ -35,8 +35,13 @@ class processReceipts{
       /* error_log(file_exists("/home/jgooch/smart-grocery" . $image_url)); */
       /* rename("/home/jgooch/smart-grocery" . $image_url, IMG_ARCHIVE_PATH); */
 
+      if ($debug) {
+        if ($debug['ocr']) {
+          error_log(print_r($ocrData->output, 1));
+          return;
+        }
+      }
 
-      /* error_log(print_r($ocrData->output, 1)); */
       // Break the results apart
       $itmList = explode("\n", $ocrData->output);
       $clnList = array(); // For final output

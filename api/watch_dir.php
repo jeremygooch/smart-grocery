@@ -1,5 +1,4 @@
 <?php
-
 if (array_key_exists(1, $argv)) {
   $option = $argv[1];
   if (array_key_exists(2, $argv)) {
@@ -13,9 +12,11 @@ if (array_key_exists(1, $argv)) {
 if (isset($option)) {
   switch ($option) {
   case '-d':
+    $debug = array();
     echo ("Debug mode on \n");
     switch ($parameter) {
     case 'ocr':
+      $debug['ocr'] = 1;
       echo("OCR monitoring\n");
     }
     break;
@@ -51,7 +52,7 @@ while (TRUE) {
       shell_exec('gmic -input ' . SITE_DIRECTORY . $receiptURL . $files[$i] . ' -v -99 -gimp_stamp 1,50,0,0,0,0,0 -output ' . SITE_DIRECTORY . $receiptURL . $edited);
 
       // Send the cleaned image to be OCRed and have the text extracted
-      $extractText = $process->extractText($receiptURL . $edited);
+      $extractText = $process->extractText($receiptURL . $edited, (isset($debug) ? $debug : false));
     }
   }
 
