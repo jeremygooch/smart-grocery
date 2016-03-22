@@ -22,7 +22,8 @@ define("DB_NAME", "XXXXXXXX");
 // ******************************************
 define("SITE_URL", "XXXXXXXXXX");
 define("SITE_RESOURCE_NAME", "XXXXXXXXXX");
-define("IMG_ARCHIVE_PATH", "XXXXXXXXXX"); // Absolute Path
+define("SITE_DIRECTORY", "XXXXXXXXXX"); // Absolute Path, no trailing slash
+define("IMG_ARCHIVE_PATH", "XXXXXXXXXX"); // Absolute Path, no trailing slash
 
 
 

@@ -20,9 +20,13 @@ while (TRUE) {
     // $newFiles is an array that contains added files
 
     $files = array_values($newFiles); // Clean up the array
-    
     for ($i=0; $i< count($files); ++$i) {
-      $extractText = $process->extractText($receiptURL . $files[$i]);
+      // Clean up the image using G'MIC
+      $edited = '[' . date('M_d_Y') . ']' . $files[$i];
+      shell_exec('gmic -input ' . SITE_DIRECTORY . $receiptURL . $files[$i] . ' -v -99 -gimp_stamp 1,50,0,0,0,0,0 -output ' . SITE_DIRECTORY . $receiptURL . $edited);
+
+      // Send the cleaned image to be OCRed and have the text extracted
+      $extractText = $process->extractText($receiptURL . $edited);
     }
   }
 
