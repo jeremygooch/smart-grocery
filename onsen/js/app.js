@@ -29,24 +29,26 @@
 
       data.items = [
           {
-              title: 'Item 1 Title',
-              label: '4h',
-              desc: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.'
+              title: 'Inventory',
+              notify: '2',
+              icon: 'inventory-thum',
+              desc: 'View and update any of the items in your currrent inventory.'
           },
           {
-              title: 'Another Item Title',
-              label: '6h',
-              desc: 'Ut enim ad minim veniam.'
+              title: 'Recipes',
+              icon: 'recipes',
+              desc: 'View and update up any of your saved recipes.'
           },
           {
-              title: 'Yet Another Item Title',
-              label: '1day ago',
-              desc: 'Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.'
+              title: 'Receipts',
+              icon: 'receipts',
+              notify: '1',
+              desc: 'Review any uploaded receipts, and view any previous receipts.'
           },
           {
-              title: 'Yet Another Item Title',
-              label: '1day ago',
-              desc: 'Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.'
+              title: 'Grocery List',
+              icon: 'grocery',
+              desc: 'Build a grocery list based off any new or old receipes.'
           }
       ];
 

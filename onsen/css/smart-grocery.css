@@ -10,10 +10,40 @@
 }
 
 .navigation-bar {
-    background-color: #4C212A;
+    background: #4C212A;
+    background: #4C212A url(images/header.png) bottom left no-repeat;;
+    height: 86px;
+}
+ons-toolbar + .page__background + .page__content {
+    top: 85px;
+}
+.navigation-bar__title {
+    font-size: 28px;
+    line-height: 85px;
 }
 .navigation-bar div {
     color: #fff;
     font-weight: bold;
 }
 
+.item-thum { height: 75px !important; width: 75px !important; }
+.inventory-thum { background: url(images/inventory-thum.png) 50% no-repeat; }
+.recipes { background: url(images/recipes.png) 50% no-repeat; }
+.receipts { background: url(images/receipts.png) 50% no-repeat; }
+.grocery { background: url(images/grocery.png) 50% no-repeat; }
+
+.toolbar-button, .toolbar-button--outline, .toolbar-button--quiet {
+    color: #889460;
+    font-size: 25px;
+}
+.back-button__label, .ons-back-button__icon {
+    line-height: 85px !important;
+}
+
+
+
+
+/* ************************************************* */
+/* Standard Utility Classes */
+/* ************************************************* */
+.p-l-25 { padding-left: 25px !important; }

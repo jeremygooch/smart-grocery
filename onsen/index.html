@@ -71,14 +71,16 @@
                 <ons-list-item modifier="chevron" class="item" ng-repeat="item in items" ng-click="showDetail($index)">
                     <ons-row>
                         <ons-col width="60px">
-                            <div class="item-thum"></div>
+                            <div class="item-thum {{ item.icon }}"></div>
                         </ons-col>
                         <ons-col>
-                            <header>
+                            <header class="p-l-25">
                                 <span class="item-title">{{item.title}}</span>
-                                <span class="item-label">{{item.label}}</span>
+                                <span class="item-label">
+                                    <span class="notification" data-ng-show="item.notify">{{item.notify}}</span>
+                                </span>
                             </header>
-                            <p class="item-desc">{{item.desc}}</p>
+                            <p class="item-desc p-l-25">{{item.desc}}</p>
                         </ons-col>
                     </ons-row>
                 </ons-list-item>
@@ -97,7 +99,7 @@
             <ons-list modifier="inset" style="margin-top: 10px">
                 <ons-list-item class="item">
                     <ons-row>
-                        <ons-col width="60px">
+                        <ons-col width="80px">
                             <div class="item-thum"></div>
                         </ons-col>
                         <ons-col>
