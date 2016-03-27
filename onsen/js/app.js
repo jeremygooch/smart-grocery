@@ -1,9 +1,19 @@
 (function(){
     'use strict';
-    var module = angular.module('app', ['onsen']);
+    var sg = angular.module('app', ['onsen']);
 
-    module.controller('AppController', function($scope, $data) {
-        // Main controller wrapping entire app
+    // Main controller wrapping entire app
+    sg.controller('AppController', function($scope, $data) {
+        // Detect scroll height for sizing the topbar
+        window.onscroll = function() { myFunction() };
+        function myFunction() {
+            console.log('whatre you doin!');
+            if (document.body.scrollTop > 50 || document.documentElement.scrollTop > 50) {
+                console.log('whatre you doin!');
+            }
+        }
+
+            
         
         $scope.doSomething = function() {
             setTimeout(function() {
@@ -12,57 +22,62 @@
         };
     });
 
-    module.controller('InventoryController', function($scope, $data) {
+    sg.controller('InventoryController', function($scope, $data) {
         $scope.item = $data.selectedItem;
+
+        // Setup the fake list of items in the inventory
         $scope.inventory = {
             meat: [
-                {
-                    label: 'Crispy Chicken Strips',
-                    reserved: false,
-                    shelfLife: '6/26',
-                    daysLeft: '45',
-                    quantity: '5lbs'
-                },
-                {
-                    label: 'Ribs',
-                    reserved: true,
-                    shelfLife: 'frozen',
-                    quantity: '2lbs'
-                },
-                {
-                    label: 'Ground Turkey',
-                    reserved: false,
-                    shelfLife: 'frozen',
-                    quantity: '2lbs'
-                },
-                {
-                    label: 'Ground Beef',
-                    reserved: false,
-                    shelfLife: 'frozen',
-                    quantity: '1lbs'
-                },
-                {
-                    label: 'Fish - River Cod',
-                    reserved: true,
-                    shelfLife: '4/15',
-                    daysLeft: '5',
-                    quantity: '4lbs'
-                }
+                {label: 'Fish - River Cod',reserved: true, shelfLife: '4/15',daysLeft: '5',quantity: '4lbs' },
+                {label: 'Beef - Ground', reserved: false, shelfLife: 'frozen', quantity: '1lbs' },
+                {label:'Crispy Chicken Strips',reserved:false,shelfLife:'6/26',daysLeft:'45',quantity: '5lbs'},
+                {label: 'Ribs', reserved: true, shelfLife: 'frozen', quantity: '2lbs' },
+                {label: 'Turkey - Ground', reserved: false, shelfLife: 'frozen', quantity: '2lbs' }
             ],
             produce: [
-
+                {label: 'Bellpeppers - Red',reserved: false, shelfLife: '4/30', daysLeft: '20', quantity: '2'},
+                {label: 'Lettuce', reserved: true, shelfLife: '4/15', daysLeft: '5', quantity: '4cup' },
+                {label: 'Onion', reserved: true, shelfLife: '4/22', daysLeft: '12', quantity: '1' },
+                {label: 'Tomato', reserved: false, shelfLife: '4/20', daysLeft: '10', quantity: '2' }
+            ],
+            dairy: [
+                {label: 'Milk',reserved: false,shelfLife: '4/22', daysLeft: '12', quantity: '.5gal' },
+                {label: 'Eggs', reserved: true, shelfLife: '5/01', daysLeft: '21', quantity: '4cup' },
+                {label: 'Whip Cream', reserved: true, shelfLife: '4/22', daysLeft: '12', quantity: '1' },
+                {label: 'Cheese - Feta', reserved: false, shelfLife: '4/20', daysLeft: '10', quantity: '2' },
+                {label: 'Sour Cream', reserved: false, shelfLife: '4/15', daysLeft: '5', quantity: '.5cup' },
+                {label: 'Yogurt - Vanilla',reserved:false,shelfLife: '4/18', daysLeft: '8', quantity: '.5cup' }
+            ],
+            pantry: [
+                {label: 'Bread',reserved: false,shelfLife: '4/15', daysLeft: '5', quantity: '0.5loaf' },
+                {label: 'Raisins', reserved: true, shelfLife: '4/15', daysLeft: '5', quantity: '4cup' },
+                {label: 'Flour', reserved: true, shelfLife: '4/22', daysLeft: '12', quantity: '16oz' },
+                {label: 'Yeast', reserved: false, shelfLife: '4/20', daysLeft: '10', quantity: '6oz' },
+                {label: 'Corn Starch', reserved: false, shelfLife: '8/25', daysLeft: '108', quantity: '12oz'},
+                {label: 'Torillas', reserved: false, shelfLife: '5/20', daysLeft: '40', quantity: '6' },
+                {label: 'Marinade', reserved: false, shelfLife: '7/28', daysLeft: '98', quantity: '12oz'},
+                {label: 'Cake Mix - Yellow',reserved:false, shelfLife: '4/20',daysLeft:'10',quantity: '1box' },
+                {label: 'Pitas', reserved: true, shelfLife: '4/25', daysLeft: '15', quantity: '12' },
+                {label: 'Chips - Tortilla', reserved: false, shelfLife: '4/18',daysLeft: '8',quantity:'.5pkg' }
+            ],
+            other: [
+                {label: 'Salsa - Red',reserved: false,shelfLife: '5/30', daysLeft: '50', quantity: '2.5cup' }
             ]
+        };
+        $scope.curList = $scope.inventory.meat;
+        $scope.switchCatetory = function(cat) {
+            $scope.curList = $scope.inventory[cat];
         };
     });
 
 
     
 
-    module.controller('DetailController', function($scope, $data) {
+    sg.controller('DetailController', function($scope, $data) {
         $scope.item = $data.selectedItem;
     });
 
-    module.controller('MasterController', function($scope, $data) {
+    sg.controller('MasterController', function($scope, $data) {
         $scope.items = $data.items;
 
         $scope.showDetail = function(index) {
@@ -73,7 +88,7 @@
         };
     });
 
-    module.factory('$data', function() {
+    sg.factory('$data', function() {
         var data = {};
 
         data.items = [

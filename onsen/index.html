@@ -187,43 +187,45 @@
             </ons-toolbar>
 
 
-
+            <!-- Segmented Navigation Bar-->
             <div class="navigation-bar">
                 <div class="navigation-bar__center">
                     <div class="button-bar" style="margin: 7px auto; padding: 0 10px;">
-                        <div class="button-bar__item">
+                        <div class="button-bar__item"
+                             ng-click="switchCatetory('meat')">
                             <input type="radio" name="navi-segment-a" checked>
                             <div class="button-bar__button">Meat</div>
                         </div>
 
-                        <div class="button-bar__item">
+                        <div class="button-bar__item"
+                             ng-click="switchCatetory('produce')">
                             <input type="radio" name="navi-segment-a">
                             <div class="button-bar__button">Produce</div>
                         </div>
 
-                        <div class="button-bar__item">
+                        <div class="button-bar__item"
+                             ng-click="switchCatetory('dairy')">
                             <input type="radio" name="navi-segment-a">
                             <div class="button-bar__button">Dairy</div>
                         </div>
 
-                        <div class="button-bar__item">
+                        <div class="button-bar__item"
+                             ng-click="switchCatetory('pantry')">
                             <input type="radio" name="navi-segment-a">
                             <div class="button-bar__button">Panty</div>
                         </div>
 
-                        <div class="button-bar__item">
+                        <div class="button-bar__item"
+                             ng-click="switchCatetory('other')">
                             <input type="radio" name="navi-segment-a">
                             <div class="button-bar__button">Other</div>
                         </div>
                     </div>
                 </div>
             </div>
-
-
-            
             <ons-list style="margin-top: 10px">
                 <ul class="list">
-                    <li class="list__item list__item--tappable" ng-repeat="item in inventory.meat"
+                    <li class="list__item list__item--tappable" ng-repeat="item in curList"
                         id="meat_{{ $index }}">
                         <label class="checkbox checkbox--noborder checkbox--list-item">
                             <input type="checkbox">
