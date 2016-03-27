@@ -23,6 +23,7 @@
 
     <!-- --------------- App init --------------- -->
     <script src="js/app.js"></script>
+    <script src="js/controllers.js"></script>
 
     <title>:: Smart Grocery ::</title>
 
@@ -35,10 +36,7 @@
 <body ng-controller="AppController">
     <ons-navigator var="navi">
         <ons-page>
-            <ons-toolbar>
-                <div class="center">Smart Grocery</div>
-            </ons-toolbar>
-
+            <ons-toolbar><div class="center">Smart Grocery</div></ons-toolbar>
             <ons-list ng-controller="MasterController">
                 <ons-list-item modifier="chevron" class="item" ng-repeat="item in items" ng-click="showDetail($index)">
                     <ons-row>
@@ -52,8 +50,7 @@
                                     <span class="notification" data-ng-show="item.notify">{{item.notify}}</span>
                                 </span>
                             </header>
-                            <p class="item-desc p-l-25">{{item.desc}}
-                            </p>
+                            <p class="item-desc p-l-25">{{item.desc}}</p>
                         </ons-col>
                     </ons-row>
                 </ons-list-item>
