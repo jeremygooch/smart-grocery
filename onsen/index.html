@@ -13,6 +13,7 @@
     <!-- CSS dependencies -->
     <link rel="stylesheet" href="css/onsenui.css" />
     <link rel="stylesheet" href="css/onsen-css-components-blue-basic-theme.css" />
+    <link rel="stylesheet" href="css/theme.css" />
     <link rel="stylesheet" href="css/smart-grocery.css" />
     <link rel="stylesheet" href="css/typicons/typicons.min.css" >
 
@@ -26,36 +27,7 @@
     <title>:: Smart Grocery ::</title>
 
     <style>
-        .item {
-            padding: 10px;
-            line-height: 1;
-        }
 
-        .item-thum {
-            background-color: #ccc;
-            width: 50px;
-            height: 50px;
-            border-radius: 4px;
-        }
-
-        .item-title {
-            font-size: 15px;
-            font-weight: 500;
-        }
-
-        .item-desc {
-            font-size: 14px;
-            color: #666;
-            line-height: 1.3;
-            margin: 4px 0 0 0;
-            padding: 0 30px 0 0;
-        }
-
-        .item-label {
-            font-size: 12px;
-            color: #999;
-            float: right;
-        }
     </style>
 
 </head>
@@ -80,7 +52,8 @@
                                     <span class="notification" data-ng-show="item.notify">{{item.notify}}</span>
                                 </span>
                             </header>
-                            <p class="item-desc p-l-25">{{item.desc}}</p>
+                            <p class="item-desc p-l-25">{{item.desc}}
+                            </p>
                         </ons-col>
                     </ons-row>
                 </ons-list-item>
@@ -90,7 +63,6 @@
 
     <ons-template id="detail.html">
         <ons-page ng-controller="DetailController">
-
             <ons-toolbar>
                 <div class="left"><ons-back-button>Back</ons-back-button></div>
                 <div class="center">Details</div>
@@ -118,6 +90,37 @@
                 </ons-list-item>
             </ons-list>
 
+            <div class="navigation-bar">
+                <div class="navigation-bar__center">
+                    <div class="button-bar" style="margin: 7px auto; padding: 0 10px;">
+                        <div class="button-bar__item">
+                            <input type="radio" name="navi-segment-a" checked>
+                            <div class="button-bar__button">Meat</div>
+                        </div>
+
+                        <div class="button-bar__item">
+                            <input type="radio" name="navi-segment-a">
+                            <div class="button-bar__button">Produce</div>
+                        </div>
+
+                        <div class="button-bar__item">
+                            <input type="radio" name="navi-segment-a">
+                            <div class="button-bar__button">Dairy</div>
+                        </div>
+
+                        <div class="button-bar__item">
+                            <input type="radio" name="navi-segment-a">
+                            <div class="button-bar__button">Panty</div>
+                        </div>
+
+                        <div class="button-bar__item">
+                            <input type="radio" name="navi-segment-a">
+                            <div class="button-bar__button">Other</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
             <ons-list style="margin-top: 10px">
                 <ons-list-item class="item" ng-repeat="i in [1,2,3]">
                     <header>
@@ -126,6 +129,126 @@
                     <p class="item-desc">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. <span class="typcn typcn-arrow-left"></span>
                     </p>
                 </ons-list-item>
+            </ons-list>
+
+            <br>
+
+        </ons-page>
+    </ons-template>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <!-- ----------------------------------------- -->
+    <!-- INVENTORY -->
+    <!-- ----------------------------------------- -->
+    <ons-template id="inventory.html">
+        <ons-page ng-controller="InventoryController">
+            <ons-toolbar>
+                <div class="left"><ons-back-button>Back</ons-back-button></div>
+                <div class="center">Inventory</div>
+            </ons-toolbar>
+
+
+
+            <div class="navigation-bar">
+                <div class="navigation-bar__center">
+                    <div class="button-bar" style="margin: 7px auto; padding: 0 10px;">
+                        <div class="button-bar__item">
+                            <input type="radio" name="navi-segment-a" checked>
+                            <div class="button-bar__button">Meat</div>
+                        </div>
+
+                        <div class="button-bar__item">
+                            <input type="radio" name="navi-segment-a">
+                            <div class="button-bar__button">Produce</div>
+                        </div>
+
+                        <div class="button-bar__item">
+                            <input type="radio" name="navi-segment-a">
+                            <div class="button-bar__button">Dairy</div>
+                        </div>
+
+                        <div class="button-bar__item">
+                            <input type="radio" name="navi-segment-a">
+                            <div class="button-bar__button">Panty</div>
+                        </div>
+
+                        <div class="button-bar__item">
+                            <input type="radio" name="navi-segment-a">
+                            <div class="button-bar__button">Other</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+            
+            <ons-list style="margin-top: 10px">
+                <ul class="list">
+                    <li class="list__item list__item--tappable" ng-repeat="item in inventory.meat"
+                        id="meat_{{ $index }}">
+                        <label class="checkbox checkbox--noborder checkbox--list-item">
+                            <input type="checkbox">
+                            <div class="checkbox__checkmark checkbox--noborder checkbox--list-item__checkmark"></div>
+                            <span class="spCol col4">{{ item.label }}</span>
+                            <span class="spCol col2" ng-click="doSomething()">
+                                <button class="button--quiet"
+                                        ng-class="{ 'danger': item.shelfLife != 'frozen' && item.daysLeft < 7 }">
+                                    {{ item.shelfLife == 'frozen' ? 'Frozen' : 'Exp: ' + item.shelfLife }}
+                                </button>
+                            </span>
+                            <span class="spCol col1" ng-click="doSomething()">
+                                <button class="button--quiet">
+                                    {{ item.quantity }}
+                                </button>
+                            </span>
+                            <span class="pull-right" ng-click="doSomething()">
+                                <ons-icon icon="{{ item.reserved ? 'fa-lock' : 'fa-unlock' }}" size="15px"
+                                     fixed-width="false"
+                                     style="{{ item.reserved ? 'color:rgba(136,148,96,0.81);' : 'color:rgba(136,148,96,0.41);' }}">
+                                </ons-icon>
+                            </span>
+                        </label>
+                    </li>
+                </ul>
             </ons-list>
 
             <br>
