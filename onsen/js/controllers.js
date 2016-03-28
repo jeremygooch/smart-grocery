@@ -63,6 +63,62 @@ sg.controller('InventoryController', function($scope, $data) {
 });
 
 
+sg.controller('ReceiptsController', function($scope, $data) {
+    $scope.item = $data.selectedItem;
+
+    // Setup the fake list of items in the inventory
+    $scope.receipts = {
+        newReceipts: [ {
+            id: 1, store: 'HEB', date: '4/10/2016 8:27PM', newItems: 12,
+            items: [
+                {
+                    description: 'Ground Turkey',
+                    expires: 'Unknown',
+                    freezer: false,
+                    quantity: 2,
+                    unit: 'lbs',
+                    recipe: ['Tacos','Meatloaf'],
+                    ocr: ['GROUND TURKEY','TURKEY','GROUND','GR','GRJUND'],
+                    receipt: ['GROUND TURKEY', 'TURKEY GR']
+                }
+            ]
+        } ],
+        oldReceipts: [
+            { id: 2, store: 'HEB', date: '4/01/2016 8:27PM' },
+            { id: 3, store: 'Target', date: '3/28/2016 5:03PM' },
+            { id: 4, store: 'Randalls', date: '3/27/2016 10:32AM' },
+            { id: 5, store: 'Target', date: '3/15/2016 2:11PM' },
+            { id: 6, store: 'Randalls', date: '3/10/2016 3:49PM' },
+            { id: 7, store: 'HEB', date: '3/05/2016 9:47AM' },
+            { id: 8, store: 'HEB', date: '2/20/2016 4:55PM' }
+        ]
+    };
+    
+    $scope.reviewReceipt = function(id) {
+        for (var i=0; i<$scope.receipts.newReceipts.length; i++) {
+            if ($scope.receipts.newReceipts[i].id) {
+                $data.reviewReceipt = $scope.receipts.newReceipts[i];
+                $scope.navi.pushPage('reviewReceipt.html', {title : 'Review Receipt' });
+            }
+        }
+    };
+});
+
+sg.controller('ReviewReceiptController', function($scope, $data) {
+    $scope.receipt = $data.reviewReceipt
+
+    $scope.receipt.items[0].freezer = $scope.receipt.items[0].freezer ? true : false;
+    document.getElementById('freezer').addEventListener('change', function(event) {
+        console.log('here jimbo?');
+        $scope.receipt.items[0].freezer = !$scope.receipt.items[0].freezer;
+    });
+    
+    $scope.test = function() {
+        console.log('its cold!');
+    };
+});
+
+
 
 
 sg.controller('DetailController', function($scope, $data) {
@@ -72,10 +128,23 @@ sg.controller('DetailController', function($scope, $data) {
 sg.controller('MasterController', function($scope, $data) {
     $scope.items = $data.items;
 
-    $scope.showDetail = function(index) {
-        var selectedItem = $data.items[index], page = 'detail.html';
+    $scope.loadView = function(index) {
+        var page;
+        switch (index) {
+        case 0:
+            page = 'inventory.html';
+            break;
+        case 2:
+            page = 'receipts.html';
+            break;
+        default:
+            page = 'detail.html';
+            break;
+        };
+
+        
+        var selectedItem = $data.items[index];
         $data.selectedItem = selectedItem;
-        if (index == 0) { page='inventory.html'; }
         $scope.navi.pushPage(page, {title : selectedItem.title});
     };
 });

@@ -38,7 +38,7 @@
         <ons-page>
             <ons-toolbar><div class="center">Smart Grocery</div></ons-toolbar>
             <ons-list ng-controller="MasterController">
-                <ons-list-item modifier="chevron" class="item" ng-repeat="item in items" ng-click="showDetail($index)">
+                <ons-list-item modifier="chevron" class="item" ng-repeat="item in items" ng-click="loadView($index)">
                     <ons-row>
                         <ons-col width="60px">
                             <div class="item-thum {{ item.icon }}"></div>
@@ -86,37 +86,6 @@
                     Add a note
                 </ons-list-item>
             </ons-list>
-
-            <div class="navigation-bar">
-                <div class="navigation-bar__center">
-                    <div class="button-bar" style="margin: 7px auto; padding: 0 10px;">
-                        <div class="button-bar__item">
-                            <input type="radio" name="navi-segment-a" checked>
-                            <div class="button-bar__button">Meat</div>
-                        </div>
-
-                        <div class="button-bar__item">
-                            <input type="radio" name="navi-segment-a">
-                            <div class="button-bar__button">Produce</div>
-                        </div>
-
-                        <div class="button-bar__item">
-                            <input type="radio" name="navi-segment-a">
-                            <div class="button-bar__button">Dairy</div>
-                        </div>
-
-                        <div class="button-bar__item">
-                            <input type="radio" name="navi-segment-a">
-                            <div class="button-bar__button">Panty</div>
-                        </div>
-
-                        <div class="button-bar__item">
-                            <input type="radio" name="navi-segment-a">
-                            <div class="button-bar__button">Other</div>
-                        </div>
-                    </div>
-                </div>
-            </div>
 
             <ons-list style="margin-top: 10px">
                 <ons-list-item class="item" ng-repeat="i in [1,2,3]">
@@ -224,7 +193,7 @@
                 <ul class="list">
                     <li class="list__item list__item--tappable" ng-repeat="item in curList"
                         id="meat_{{ $index }}">
-                        <label class="checkbox checkbox--noborder checkbox--list-item">
+                        <label class="checkbox checkbox--list-item">
                             <input type="checkbox">
                             <div class="checkbox__checkmark checkbox--noborder checkbox--list-item__checkmark"></div>
                             <span class="spCol col4">{{ item.label }}</span>
@@ -254,5 +223,225 @@
 
         </ons-page>
     </ons-template>
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <!-- ----------------------------------------- -->
+    <!-- RECEIPTS -->
+    <!-- ----------------------------------------- -->
+    <ons-template id="receipts.html">
+        <ons-page ng-controller="ReceiptsController">
+            <ons-toolbar>
+                <div class="left"><ons-back-button>Back</ons-back-button></div>
+                <div class="center">Receipts</div>
+            </ons-toolbar>
+
+
+            <ons-list modifier="inset" style="margin-top: 10px"
+                      ng-show="receipts.newReceipts.length > 0 || receipts.Receipts.length > 0">
+                <ul class="list">
+                    <li class="list__header" ng-show="receipts.newReceipts.length > 0">
+                        New Receipts
+                    </li>
+                    <li class="list__item" ng-show="receipts.newReceipts.length > 0"
+                        ng-repeat="receipt in receipts.newReceipts">
+                        <span class="spCol col2">{{ receipt.store }}</span>
+                        <span class="spCol col2">{{ receipt.newItems }} Items</span>
+                        <span class="pull-right">
+                            <button class="button button-small m-t-5 m-b-5" ng-click="reviewReceipt(receipt.id);">Review</button>
+                            <button class="button button-small button--outline m-t-5 m-b-5">Delete</button>
+                        </span>
+                    </li>
+                    <li class="list__header" ng-show="receipts.oldReceipts.length > 0">
+                        Old Receipts
+                    </li>
+                    <li class="list__item" ng-show="receipts.oldReceipts.length > 0"
+                        ng-repeat="receipt in receipts.oldReceipts">
+                        <span class="spCol col2">{{ receipt.store }}</span>
+                        <span class="spCol col4">{{ receipt.date }}</span>
+                        <span class="pull-right">
+                            <ons-icon icon="fa-search" size="15px" fixed-width="false"
+                                      ng-click="doSomething()"
+                                      style="color:rgba(136,148,96,0.81);">
+                            </ons-icon>
+                            <ons-icon icon="fa-list-alt" size="15px" fixed-width="false"
+                                      class="m-l-10" ng-click="doSomething()"
+                                      style="color:rgba(136,148,96,0.81);">
+                            </ons-icon>
+                        </span>
+                    </li>
+                </ul>
+            </ons-list>
+            <p class="text-center" ng-show="receipts.oldReceipts.length<=0 && receipts.newReceipts.length<=0">
+                No receipts have been uploaded yet
+            </p>
+            
+
+            <br>
+
+        </ons-page>
+    </ons-template>
+
+
+    <!-- ----------------------------------------- -->
+    <!-- REVIEW RECEIPT -->
+    <!-- ----------------------------------------- -->
+    <ons-template id="reviewReceipt.html">
+        <ons-page ng-controller="ReviewReceiptController">
+            <ons-toolbar>
+                <div class="left"><ons-back-button>Back</ons-back-button></div>
+                <div class="center">Review</div>
+            </ons-toolbar>
+            <ons-list>
+                <ons-list-item class="item">
+                    <ons-row>
+                        <ons-col>
+                            <header class="p-l-25">
+                                <span class="item-title">{{ receipt.store }}</span>
+                            </header>
+                            <p class="item-desc p-l-25">{{ receipt.items[0].description }}</p>
+                        </ons-col>
+                    </ons-row>
+                </ons-list-item>
+            </ons-list>
+
+
+            <ons-list class="m-t-10">
+                <ons-list-item class="item">
+                    <ons-row>
+                        <ons-col>
+                            <span class="spCol col2">
+                                <label for="itemLabel">Item: </label>
+                            </span>
+                            <span class="spCol col6">
+                                <input type="text" id="itemLabel" class="text-input--underbar" placeholder="text" value="">
+                            </span>
+
+
+
+                            <div class="clearfix"></div>
+                            <span class="spCol col2 m-t-20">
+                                <label class="">Freezing </label>
+                            </span>
+                            <span class="spCol col6">
+                                <ons-switch id="freezer" ng-checked="receipt.items[0].freezer"></ons-switch>
+                            </span>
+
+                            <div class="clearfix"></div>
+                            <span class="spCol col2 m-t-10" ng-show="!receipt.items[0].freezer">
+                                <label for="itemLabel">Expires: </label>
+                            </span>
+                            <span class="spCol col6" ng-show="recipe.freezer">
+                                <input type="text" id="itemLabel" class="text-input--underbar" placeholder="text" value="">
+                            </span>
+                            <div class="clearfix"></div>
+                            <span class="spCol col2 m-t-20">
+                                <label>Reserved </label>
+                            </span>
+                            <span class="spCol col6">
+                                <label class="switch m-t-15">
+                                    <input type="checkbox" class="switch__input">
+                                    <div class="switch__toggle"></div>
+                                </label>
+                            </span>
+                            <div class="clearfix"></div>
+                            <span class="spCol col2">
+                                <label for="itemLabel">Recipe: </label>
+                            </span>
+                            <span class="spCol col9">
+                                <ons-scroller style="height:100px; width: 100%">
+                                    <ons-list>
+                                        <ons-list-item>
+                                            <ons-row><ons-col>here?</ons-col></ons-row>
+                                        </ons-list-item>
+                                        <ons-list-item>
+                                            <ons-row><ons-col>here?</ons-col></ons-row>
+                                        </ons-list-item>
+                                        <ons-list-item>
+                                            <ons-row><ons-col>here?</ons-col></ons-row>
+                                        </ons-list-item>
+                                        <ons-list-item>
+                                            <ons-row><ons-col>here?</ons-col></ons-row>
+                                        </ons-list-item>
+                                        <ons-list-item>
+                                            <ons-row><ons-col>here?</ons-col></ons-row>
+                                        </ons-list-item>
+                                        <ons-list-item>
+                                            <ons-row><ons-col>here?</ons-col></ons-row>
+                                        </ons-list-item>
+                                        <ons-list-item>
+                                            <ons-row><ons-col>here?</ons-col></ons-row>
+                                        </ons-list-item>
+                                    </ons-list>
+                                </ons-scroller>
+                            </span>
+                        </ons-col>
+                    </ons-row>
+                </ons-list-item>
+            </ons-list>
+
+            
+            
+
+
+            
+
+
+
+
+
+
+            <!-- <div class="tab-bar"> -->
+            <!--     <label class="tab-bar__item"> -->
+            <!--         <input type="radio" name="tab-bar-c" checked="checked"> -->
+            <!--         <button class="tab-bar__button"> -->
+            <!--             <div class="tab-bar__label"> -->
+            <!--                 <ons-icon icon="fa-chevron-left" size="15px" fixed-width="false" -->
+            <!--                           ng-click="doSomething()" style="color:#aab585;"> -->
+            <!--                 </ons-icon> -->
+            <!--                 Last Item -->
+            <!--             </div> -->
+            <!--         </button> -->
+            <!--     </label> -->
+            <!--     <label class="tab-bar__item"> -->
+            <!--         <input type="radio" name="tab-bar-c"> -->
+            <!--         <button class="tab-bar__button"> -->
+            <!--             <div class="tab-bar__label"> -->
+            <!--                 Next Item -->
+            <!--                 <ons-icon icon="fa-chevron-right" size="15px" fixed-width="false" -->
+            <!--                           ng-click="doSomething()" style="color:#aab585;"> -->
+            <!--                 </ons-icon> -->
+            <!--             </div> -->
+            <!--         </button> -->
+            <!--     </label> -->
+            <!-- </div> -->
+
+        </ons-page>
+    </ons-template>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    
 </body>
 </html>

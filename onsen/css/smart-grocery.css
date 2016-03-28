@@ -70,7 +70,14 @@ ons-toolbar.navigation-bar div {
     color: #999;
     float: right;
 }
-.checkbox--noborder > .checkbox__checkmark { float: left; }
+.checkbox--noborder > .checkbox__checkmark, .checkbox > .checkbox__checkmark { float: left; }
+.button-small {
+    padding: 0px 10px;
+    line-height: 29px;
+}
+label {
+    display: inline-block;
+}
 
 
 
@@ -79,8 +86,32 @@ ons-toolbar.navigation-bar div {
 /* Standard Utility Classes */
 /* ************************************************* */
 .danger { color: #b84a0e; }
+.text-center { text-align: center; }
+.clearfix {display: block; height: 1px; width: 100%; clear: both;}
 .pull-right { position: relative; float: right; }
 .p-l-25 { padding-left: 25px !important; }
+
+.m-l-5 { margin-left: 5px; }
+.m-l-10 { margin-left: 10px; }
+.m-l-15 { margin-left: 15px; }
+.m-l-20 { margin-left: 20px; }
+.m-l-25 { margin-left: 25px; }
+.m-r-5 { margin-right: 5px; }
+.m-r-10 { margin-right: 10px; }
+.m-r-15 { margin-right: 15px; }
+.m-r-20 { margin-right: 20px; }
+.m-r-25 { margin-right: 25px; }
+.m-t-5 { margin-top: 5px; }
+.m-t-10 { margin-top: 10px; }
+.m-t-15 { margin-top: 15px; }
+.m-t-20 { margin-top: 20px; }
+.m-t-25 { margin-top: 25px; }
+.m-b-5 { margin-botton: 5px; }
+.m-b-10 { margin-bottom: 10px; }
+.m-b-15 { margin-bottom: 15px; }
+.m-b-20 { margin-bottom: 20px; }
+.m-b-25 { margin-bottom: 25px; }
+
 .spCol {
     display: block;
     float: left;
@@ -89,21 +120,12 @@ ons-toolbar.navigation-bar div {
     overflow: hidden;
     text-overflow: ellipsis;
 }
-.col1 {
-    width: 10%;
-}
-
-.col2 {
-    width: 20%;
-}
-.col3 {
-    border: 1px solid yellow;
-    width: 30%;
-}
-.col4 {
-    width: 40%;
-}
-.col5 {
-    border: 1px solid purple;
-    width: 50%;
-}
+.col1 { width: 10%; }
+.col2 { width: 20%; }
+.col3 { width: 30%; }
+.col4 { width: 40%; }
+.col5 { width: 50%; }
+.col6 { width: 60%; }
+.col7 { width: 70%; }
+.col8 { width: 80%; }
+.col9 { width: 90%; }
