@@ -4,14 +4,27 @@ sg.controller('AppController', function($scope, $data) {
     $scope.showMore = function() {
         console.log('show more triggered');  
     };
-
-    
     
     $scope.doSomething = function() {
         setTimeout(function() {
             ons.notification.alert({ message: 'tapped' });
         }, 100);
     };
+
+    var currentTime = new Date();
+    $scope.currentYear = currentTime.getFullYear();
+
+    $scope.recipes = [
+        {label: 'Beef Wellington'},
+        {label: 'Fish Tacos'},
+        {label: 'Pork Chops'},
+        {label: 'Meat Loaf'},
+        {label: 'Tuna Salad'},
+        {label: 'Spaghetti'},
+        {label: 'Chicken Parmasean'},
+        {label: 'Stir Fry'},
+        {label: 'Salsbury Steak'}
+    ];
 });
 
 sg.controller('InventoryController', function($scope, $data) {
@@ -75,6 +88,7 @@ sg.controller('ReceiptsController', function($scope, $data) {
                     description: 'Ground Turkey',
                     expires: 'Unknown',
                     freezer: false,
+                    reserved: true,
                     quantity: 2,
                     unit: 'lbs',
                     recipe: ['Tacos','Meatloaf'],
@@ -108,14 +122,14 @@ sg.controller('ReviewReceiptController', function($scope, $data) {
     $scope.receipt = $data.reviewReceipt
 
     $scope.receipt.items[0].freezer = $scope.receipt.items[0].freezer ? true : false;
+    $scope.receipt.items[0].reserved = $scope.receipt.items[0].reserved ? true : false;
+
     document.getElementById('freezer').addEventListener('change', function(event) {
-        console.log('here jimbo?');
-        $scope.receipt.items[0].freezer = !$scope.receipt.items[0].freezer;
+        $scope.$apply(function() { $scope.receipt.items[0].freezer = !$scope.receipt.items[0].freezer; });
     });
-    
-    $scope.test = function() {
-        console.log('its cold!');
-    };
+    document.getElementById('reserved').addEventListener('change', function(event) {
+        $scope.$apply(function() { $scope.receipt.items[0].reserved = !$scope.receipt.items[0].reserved; });
+    });
 });
 
 

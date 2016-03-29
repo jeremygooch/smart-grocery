@@ -324,67 +324,100 @@
                                 <label for="itemLabel">Item: </label>
                             </span>
                             <span class="spCol col6">
-                                <input type="text" id="itemLabel" class="text-input--underbar" placeholder="text" value="">
+                                <input type="text" id="itemLabel" class="text-input--underbar"
+                                       placeholder="Hot Dogs" value="">
                             </span>
-
-
+                        </ons-col>
+                    </ons-row>
+                </ons-list-item>
+                <ons-list-item class="item">
+                    <ons-row>
+                        <ons-col>
 
                             <div class="clearfix"></div>
                             <span class="spCol col2 m-t-20">
                                 <label class="">Freezing </label>
                             </span>
-                            <span class="spCol col6">
+                            <span class="spCol col6 m-t-15">
                                 <ons-switch id="freezer" ng-checked="receipt.items[0].freezer"></ons-switch>
                             </span>
 
                             <div class="clearfix"></div>
-                            <span class="spCol col2 m-t-10" ng-show="!receipt.items[0].freezer">
-                                <label for="itemLabel">Expires: </label>
+                            <span class="spCol col2 m-t-10" ng-class="{'fade50' : receipt.items[0].freezer}">
+                                <label for="itemExpMo">Expires: </label>
                             </span>
-                            <span class="spCol col6" ng-show="recipe.freezer">
-                                <input type="text" id="itemLabel" class="text-input--underbar" placeholder="text" value="">
+                            <span class="spCol col6 calendar" ng-disabled="!receipt.items[0].freezer">
+                                <input type="number" id="itemExpMo" class="text-input--underbar"
+                                       placeholder="MM" min="1" max="12" value=""
+                                       ng-disabled="receipt.items[0].freezer">
+                                <input type="number" id="itemExpDa" class="text-input--underbar"
+                                       placeholder="DD" min="1" max="31" value=""
+                                       ng-disabled="receipt.items[0].freezer">
+                                <input type="number" id="itemExpYr" class="text-input--underbar"
+                                       placeholder="YYYY" min="{{ currentYear }}" max="{{ currentYear + 30 }}"
+                                       value="" ng-disabled="receipt.items[0].freezer">
                             </span>
-                            <div class="clearfix"></div>
+                        </ons-col>
+                    </ons-row>
+                </ons-list-item>
+                <ons-list-item class="item">
+                    <ons-row>
+                        <ons-col>
                             <span class="spCol col2 m-t-20">
                                 <label>Reserved </label>
                             </span>
-                            <span class="spCol col6">
-                                <label class="switch m-t-15">
-                                    <input type="checkbox" class="switch__input">
-                                    <div class="switch__toggle"></div>
-                                </label>
+                            <span class="spCol col6 m-t-15">
+                                <ons-switch id="reserved" ng-checked="receipt.items[0].reserved"></ons-switch>
                             </span>
                             <div class="clearfix"></div>
                             <span class="spCol col2">
                                 <label for="itemLabel">Recipe: </label>
                             </span>
-                            <span class="spCol col9">
+                            <span class="spCol col9" ng-class="{'fade50' : !receipt.items[0].reserved}">
                                 <ons-scroller style="height:100px; width: 100%">
                                     <ons-list>
-                                        <ons-list-item>
-                                            <ons-row><ons-col>here?</ons-col></ons-row>
-                                        </ons-list-item>
-                                        <ons-list-item>
-                                            <ons-row><ons-col>here?</ons-col></ons-row>
-                                        </ons-list-item>
-                                        <ons-list-item>
-                                            <ons-row><ons-col>here?</ons-col></ons-row>
-                                        </ons-list-item>
-                                        <ons-list-item>
-                                            <ons-row><ons-col>here?</ons-col></ons-row>
-                                        </ons-list-item>
-                                        <ons-list-item>
-                                            <ons-row><ons-col>here?</ons-col></ons-row>
-                                        </ons-list-item>
-                                        <ons-list-item>
-                                            <ons-row><ons-col>here?</ons-col></ons-row>
-                                        </ons-list-item>
-                                        <ons-list-item>
-                                            <ons-row><ons-col>here?</ons-col></ons-row>
-                                        </ons-list-item>
+                                        <ul class="list">
+                                            <li class="list__item list__item--tappable"
+                                                ng-repeat=" recipe in recipes">
+                                                <label class="checkbox checkbox--list-item">
+                                                    <input type="checkbox"
+                                                           ng-disabled="!receipt.items[0].reserved">
+                                                    <div class="checkbox__checkmark checkbox--noborder checkbox--list-item__checkmark"></div>
+                                                    <span class="spCol col4">{{ recipe.label }}</span>
+                                                </label>
+                                            </li>
+                                        </ul>
                                     </ons-list>
                                 </ons-scroller>
                             </span>
+                        </ons-col>
+                    </ons-row>
+                </ons-list-item>
+                <ons-list-item class="item">
+                    <ons-row>
+                        <ons-col>
+                            <span class="spCol col2">
+                                <label for="itemQuantity">Quantity: </label>
+                            </span>
+                            <span class="spCol col2">
+                                <input type="number" id="itemQuantity" class="text-input--underbar"
+                                       placeholder="##" value="">
+                            </span>
+                            <span class="spCol col2">
+                                <label for="itemQuantity">Units: </label>
+                            </span>
+                            <span class="spCol col2">
+                                <input type="text" id="itemUnits" class="text-input--underbar"
+                                       placeholder="##" value="">
+                            </span>
+                        </ons-col>
+                    </ons-row>
+                </ons-list-item>
+                <ons-list-item class="item">
+                    <ons-row>
+                        <ons-col>
+                            <button class="button pull-right">Save</button>
+                            <button class="button button--outline pull-left">Close</button>
                         </ons-col>
                     </ons-row>
                 </ons-list-item>

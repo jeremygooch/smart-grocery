@@ -78,6 +78,9 @@ ons-toolbar.navigation-bar div {
 label {
     display: inline-block;
 }
+.calendar input {
+    width: 30%;
+}
 
 
 
@@ -85,11 +88,15 @@ label {
 /* ************************************************* */
 /* Standard Utility Classes */
 /* ************************************************* */
+.fade50 { opacity: .5; }
 .danger { color: #b84a0e; }
 .text-center { text-align: center; }
 .clearfix {display: block; height: 1px; width: 100%; clear: both;}
+.hide { display: none !important; }
 .pull-right { position: relative; float: right; }
+.pull-left { position: relative; float: left; }
 .p-l-25 { padding-left: 25px !important; }
+
 
 .m-l-5 { margin-left: 5px; }
 .m-l-10 { margin-left: 10px; }
