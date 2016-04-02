@@ -127,9 +127,12 @@ sg.controller('ReviewReceiptController', function($scope, $data) {
     document.getElementById('freezer').addEventListener('change', function(event) {
         $scope.$apply(function() { $scope.receipt.items[0].freezer = !$scope.receipt.items[0].freezer; });
     });
-    document.getElementById('reserved').addEventListener('change', function(event) {
-        $scope.$apply(function() { $scope.receipt.items[0].reserved = !$scope.receipt.items[0].reserved; });
-    });
+    // ////////////////////////////////////////////
+    // Receipts not yet implemented
+    // ////////////////////////////////////////////
+    // document.getElementById('reserved').addEventListener('change', function(event) {
+    //     $scope.$apply(function() { $scope.receipt.items[0].reserved = !$scope.receipt.items[0].reserved; });
+    // });
 });
 
 

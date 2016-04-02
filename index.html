@@ -1,27 +1,442 @@
-<!doctype html>
+<!DOCTYPE html>
+<!-- CSP support mode (required for Windows Universal apps): https://docs.angularjs.org/api/ng/directive/ngCsp -->
+<html lang="en" ng-app="app" ng-csp>
+<head>
+    <meta charset="utf-8" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="mobile-web-app-capable" content="yes" />
 
-<html lang="en">
-    <head>
-        <meta charset="utf-8">
+    <!-- JS dependencies (order matters!) -->
+    <script src="libs/angular/angular.js"></script>
+    <script src="libs/onsenui.js"></script>
 
-        <title>Smart Kitchen</title>
-        <meta name="description" content="Smart Grocery">
-        <meta name="author" content="Jeremy Gooch">
+    <!-- CSS dependencies -->
+    <link rel="stylesheet" href="css/onsenui.css" />
+    <link rel="stylesheet" href="css/onsen-css-components-blue-basic-theme.css" />
+    <link rel="stylesheet" href="css/theme.css" />
+    <link rel="stylesheet" href="css/smart-grocery.css" />
+    <link rel="stylesheet" href="css/typicons/typicons.min.css" >
 
-        <link rel="stylesheet" href="css/styles.css?v=1.0">
+    <!-- CSP support mode (required for Windows Universal apps) -->
+    <link rel="stylesheet" href="libs/angular/angular-csp.css" />
 
-        <!--[if lt IE 9]>
-            <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
-            <![endif]-->
-    </head>
 
-    <body>
-        wtf mate???
-        <!-- Libraries -->
-        <script src="https://code.jquery.com/jquery-2.2.1.min.js"></script>
-        
-        <!-- Smart Garden -->
-        <script src="app/sg.js"></script>
-        <script src="js/scripts.js"></script>
-    </body>
+    <!-- --------------- App init --------------- -->
+    <script src="app/app.js"></script>
+    <script src="app/controllers.js"></script>
+
+    <title>:: Smart Grocery ::</title>
+</head>
+
+<body ng-controller="AppController">
+    <ons-navigator var="navi">
+        <ons-page>
+            <ons-toolbar><div class="center">Smart Grocery</div></ons-toolbar>
+            <ons-list ng-controller="MasterController">
+                <ons-list-item modifier="chevron" class="item" ng-repeat="item in items" ng-click="loadView($index)">
+                    <ons-row>
+                        <ons-col width="60px">
+                            <div class="item-thum {{ item.icon }}"></div>
+                        </ons-col>
+                        <ons-col>
+                            <header class="p-l-25">
+                                <span class="item-title">{{item.title}}</span>
+                                <span class="item-label">
+                                    <span class="notification" data-ng-show="item.notify">{{item.notify}}</span>
+                                </span>
+                            </header>
+                            <p class="item-desc p-l-25">{{item.desc}}</p>
+                        </ons-col>
+                    </ons-row>
+                </ons-list-item>
+            </ons-list>
+        </ons-page>
+    </ons-navigator>
+
+    <ons-template id="detail.html">
+        <ons-page ng-controller="DetailController">
+            <ons-toolbar>
+                <div class="left"><ons-back-button>Back</ons-back-button></div>
+                <div class="center">Details</div>
+            </ons-toolbar>
+
+            <ons-list modifier="inset" style="margin-top: 10px">
+                <ons-list-item class="item">
+                    <ons-row>
+                        <ons-col width="80px">
+                            <div class="item-thum"></div>
+                        </ons-col>
+                        <ons-col>
+                            <header>
+                                <span class="item-title">{{item.title}}</span>
+                                <span class="item-label">{{item.label}}</span>
+                            </header>
+                            <p class="item-desc">{{item.desc}}</p>
+                        </ons-col>
+                    </ons-row>
+                </ons-list-item>
+
+                <ons-list-item modifier="chevron" ng-click="doSomething()">
+                    <ons-icon icon="ion-chatboxes" fixed-width="true" style="color: #ccc"></ons-icon>
+                    Add a note
+                </ons-list-item>
+            </ons-list>
+
+            <ons-list style="margin-top: 10px">
+                <ons-list-item class="item" ng-repeat="i in [1,2,3]">
+                    <header>
+                        <span class="item-title">Lorem ipsum dolor sit amet</span>
+                    </header>
+                    <p class="item-desc">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. <span class="typcn typcn-arrow-left"></span>
+                    </p>
+                </ons-list-item>
+            </ons-list>
+
+            <br>
+
+        </ons-page>
+    </ons-template>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <!-- ----------------------------------------- -->
+    <!-- INVENTORY -->
+    <!-- ----------------------------------------- -->
+    <ons-template id="inventory.html">
+        <ons-page ng-controller="InventoryController">
+            <ons-toolbar>
+                <div class="left"><ons-back-button>Back</ons-back-button></div>
+                <div class="center">Inventory</div>
+            </ons-toolbar>
+
+
+            <!-- Segmented Navigation Bar-->
+            <div class="navigation-bar">
+                <div class="navigation-bar__center">
+                    <div class="button-bar" style="margin: 7px auto; padding: 0 10px;">
+                        <div class="button-bar__item"
+                             ng-click="switchCatetory('meat')">
+                            <input type="radio" name="navi-segment-a" checked>
+                            <div class="button-bar__button">Meat</div>
+                        </div>
+
+                        <div class="button-bar__item"
+                             ng-click="switchCatetory('produce')">
+                            <input type="radio" name="navi-segment-a">
+                            <div class="button-bar__button">Produce</div>
+                        </div>
+
+                        <div class="button-bar__item"
+                             ng-click="switchCatetory('dairy')">
+                            <input type="radio" name="navi-segment-a">
+                            <div class="button-bar__button">Dairy</div>
+                        </div>
+
+                        <div class="button-bar__item"
+                             ng-click="switchCatetory('pantry')">
+                            <input type="radio" name="navi-segment-a">
+                            <div class="button-bar__button">Panty</div>
+                        </div>
+
+                        <div class="button-bar__item"
+                             ng-click="switchCatetory('other')">
+                            <input type="radio" name="navi-segment-a">
+                            <div class="button-bar__button">Other</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <ons-list style="margin-top: 10px">
+                <ul class="list">
+                    <li class="list__item list__item--tappable" ng-repeat="item in curList"
+                        id="meat_{{ $index }}">
+                        <label class="checkbox checkbox--list-item">
+                            <input type="checkbox">
+                            <div class="checkbox__checkmark checkbox--noborder checkbox--list-item__checkmark"></div>
+                            <span class="spCol col4">{{ item.label }}</span>
+                            <span class="spCol col2" ng-click="doSomething()">
+                                <button class="button--quiet"
+                                        ng-class="{ 'danger': item.shelfLife != 'frozen' && item.daysLeft < 7 }">
+                                    {{ item.shelfLife == 'frozen' ? 'Frozen' : 'Exp: ' + item.shelfLife }}
+                                </button>
+                            </span>
+                            <span class="spCol col1" ng-click="doSomething()">
+                                <button class="button--quiet">
+                                    {{ item.quantity }}
+                                </button>
+                            </span>
+                            <span class="pull-right" ng-click="doSomething()">
+                                <ons-icon icon="{{ item.reserved ? 'fa-lock' : 'fa-unlock' }}" size="15px"
+                                     fixed-width="false"
+                                     style="{{ item.reserved ? 'color:rgba(136,148,96,0.81);' : 'color:rgba(136,148,96,0.41);' }}">
+                                </ons-icon>
+                            </span>
+                        </label>
+                    </li>
+                </ul>
+            </ons-list>
+
+            <br>
+
+        </ons-page>
+    </ons-template>
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <!-- ----------------------------------------- -->
+    <!-- RECEIPTS -->
+    <!-- ----------------------------------------- -->
+    <ons-template id="receipts.html">
+        <ons-page ng-controller="ReceiptsController">
+            <ons-toolbar>
+                <div class="left"><ons-back-button>Back</ons-back-button></div>
+                <div class="center">Receipts</div>
+            </ons-toolbar>
+
+
+            <ons-list modifier="inset" style="margin-top: 10px"
+                      ng-show="receipts.newReceipts.length > 0 || receipts.Receipts.length > 0">
+                <ul class="list">
+                    <li class="list__header" ng-show="receipts.newReceipts.length > 0">
+                        New Receipts
+                    </li>
+                    <li class="list__item" ng-show="receipts.newReceipts.length > 0"
+                        ng-repeat="receipt in receipts.newReceipts">
+                        <span class="spCol col2">{{ receipt.store }}</span>
+                        <span class="spCol col2">{{ receipt.newItems }} Items</span>
+                        <span class="pull-right">
+                            <button class="button button-small m-t-5 m-b-5" ng-click="reviewReceipt(receipt.id);">Review</button>
+                            <button class="button button-small button--outline m-t-5 m-b-5">Delete</button>
+                        </span>
+                    </li>
+                    <li class="list__header" ng-show="receipts.oldReceipts.length > 0">
+                        Old Receipts
+                    </li>
+                    <li class="list__item" ng-show="receipts.oldReceipts.length > 0"
+                        ng-repeat="receipt in receipts.oldReceipts">
+                        <span class="spCol col2">{{ receipt.store }}</span>
+                        <span class="spCol col4">{{ receipt.date }}</span>
+                        <span class="pull-right">
+                            <ons-icon icon="fa-search" size="15px" fixed-width="false"
+                                      ng-click="doSomething()"
+                                      style="color:rgba(136,148,96,0.81);">
+                            </ons-icon>
+                            <ons-icon icon="fa-list-alt" size="15px" fixed-width="false"
+                                      class="m-l-10" ng-click="doSomething()"
+                                      style="color:rgba(136,148,96,0.81);">
+                            </ons-icon>
+                        </span>
+                    </li>
+                </ul>
+            </ons-list>
+            <p class="text-center" ng-show="receipts.oldReceipts.length<=0 && receipts.newReceipts.length<=0">
+                No receipts have been uploaded yet
+            </p>
+            
+
+            <br>
+
+        </ons-page>
+    </ons-template>
+
+
+    <!-- ----------------------------------------- -->
+    <!-- REVIEW RECEIPT -->
+    <!-- ----------------------------------------- -->
+
+    <ons-template id="reviewReceipt.html">
+        <ons-page ng-controller="ReviewReceiptController">
+            <ons-toolbar>
+                <div class="left"><ons-back-button>Back</ons-back-button></div>
+                <div class="center">Review</div>
+            </ons-toolbar>
+            <ons-list>
+                <ons-list-item class="item">
+                    <ons-row>
+                        <ons-col>
+                            <header class="p-l-25">
+                                <span class="item-title">{{ receipt.store }}</span>
+                            </header>
+                            <p class="item-desc p-l-25">{{ receipt.items[0].description }}</p>
+                        </ons-col>
+                    </ons-row>
+                </ons-list-item>
+            </ons-list>
+
+
+            <ons-list class="m-t-10">
+                <ons-list-item class="item">
+                    <ons-row>
+                        <ons-col>
+                            <span class="spCol col2">
+                                <label for="itemLabel">Item: </label>
+                            </span>
+                            <span class="spCol col6">
+                                <input type="text" id="itemLabel" class="text-input--underbar"
+                                       placeholder="Hot Dogs" value="">
+                            </span>
+                        </ons-col>
+                    </ons-row>
+                </ons-list-item>
+                <ons-list-item class="item">
+                    <ons-row>
+                        <ons-col>
+
+                            <div class="clearfix"></div>
+                            <span class="spCol col2 m-t-20">
+                                <label class="">Freezing </label>
+                            </span>
+                            <span class="spCol col6 m-t-15">
+                                <ons-switch id="freezer" ng-checked="receipt.items[0].freezer"></ons-switch>
+                            </span>
+
+                            <div class="clearfix"></div>
+                            <span class="spCol col2 m-t-10" ng-class="{'fade50' : receipt.items[0].freezer}">
+                                <label for="itemExpMo">Expires: </label>
+                            </span>
+                            <span class="spCol col6 calendar" ng-disabled="!receipt.items[0].freezer">
+                                <input type="number" id="itemExpMo" class="text-input--underbar"
+                                       placeholder="MM" min="1" max="12" value=""
+                                       ng-disabled="receipt.items[0].freezer">
+                                <input type="number" id="itemExpDa" class="text-input--underbar"
+                                       placeholder="DD" min="1" max="31" value=""
+                                       ng-disabled="receipt.items[0].freezer">
+                                <input type="number" id="itemExpYr" class="text-input--underbar"
+                                       placeholder="YYYY" min="{{ currentYear }}" max="{{ currentYear + 30 }}"
+                                       value="" ng-disabled="receipt.items[0].freezer">
+                            </span>
+                        </ons-col>
+                    </ons-row>
+                </ons-list-item>
+                <ons-list-item class="item">
+                    <ons-row>
+                        <ons-col>
+                            <span class="spCol col2 m-t-20">
+                                <label>Reserved </label>
+                            </span>
+                            <span class="spCol col6 m-t-15">
+                                <ons-switch id="reserved" ng-checked="receipt.items[0].reserved"></ons-switch>
+                            </span>
+                            <div class="clearfix"></div>
+                            <!-- --------------------------------------------------------- -->
+                            <!-- Receipts not yet implemented -->
+                            <!-- --------------------------------------------------------- -->
+                            <!-- <span class="spCol col2"> -->
+                            <!--     <label for="itemLabel">Recipe: </label> -->
+                            <!-- </span> -->
+                            <!-- <span class="spCol col9" ng-class="{'fade50' : !receipt.items[0].reserved}"> -->
+                            <!--     <ons-scroller style="height:100px; width: 100%"> -->
+                            <!--         <ons-list> -->
+                            <!--             <ul class="list"> -->
+                            <!--                 <li class="list__item list__item--tappable" -->
+                            <!--                     ng-repeat=" recipe in recipes"> -->
+                            <!--                     <label class="checkbox checkbox--list-item"> -->
+                            <!--                         <input type="checkbox" -->
+                            <!--                                ng-disabled="!receipt.items[0].reserved"> -->
+                            <!--                         <div class="checkbox__checkmark checkbox--noborder checkbox--list-item__checkmark"></div> -->
+                            <!--                         <span class="spCol col4">{{ recipe.label }}</span> -->
+                            <!--                     </label> -->
+                            <!--                 </li> -->
+                            <!--             </ul> -->
+                            <!--         </ons-list> -->
+                            <!--     </ons-scroller> -->
+                            <!-- </span> -->
+                        </ons-col>
+                    </ons-row>
+                </ons-list-item>
+                <ons-list-item class="item">
+                    <ons-row>
+                        <ons-col>
+                            <span class="spCol col2">
+                                <label for="itemQuantity">Quantity: </label>
+                            </span>
+                            <span class="spCol col2">
+                                <input type="number" id="itemQuantity" class="text-input--underbar"
+                                       placeholder="##" value="">
+                            </span>
+                            <span class="spCol col2">
+                                <label for="itemQuantity">Units: </label>
+                            </span>
+                            <span class="spCol col2">
+                                <input type="text" id="itemUnits" class="text-input--underbar"
+                                       placeholder="##" value="">
+                            </span>
+                        </ons-col>
+                    </ons-row>
+                </ons-list-item>
+                <ons-list-item class="item">
+                    <ons-row>
+                        <ons-col>
+                            <button class="button pull-right">Save</button>
+                            <button class="button button--outline pull-left">Close</button>
+                        </ons-col>
+                    </ons-row>
+                </ons-list-item>
+            </ons-list>
+        </ons-page>
+    </ons-template>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    
+</body>
 </html>

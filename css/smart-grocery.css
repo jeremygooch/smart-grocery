@@ -73,7 +73,7 @@ ons-toolbar.navigation-bar div {
 .checkbox--noborder > .checkbox__checkmark, .checkbox > .checkbox__checkmark { float: left; }
 .button-small {
     padding: 0px 10px;
-    line-height: 29px;
+    line-height: 24px;
 }
 label {
     display: inline-block;
