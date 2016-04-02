@@ -2,9 +2,14 @@
 
 class processReceipts{
   public function __construct() {
+    // Generic DAO Class
     $this->gdao = new genericDAO();
+    // Utilities Class
+    $this->utilitiesCLASS = new utilities();
   }
   public function extractText($image_url, $debug) {
+
+    error_reporting(E_ALL ^ E_NOTICE); // Silence notices
     
     $grocr = 'http://local.grocr.com:5000/v1/ocr';
     $ch = curl_init($grocr);
@@ -51,7 +56,7 @@ class processReceipts{
         $words = explode(" ", $itmList[$i]);
         // Make sure we have more than one word on this row. If there is only
         // one word, this is likely a serial number or gibbirish so we dont 
-        // have to wast time looking in the DB for a match
+        // have to waste time looking in the DB for a match
         if (count($words) > 1) {
           for ($x = 0; $x < count($words); $x++) {
             $word = $words[$x];
@@ -80,6 +85,20 @@ class processReceipts{
       }
 
 
+
+      // Try to locate the store name
+      $store = "Unknown";
+      if ($this->utilitiesCLASS->in_array_r("HEB", $clnList)) { $store = "HEB"; }
+
+      // Get the next receipt id
+      $ridQuery = "(SELECT MAX(receipt_id) FROM receipts)";
+      $rid = $this->gdao->queryOne($ridQuery);
+      $rid++;
+      // Add the new receipt
+      $newReceiptQuery = "INSERT INTO receipts (receipt_id, scan_date, location, processed) VALUES ($rid,now(),'$store',0);";
+      $newReceipt = $this->gdao->queryOne($newReceiptQuery);
+      
+
       // Figure out what we bought
       $purchasedItems = array();
       for ($i = 0; $i < count($clnList); ++$i) {
@@ -103,14 +122,15 @@ class processReceipts{
           if ($getInvItemId) {
             $invItmQuery = "SELECT * FROM inventory_items WHERE id = '$getInvItemId'";
             $invItm = $this->gdao->queryAll($invItmQuery);
-
-
-
-
-            error_log(print_r($invItm));
+            
+            /* error_log(print_r($invItm)); */
           }
         }
       }
+
+
+
+      
       
       unset($gdao);
 
