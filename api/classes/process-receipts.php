@@ -99,7 +99,7 @@ class processReceipts{
       $newReceipt = $this->gdao->queryOne($newReceiptQuery);
       
 
-      // Figure out what we bought
+      // Figure out what we bought by looking in the inventory_items and ref tables
       $purchasedItems = array();
       for ($i = 0; $i < count($clnList); ++$i) {
         if (count($clnList[$i]) > 0) {
@@ -117,17 +117,23 @@ class processReceipts{
 
           $invItmRefQuery = "SELECT inventory_items_id FROM inventory_item_ref where label = '$label'";
           $getInvItemId = $this->gdao->queryOne($invItmRefQuery);
-
-
+          
           if ($getInvItemId) {
-            $invItmQuery = "SELECT * FROM inventory_items WHERE id = '$getInvItemId'";
-            $invItm = $this->gdao->queryAll($invItmQuery);
+            $shelfLifeQuery = "SELECT shelf_life FROM inventory_items WHERE id = '$getInvItemId'";
+            $shelfLife = $this->gdao->queryOne($shelfLifeQuery);
+
+            if ($shelfLife != NULL) {
+              $expDate = "DATE_ADD(now(), INTERVAL $shelfLife DAY)";
+            } else {
+              $expDate = NULL;
+            }
             
-            /* error_log(print_r($invItm)); */
+            // Insert the item into the inventory
+            $addItemQuery = "INSERT INTO receipt_items_ref (receipt_id, expires, freezer, inventory_item_id, reviewed) SELECT $rid, $expDate, freezer, id, 0 FROM inventory_items WHERE id = '$getInvItemId';";
+            $addItem = $this->gdao->queryOne($addItemQuery);
           }
         }
       }
-
 
 
       
