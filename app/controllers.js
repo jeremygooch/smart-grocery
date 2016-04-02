@@ -85,15 +85,43 @@ sg.controller('ReceiptsController', function($scope, $data) {
             id: 1, store: 'HEB', date: '4/10/2016 8:27PM', newItems: 12,
             items: [
                 {
+                    store: 'HEB',
                     description: 'Ground Turkey',
-                    expires: 'Unknown',
-                    freezer: false,
+                    expires: {
+                        month: '',
+                        day: '',
+                        year: ''
+                    },
+                    freezer: true,
                     reserved: true,
                     quantity: 2,
-                    unit: 'lbs',
-                    recipe: ['Tacos','Meatloaf'],
-                    ocr: ['GROUND TURKEY','TURKEY','GROUND','GR','GRJUND'],
-                    receipt: ['GROUND TURKEY', 'TURKEY GR']
+                    unit: 'lbs'
+                },
+                {
+                    store: 'HEB',
+                    description: 'Whole Milk',
+                    expires: {
+                        month: '4',
+                        day: '15',
+                        year: '2016'
+                    },
+                    freezer: false,
+                    reserved: false,
+                    quantity: 1,
+                    unit: 'gal'
+                },
+                {
+                    store: 'HEB',
+                    description: 'Salsa Ranchera',
+                    expires: {
+                        month: '6',
+                        day: '21',
+                        year: '2016'
+                    },
+                    freezer: false,
+                    reserved: false,
+                    quantity: 1.5,
+                    unit: 'cup'
                 }
             ]
         } ],
@@ -119,16 +147,56 @@ sg.controller('ReceiptsController', function($scope, $data) {
 });
 
 sg.controller('ReviewReceiptController', function($scope, $data) {
-    $scope.receipt = $data.reviewReceipt
+    var r = 0; tot = $data.reviewReceipt.items.length;
+    // Update the pagination depending on the number of receipts
+    $scope.prevReceipts = false;
+    $scope.nextReceipts = tot > 1 ? true : false;
+    
+    // Assign the current receipt
+    $scope.receipt = $data.reviewReceipt.items[r];
 
-    $scope.receipt.items[0].freezer = $scope.receipt.items[0].freezer ? true : false;
-    $scope.receipt.items[0].reserved = $scope.receipt.items[0].reserved ? true : false;
+    // Update the switches
+    $scope.receipt.freezer = $scope.receipt.freezer ? true : false;
+    $scope.receipt.reserved = $scope.receipt.reserved ? true : false;
 
     document.getElementById('freezer').addEventListener('change', function(event) {
-        $scope.$apply(function() { $scope.receipt.items[0].freezer = !$scope.receipt.items[0].freezer; });
+        $scope.$apply(function() { $scope.receipt.freezer = !$scope.receipt.freezer; });
     });
+
+    // Change receipt
+    $scope.changeReceipt = function(direction) {
+        /* This function progresses through the receipts in the $data object
+         * 
+         * @direction[str]: 'next'  or 'back'
+         */
+        
+        if (direction == 'next') {
+            r = r + 1 <= (tot-1) ? r+1 : r; // Make sure we haven't max-ed out
+        } else {
+            r = r - 1 >= 0 ? r-1 : r; // Make sure we haven't min-ed out
+        }
+
+        function checkPagination() {
+            // Cleanup for afterwards
+            $scope.prevReceipts = r == 0 ? false : true
+            $scope.nextReceipts = r == (tot-1) ? false : true;
+        }
+        
+        if ($data.reviewReceipt.items[r]) {
+            $scope.receipt = $data.reviewReceipt.items[r];
+            // Update the switches
+            $scope.receipt.freezer = $scope.receipt.freezer ? true : false;
+            $scope.receipt.reserved = $scope.receipt.reserved ? true : false;
+            checkPagination();
+        } else {
+            // We reached the end of the receipts
+            checkPagination();
+        }
+    };
+
+    
     // ////////////////////////////////////////////
-    // Receipts not yet implemented
+    // Recipes not yet implemented
     // ////////////////////////////////////////////
     // document.getElementById('reserved').addEventListener('change', function(event) {
     //     $scope.$apply(function() { $scope.receipt.items[0].reserved = !$scope.receipt.items[0].reserved; });
