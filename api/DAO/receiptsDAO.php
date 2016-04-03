@@ -23,4 +23,49 @@ class receiptsDAO {
 
     return $this->utilities->prep_response($res);
   }
+
+  public function get_all_scans(){
+    $out = array();
+    $out['new'] = array();
+    $out['old'] = array();
+    
+    $query = "SELECT * FROM receipts;";
+    $res = $this->gdao->queryAll($query);
+
+    foreach ($res as $receipt => $value) {
+      if ($value['processed'] == 0) {
+        // NEW RECEIPT
+
+        // Since this is a new receipt, lets get it's various items for reviewing
+        $rid = $value['receipt_id'];
+        $indQuery = "SELECT * FROM receipt_items_ref AS r LEFT JOIN inventory_items AS i ON r.inventory_item_id=i.id WHERE r.receipt_id = $rid;";
+        $indRes = $this->gdao->queryAll($indQuery);
+
+        // Break the expiration information apart
+        for ($i=0; $i < count($indRes); $i++) {
+          $month = date("m",strtotime($indRes[$i]['expires']));
+          $day = date("d",strtotime($indRes[$i]['expires']));
+          $year = date("Y",strtotime($indRes[$i]['expires']));
+          
+          $indRes[$i]['exp'] = array('month'=>$month,'day'=>$day,'year'=>$year);
+        }
+        
+        $value['receipt_data'] = $indRes;
+
+        // Add the item as a new receipt
+        array_push($out['new'], $value);
+      } else {
+        // OLD RECEIPT
+        
+        // Format the date
+        $scan_date = date_create($value['scan_date']);
+        $value['scan_date'] = date_format($scan_date, "M d, Y");
+        
+        // Add the item as an old receipt
+        array_push($out['old'], $value);
+      }
+    }
+    
+    return $this->utilities->prep_response($out);
+  }
 }

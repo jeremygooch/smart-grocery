@@ -53,7 +53,7 @@ case "receipts":
 
   case "getAllReceipts":
     //Load DAO
-    $DAO = new scansDAO();
+    $DAO = new receiptsDAO();
     $data = $DAO->get_all_scans();
 
     //Send JSON Response

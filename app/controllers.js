@@ -93,23 +93,16 @@ sg.controller('InventoryController', function($scope, $data) {
 sg.controller('ReceiptsController', function($scope, $data) {
     $scope.item = $data.selectedItem;
 
-
-
-    
     // Get the old and new receipts
     var data = { api: 'receipts', method: 'getAllReceipts' }
     var newReceipts = $scope.apiRequest('post', 'api/index.php', data);
     newReceipts.success(function (res) {
-        console.log(res);
-        // if (res.code == 200) {
-        //     if (res.data.new_receipt_count > 0) {
-        //         $data.items[2].notify = res.data.new_receipt_count;
-        //     } else {
-        //         delete $data.items[2].notify;
-        //     }
-        // } else {
-        //     console.dir(res);
-        // }
+        if (res.code == 200) {
+            $scope.newReceipts = res.data['new']; // new is reserved
+            $scope.oldReceipts = res.data.old;
+        } else {
+            console.dir(res);
+        }
     });
     newReceipts.error(function(data, status, headers, config){
         console.dir(data);
@@ -176,9 +169,9 @@ sg.controller('ReceiptsController', function($scope, $data) {
     };
     
     $scope.reviewReceipt = function(id) {
-        for (var i=0; i<$scope.receipts.newReceipts.length; i++) {
-            if ($scope.receipts.newReceipts[i].id) {
-                $data.reviewReceipt = $scope.receipts.newReceipts[i];
+        for (var i=0; i<$scope.newReceipts.length; i++) {
+            if ($scope.newReceipts[i].id) {
+                $data.reviewReceipt = $scope.newReceipts[i];
                 $scope.navi.pushPage('reviewReceipt.html', {title : 'Review Receipt' });
             }
         }
@@ -186,17 +179,19 @@ sg.controller('ReceiptsController', function($scope, $data) {
 });
 
 sg.controller('ReviewReceiptController', function($scope, $data) {
-    var r = 0; tot = $data.reviewReceipt.items.length;
+    var r = 0; tot = $data.reviewReceipt.receipt_data.length;
     // Update the pagination depending on the number of receipts
     $scope.prevReceipts = false;
     $scope.nextReceipts = tot > 1 ? true : false;
     
     // Assign the current receipt
-    $scope.receipt = $data.reviewReceipt.items[r];
+    $scope.receipt = $data.reviewReceipt.receipt_data[r];
+
+    $scope.reviewReceiptTitle = $data.reviewReceipt.location;
 
     // Update the switches
-    $scope.receipt.freezer = $scope.receipt.freezer ? true : false;
-    $scope.receipt.reserved = $scope.receipt.reserved ? true : false;
+    $scope.receipt.freezer = $scope.receipt.freezer != '0' ? true : false;
+    $scope.receipt.reserved = $scope.receipt.reserved != '0' ? true : false;
 
     document.getElementById('freezer').addEventListener('change', function(event) {
         $scope.$apply(function() { $scope.receipt.freezer = !$scope.receipt.freezer; });
@@ -221,11 +216,11 @@ sg.controller('ReviewReceiptController', function($scope, $data) {
             $scope.nextReceipts = r == (tot-1) ? false : true;
         }
         
-        if ($data.reviewReceipt.items[r]) {
-            $scope.receipt = $data.reviewReceipt.items[r];
+        if ($data.reviewReceipt.receipt_data[r]) {
+            $scope.receipt = $data.reviewReceipt.receipt_data[r];
             // Update the switches
-            $scope.receipt.freezer = $scope.receipt.freezer ? true : false;
-            $scope.receipt.reserved = $scope.receipt.reserved ? true : false;
+            $scope.receipt.freezer = $scope.receipt.freezer != '0' ? true : false;
+            $scope.receipt.reserved = $scope.receipt.reserved != '0' ? true : false;
             checkPagination();
         } else {
             // We reached the end of the receipts

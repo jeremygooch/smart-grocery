@@ -153,27 +153,27 @@
                 <div class="center">Receipts</div>
             </ons-toolbar>
             <ons-list modifier="inset" style="margin-top: 10px"
-                      ng-show="receipts.newReceipts.length > 0 || receipts.Receipts.length > 0">
+                      ng-show="newReceipts.length > 0 || oldReceipts.length > 0">
                 <ul class="list">
-                    <li class="list__header" ng-show="receipts.newReceipts.length > 0">
+                    <li class="list__header" ng-show="newReceipts.length > 0">
                         New Receipts
                     </li>
-                    <li class="list__item" ng-show="receipts.newReceipts.length > 0"
-                        ng-repeat="receipt in receipts.newReceipts">
-                        <span class="spCol col2">{{ receipt.store }}</span>
-                        <span class="spCol col2">{{ receipt.newItems }} Items</span>
+                    <li class="list__item" ng-show="newReceipts.length > 0"
+                        ng-repeat="receipt in newReceipts">
+                        <span class="spCol col2">{{ receipt.location }}</span>
+                        <span class="spCol col2">{{ receipt.receipt_data.length }} Items</span>
                         <span class="pull-right">
                             <button class="button button-small m-t-5 m-b-5" ng-click="reviewReceipt(receipt.id);">Review</button>
                             <button class="button button-small button--outline m-t-5 m-b-5">Delete</button>
                         </span>
                     </li>
-                    <li class="list__header" ng-show="receipts.oldReceipts.length > 0">
+                    <li class="list__header" ng-show="oldReceipts.length > 0">
                         Old Receipts
                     </li>
-                    <li class="list__item" ng-show="receipts.oldReceipts.length > 0"
-                        ng-repeat="receipt in receipts.oldReceipts">
-                        <span class="spCol col2">{{ receipt.store }}</span>
-                        <span class="spCol col4">{{ receipt.date }}</span>
+                    <li class="list__item" ng-show="oldReceipts.length > 0"
+                        ng-repeat="receipt in oldReceipts">
+                        <span class="spCol col2">{{ receipt.location }}</span>
+                        <span class="spCol col4">{{ receipt.scan_date }}</span>
                         <span class="pull-right">
                             <ons-icon icon="fa-search" size="15px" fixed-width="false"
                                       ng-click="doSomething()"
@@ -218,7 +218,7 @@
                         </ons-col>
                         <ons-col>
                             <header class="text-center">
-                                <span class="item-title">{{ receipt.store }}</span>
+                                <span class="item-title">{{ reviewReceiptTitle }}</span>
                             </header>
                             <p class="item-desc text-center p-r-0">{{ receipt.description }}</p>
                         </ons-col>
@@ -267,21 +267,21 @@
                             <span class="spCol col6 calendar" ng-disabled="!receipt.freezer">
                                 <input type="number" id="itemExpMo" class="text-input--underbar"
                                        placeholder="MM" min="1" max="12"
-                                       value="{{ receipt.expires.month }}"
+                                       value="{{ receipt.exp.month }}"
                                        ng-disabled="receipt.freezer">
                                 <input type="number" id="itemExpDa" class="text-input--underbar"
                                        placeholder="DD" min="1" max="31"
-                                       value="{{ receipt.expires.day }}"
+                                       value="{{ receipt.exp.day }}"
                                        ng-disabled="receipt.freezer">
                                 <input type="number" id="itemExpYr" class="text-input--underbar"
                                        placeholder="YYYY" min="{{ currentYear }}" max="{{ currentYear + 30 }}"
-                                       value="{{ receipt.expires.year }}" ng-disabled="receipt.freezer">
+                                       value="{{ receipt.exp.year }}" ng-disabled="receipt.freezer">
                             </span>
                         </ons-col>
                     </ons-row>
                 </ons-list-item>
                 <!-- --------------------------------------------------------- -->
-                <!-- Receipts not yet implemented -->
+                <!-- Recipes not yet implemented -->
                 <!-- --------------------------------------------------------- -->
                 <!-- <ons-list-item class="item"> -->
                 <!--     <ons-row> -->
@@ -331,7 +331,7 @@
                             </span>
                             <span class="spCol col2">
                                 <input type="text" id="itemUnits" class="text-input--underbar"
-                                       placeholder="" value="{{ receipt.unit }}">
+                                       placeholder="" value="{{ receipt.units }}">
                             </span>
                         </ons-col>
                     </ons-row>
