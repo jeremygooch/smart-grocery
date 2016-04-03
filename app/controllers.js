@@ -1,5 +1,5 @@
 // Main controller wrapping entire app
-sg.controller('AppController', function($scope, $data) {
+sg.controller('AppController', function($scope, $data, $http) {
     // Detect scroll height for sizing the topbar
     $scope.showMore = function() {
         console.log('show more triggered');  
@@ -14,17 +14,31 @@ sg.controller('AppController', function($scope, $data) {
     var currentTime = new Date();
     $scope.currentYear = currentTime.getFullYear();
 
-    $scope.recipes = [
-        {label: 'Beef Wellington'},
-        {label: 'Fish Tacos'},
-        {label: 'Pork Chops'},
-        {label: 'Meat Loaf'},
-        {label: 'Tuna Salad'},
-        {label: 'Spaghetti'},
-        {label: 'Chicken Parmasean'},
-        {label: 'Stir Fry'},
-        {label: 'Salsbury Steak'}
-    ];
+    $scope.apiRequest = function(type, api, data, async) {
+        /*
+         * This fuction makes a basic request to the champHR API
+         * based off of the provided parameter
+         *
+         * @type    = The type of request being made (i.e. POST, GET)
+         * @api     = The api to be requested
+         * @data    = The data payload
+         * @async   = Should the request be sent asyncronysoulsly? [default: false]
+         *
+         * @RETURN = The results of the request as an object
+         */
+
+        // var $http = angular.element(document.body).injector().get('$http');
+        var request = $http({
+            method: type,
+            url: api,
+            data: data,
+            async: (async) ? true : false,
+            headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
+        });
+        /* Check whether the HTTP Request is successful or not. */
+        return request;
+    };
+
 });
 
 sg.controller('InventoryController', function($scope, $data) {
@@ -78,6 +92,31 @@ sg.controller('InventoryController', function($scope, $data) {
 
 sg.controller('ReceiptsController', function($scope, $data) {
     $scope.item = $data.selectedItem;
+
+
+
+    
+    // Get the old and new receipts
+    var data = { api: 'receipts', method: 'getAllReceipts' }
+    var newReceipts = $scope.apiRequest('post', 'api/index.php', data);
+    newReceipts.success(function (res) {
+        console.log(res);
+        // if (res.code == 200) {
+        //     if (res.data.new_receipt_count > 0) {
+        //         $data.items[2].notify = res.data.new_receipt_count;
+        //     } else {
+        //         delete $data.items[2].notify;
+        //     }
+        // } else {
+        //     console.dir(res);
+        // }
+    });
+    newReceipts.error(function(data, status, headers, config){
+        console.dir(data);
+    });
+
+    
+    
 
     // Setup the fake list of items in the inventory
     $scope.receipts = {
@@ -210,9 +249,9 @@ sg.controller('DetailController', function($scope, $data) {
     $scope.item = $data.selectedItem;
 });
 
-sg.controller('MasterController', function($scope, $data) {
+sg.controller('MasterController', function($scope, $data, $interval) {
+    // Initial Page setup
     $scope.items = $data.items;
-
     $scope.loadView = function(index) {
         var page;
         switch (index) {
@@ -227,9 +266,38 @@ sg.controller('MasterController', function($scope, $data) {
             break;
         };
 
-        
+        // Navigation
         var selectedItem = $data.items[index];
         $data.selectedItem = selectedItem;
         $scope.navi.pushPage(page, {title : selectedItem.title});
     };
+
+
+
+    
+    // Start listening for notifications
+    function getNewReceipts() {
+        var data = { api: 'receipts', method: 'getNewReceipts' }
+        var newReceipts = $scope.apiRequest('post', 'api/index.php', data);
+        newReceipts.success(function (res) {
+            if (res.code == 200) {
+                if (res.data.new_receipt_count > 0) {
+                    $data.items[2].notify = res.data.new_receipt_count;
+                } else {
+                    delete $data.items[2].notify;
+                }
+            } else {
+                console.dir(res);
+            }
+        });
+        newReceipts.error(function(data, status, headers, config){
+            console.dir(data);
+        });
+    }
+    getNewReceipts();
+    $interval(function() { getNewReceipts(); }, 1000);
+
+
+
+
 });

@@ -61,6 +61,7 @@ class processReceipts{
           for ($x = 0; $x < count($words); $x++) {
             $word = $words[$x];
             $word = trim($word);
+            $preventQuantity = false;
 
             // Make sure we have at least 2 characters to work with
             if (strlen($word) > 1) {
@@ -74,17 +75,56 @@ class processReceipts{
               } else {
                 $swapQuery = "SELECT s.label FROM spellings AS s LEFT JOIN spellings_alternatives_ref AS sa ON s.id=sa.spelling_id WHERE sa.alt_spelling = '$label';";
                 $swapWord = $this->gdao->queryOne($swapQuery);
-
                 if ($swapWord) {
                   $clnList[$i][$x] = $swapWord;
+                } else {
+                  // Make sure a quantity doesn't accidentally get stuck to this empty record
+                  /* $clnList[$i][$x] = 'DELETED'; */
+                }
+              }
+
+              // See if we can find any quantities for our items
+              $quantity = 1;
+              if (is_numeric($words[0])) {
+                // This might be a quantity
+                if ($words[1] == 'Ea.' || $words[1] == 'Ea') {
+                  $quantity = $words[0];
                 }
               }
             }
+          } // end FOR ($words)
+        
+          // Lets find who the quantity belongs to... sometimes the previous array was an empty line,
+          // so we should also check 2 previous entries. We'll stick the quantity on the end
+          if (count($clnList[$i - 1]) > 0) {
+
+
+            $lastChar = $clnList[$i-1][count($clnList[$i-1]) - 1];
+            if ($lastChar == '') { $lastChar = $clnList[$i-1][count($clnList[$i-1]) - 2]; }
+            /* error_log("$i), i'm sticking $quantity on $lastChar for the row " . */
+            /*           $clnList[$i-1][0] . " " . $clnList[$i-1][1]); */
+            
+
+            if (!is_numeric($lastChar)) {
+              /* array_push($clnList[$i - 1],$quantity); */
+            }
+
+            
+          } elseif (count($clnList[$i - 2]) > 0) {
+
+            $lastChar = $clnList[$i-2][count($clnList[$i-2]) - 1];
+            if ($lastChar == '') { $lastChar = $clnList[$i-2][count($clnList[$i-2]) - 2]; }
+
+            /* error_log("$i), i'm sticking $quantity on $lastChar for the row " . */
+            /*           $clnList[$i-2][0] . " " . $clnList[$i-2][1]); */
+            
+            if (!is_numeric($lastChar)) {
+              /* array_push($clnList[$i - 2],$quantity); */
+            }
           }
-        }
+
+        } // end IF count($words > 1)
       }
-
-
 
       // Try to locate the store name
       $store = "Unknown";
@@ -112,6 +152,7 @@ class processReceipts{
               $sentence .= " ";
             }
           }
+          /* error_log($i . ') ' . $sentence); */
           // Try to match this against an inventory item
           $label = $this->gdao->mysql_sanitize($sentence);
 
@@ -129,7 +170,7 @@ class processReceipts{
             }
             
             // Insert the item into the inventory
-            $addItemQuery = "INSERT INTO receipt_items_ref (receipt_id, expires, freezer, inventory_item_id, reviewed) SELECT $rid, $expDate, freezer, id, 0 FROM inventory_items WHERE id = '$getInvItemId';";
+            $addItemQuery = "INSERT INTO receipt_items_ref (receipt_id, expires, freezer, units, inventory_item_id, reviewed) SELECT $rid, $expDate, freezer, units, id, 0 FROM inventory_items WHERE id = '$getInvItemId';";
             $addItem = $this->gdao->queryOne($addItemQuery);
           }
         }
@@ -151,5 +192,12 @@ class processReceipts{
     }
     
   }
+
+
+  public function extractQuantity($rcpt) {
+    error_log('im going fishing for quantities...');
+  }
+
+  
 
   }

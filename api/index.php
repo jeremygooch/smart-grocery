@@ -10,7 +10,7 @@
    * It will be used to route the users to the proper method/file.
    * This API requires the "api" and "method" paramaters to be sent.
    *
-np    * @api[str]    : Which API you are wanting to reference.
+   np    * @api[str]    : Which API you are wanting to reference.
    * @method[str] : API Method to be used.
    * @data[obj]   : Any arguments, data or flags need to be passed in using this "data" object.
    *
@@ -36,26 +36,52 @@ if(empty($request['api'])){
   die;
 }
 
-
 //----- START ----- API Controller -----//
 switch($request['api']){
   // Methods
-case "inventory":
+case "receipts":
   switch($request['method']){
-    //Get Branch Data
-  case "getLatestScan":
+  case "getNewReceipts":
+    //Load DAO
+    $DAO = new receiptsDAO();
+    $data = $DAO->get_new_receipts();
 
+    //Send JSON Response
+    header('Content-Type: application/json');
+    echo $data;
+    break;
+
+  case "getAllReceipts":
+    //Load DAO
+    $DAO = new scansDAO();
+    $data = $DAO->get_all_scans();
+
+    //Send JSON Response
+    header('Content-Type: application/json');
+    echo $data;
+    break;
+
+  default:
+    //ERROR! Uncaught Request Method
+    error_invalid_api($request);
+    break;
 
   }
   break;
 case 'NEXT':
   switch($request['TYPE']){
+  case "xxx":
     //
-  break;
-  //***** END ***** APPLICANT METHODS *****//
+    break;
+    //***** END ***** METHODS *****//
+  default:
+    //ERROR! Uncaught Request API
+    error_invalid_api($request);
+    break;
+  }
+  
 default:
-  //ERROR! Uncaught Request API
-  error_invalid_api($request);
+  //
   break;
 }
 

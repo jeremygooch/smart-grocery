@@ -6,7 +6,6 @@ sg.factory('$data', function() {
     data.items = [
         {
             title: 'Inventory',
-            notify: '2',
             controller: '',
             icon: 'inventory-thum',
             desc: 'View and update any of the items in your currrent inventory.'
@@ -19,7 +18,6 @@ sg.factory('$data', function() {
         {
             title: 'Receipts',
             icon: 'receipts',
-            notify: '1',
             desc: 'Review any uploaded receipts, and view any previous receipts.'
         },
         {
