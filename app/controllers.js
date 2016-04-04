@@ -109,65 +109,6 @@ sg.controller('ReceiptsController', function($scope, $data) {
     });
 
     
-    
-
-    // Setup the fake list of items in the inventory
-    $scope.receipts = {
-        newReceipts: [ {
-            id: 1, store: 'HEB', date: '4/10/2016 8:27PM', newItems: 12,
-            items: [
-                {
-                    store: 'HEB',
-                    description: 'Ground Turkey',
-                    expires: {
-                        month: '',
-                        day: '',
-                        year: ''
-                    },
-                    freezer: true,
-                    reserved: true,
-                    quantity: 2,
-                    unit: 'lbs'
-                },
-                {
-                    store: 'HEB',
-                    description: 'Whole Milk',
-                    expires: {
-                        month: '4',
-                        day: '15',
-                        year: '2016'
-                    },
-                    freezer: false,
-                    reserved: false,
-                    quantity: 1,
-                    unit: 'gal'
-                },
-                {
-                    store: 'HEB',
-                    description: 'Salsa Ranchera',
-                    expires: {
-                        month: '6',
-                        day: '21',
-                        year: '2016'
-                    },
-                    freezer: false,
-                    reserved: false,
-                    quantity: 1.5,
-                    unit: 'cup'
-                }
-            ]
-        } ],
-        oldReceipts: [
-            { id: 2, store: 'HEB', date: '4/01/2016 8:27PM' },
-            { id: 3, store: 'Target', date: '3/28/2016 5:03PM' },
-            { id: 4, store: 'Randalls', date: '3/27/2016 10:32AM' },
-            { id: 5, store: 'Target', date: '3/15/2016 2:11PM' },
-            { id: 6, store: 'Randalls', date: '3/10/2016 3:49PM' },
-            { id: 7, store: 'HEB', date: '3/05/2016 9:47AM' },
-            { id: 8, store: 'HEB', date: '2/20/2016 4:55PM' }
-        ]
-    };
-    
     $scope.reviewReceipt = function(id) {
         for (var i=0; i<$scope.newReceipts.length; i++) {
             if ($scope.newReceipts[i].id) {
@@ -213,7 +154,7 @@ sg.controller('ReviewReceiptController', function($scope, $data) {
         function checkPagination() {
             // Cleanup for afterwards
             $scope.prevReceipts = r == 0 ? false : true
-            $scope.nextReceipts = r == (tot-1) ? false : true;
+            $scope.nextReceipts = r == (tot - 1) ? false : true;
         }
         
         if ($data.reviewReceipt.receipt_data[r]) {
@@ -226,6 +167,14 @@ sg.controller('ReviewReceiptController', function($scope, $data) {
             // We reached the end of the receipts
             checkPagination();
         }
+    };
+
+    $scope.saveItem = function(id) {
+        // Do some logic
+        
+
+        // Advance to next item
+        // $scope.changeReceipt('next');
     };
 
     
