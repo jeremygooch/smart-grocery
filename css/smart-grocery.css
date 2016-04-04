@@ -90,8 +90,48 @@ label {
 .reviewProgress:hover, .reviewProgress:active {
     opacity: .5;
 }
+input[type="range"] {
+    output: 0;
+    
+}
+.range-hint {
+    opacity: .82;
+    text-align: center;
+    line-height: 26px;
+}
 
+.select-style {
+    padding: 0;
+    margin: 0;
+    border: 1px solid #ccc;
+    width: 150px;
+    border-radius: 3px;
+    overflow: hidden;
+    background-color: #fff;
+    float: left;
+}
+label[for="itemUnits"] {
+    float: left;
+}
 
+.select-style select {
+    padding: 5px 8px;
+    width: 130%;
+    border: none;
+    box-shadow: none;
+    background-color: transparent;
+    background-image: none;
+    -webkit-appearance: none;
+       -moz-appearance: none;
+            appearance: none;
+}
+
+.select-style select, .select-style select:active, .select-style select:focus {
+    outline: none;
+}
+.select-style select::-moz-focus-inner {
+    border: 0;
+}
 
 
 

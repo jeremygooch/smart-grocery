@@ -134,6 +134,15 @@ sg.controller('ReviewReceiptController', function($scope, $data) {
     $scope.receipt.freezer = $scope.receipt.freezer != '0' ? true : false;
     $scope.receipt.reserved = $scope.receipt.reserved != '0' ? true : false;
 
+    // Setup the various units
+    $scope.units = {
+        standard: ['bag', 'bottle', 'box', 'bunch', 'can', 'container', 'cups', 'liter',
+                   'oz', 'package', 'quart'],
+        butter: ['sticks', 'small tub', 'medium tub', 'large tub']
+    };
+
+    
+
     document.getElementById('freezer').addEventListener('change', function(event) {
         $scope.$apply(function() { $scope.receipt.freezer = !$scope.receipt.freezer; });
     });

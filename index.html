@@ -238,19 +238,6 @@
                 <ons-list-item class="item">
                     <ons-row>
                         <ons-col>
-                            <span class="spCol col2">
-                                <label for="itemLabel">Item: </label>
-                            </span>
-                            <span class="spCol col6">
-                                <input type="text" id="itemLabel" class="text-input--underbar"
-                                       placeholder="Hot Dogs" value="{{ receipt.description }}">
-                            </span>
-                        </ons-col>
-                    </ons-row>
-                </ons-list-item>
-                <ons-list-item class="item">
-                    <ons-row>
-                        <ons-col>
 
                             <div class="clearfix"></div>
                             <span class="spCol col2 m-t-20">
@@ -265,6 +252,12 @@
                                 <label for="itemExpMo">Expires: </label>
                             </span>
                             <span class="spCol col6 calendar" ng-disabled="!receipt.freezer">
+                                <!-- <input type="range" class="range" min="1" max="12" -->
+                                <!--        ng-model="receipt.exp.month" -->
+                                <!--        value="{{ receipt.exp.month }}"> -->
+                                <!-- <div class="calendarMonthLabel">{{ receipt.exp.month | getMonth }}</div> -->
+                            <!-- </span> -->
+                            <!-- <span class="spCol col6" ng-disabled="!receipt.freezer"> -->
                                 <input type="number" id="itemExpMo" class="text-input--underbar"
                                        placeholder="MM" min="1" max="12"
                                        value="{{ receipt.exp.month }}"
@@ -319,23 +312,34 @@
                 <ons-list-item class="item">
                     <ons-row>
                         <ons-col>
-                            <span class="spCol col2">
-                                <label for="itemQuantity">Quantity: </label>
-                            </span>
-                            <span class="spCol col2">
-                                <input type="number" id="itemQuantity" class="text-input--underbar"
-                                       placeholder="##" value="{{ receipt.quantity }}">
-                            </span>
-                            <span class="spCol col2">
-                                <label for="itemQuantity">Units: </label>
-                            </span>
-                            <span class="spCol col2">
-                                <input type="text" id="itemUnits" class="text-input--underbar"
-                                       placeholder="" value="{{ receipt.units }}">
-                            </span>
+                            <label for="itemQuantity" class="m-r-10">Quantity: </label>
+                        </ons-col>
+                        <ons-col>
+                            <input type="range" class="range m-r-10" min="1" max="10"
+                                   ng-model="receipt.quantity"
+                                   value="{{ receipt.quantity }}">
+                        </ons-col>
+                        <ons-col class="range-hint">
+                            {{ receipt.quantity }}
                         </ons-col>
                     </ons-row>
-                </ons-list-item>
+                </ons-list-item>                
+                <ons-list-item class="item">
+                    <ons-row>
+                        <ons-col>
+                            <label for="itemUnits" class="m-r-20">Units: </label>
+                            <div class="select-style">
+                                <select>
+                                    <option ng-repeat="unit in units.standard"
+                                            ng-selected="unit == receipt.units">{{ unit }}</option>
+                                </select>
+                            </div>
+                        </ons-col>
+                        <!-- <ons-col> -->
+
+                        <!-- </ons-col> -->
+                    </ons-row>
+                </ons-list-item>                
                 <ons-list-item class="item">
                     <ons-row>
                         <ons-col>
