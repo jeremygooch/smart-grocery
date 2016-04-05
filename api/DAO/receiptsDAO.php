@@ -38,7 +38,7 @@ class receiptsDAO {
 
         // Since this is a new receipt, lets get it's various items for reviewing
         $rid = $value['receipt_id'];
-        $indQuery = "SELECT * FROM receipt_items_ref AS r LEFT JOIN inventory_items AS i ON r.inventory_item_id=i.id WHERE r.receipt_id = $rid;";
+        $indQuery = "SELECT *, r.id FROM receipt_items_ref AS r LEFT JOIN inventory_items AS i ON r.inventory_item_id=i.id WHERE r.receipt_id = $rid;";
         $indRes = $this->gdao->queryAll($indQuery);
 
         // Break the expiration information apart
@@ -67,5 +67,13 @@ class receiptsDAO {
     }
     
     return $this->utilities->prep_response($out);
+  }
+
+  public function delete_item($id){
+    $query = "DELETE FROM receipt_items_ref WHERE id = '$id';";
+    $res = $this->gdao->queryRow($query);
+
+    return $this->utilities->prep_response("$id successfully deleted.");
+    /* return; */
   }
 }

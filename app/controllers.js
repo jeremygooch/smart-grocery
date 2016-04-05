@@ -141,6 +141,24 @@ sg.controller('ReviewReceiptController', function($scope, $data) {
         butter: ['sticks', 'small tub', 'medium tub', 'large tub']
     };
 
+    $scope.deleteItem = function(id) {
+        var data = { api: 'receipts', method: 'deleteItem', item_id: id };
+        console.log(data);
+        var deleteItem = $scope.apiRequest('post', 'api/index.php', data);
+        deleteItem.success(function (res) {
+            if (res.code == 200) {
+                console.log(res);
+                // $scope.newReceipts = res.data['new']; // new is reserved
+                // $scope.oldReceipts = res.data.old;
+            } else {
+                console.dir(res);
+            }
+        });
+        deleteItem.error(function(data, status, headers, config){
+            console.dir(data);
+        });
+    };
+
     
 
     document.getElementById('freezer').addEventListener('change', function(event) {

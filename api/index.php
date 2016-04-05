@@ -61,6 +61,32 @@ case "receipts":
     echo $data;
     break;
 
+  case "saveItem":
+    //Load DAO
+    $DAO = new receiptsDAO();
+    $data = $DAO->save_item($request['item_id']);
+
+    //Send JSON Response
+    header('Content-Type: application/json');
+    echo $data;
+    break;
+
+  case "deleteItem":
+    if ($request['item_id']) {
+      //Load DAO
+      $DAO = new receiptsDAO();
+      $data = $DAO->delete_item($request['item_id']);
+
+      //Send JSON Response
+      header('Content-Type: application/json');
+      echo $data;
+    } else {
+      $message = "ERROR: Missing item id argument [item_id] for this method";
+      header('Content-Type: application/json');
+      echo(json_encode(array("code"=>"403", "message"=>$message, "request"=>print_r($request,1))));
+    }
+    break;
+
   default:
     //ERROR! Uncaught Request Method
     error_invalid_api($request);
