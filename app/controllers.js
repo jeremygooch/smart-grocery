@@ -1,46 +1,3 @@
-// Main controller wrapping entire app
-sg.controller('AppController', function($scope, $data, $http) {
-    // Detect scroll height for sizing the topbar
-    $scope.showMore = function() {
-        console.log('show more triggered');  
-    };
-    
-    $scope.doSomething = function() {
-        setTimeout(function() {
-            ons.notification.alert({ message: 'tapped' });
-        }, 100);
-    };
-
-    var currentTime = new Date();
-    $scope.currentYear = currentTime.getFullYear();
-
-    $scope.apiRequest = function(type, api, data, async) {
-        /*
-         * This fuction makes a basic request to the champHR API
-         * based off of the provided parameter
-         *
-         * @type    = The type of request being made (i.e. POST, GET)
-         * @api     = The api to be requested
-         * @data    = The data payload
-         * @async   = Should the request be sent asyncronysoulsly? [default: false]
-         *
-         * @RETURN = The results of the request as an object
-         */
-
-        // var $http = angular.element(document.body).injector().get('$http');
-        var request = $http({
-            method: type,
-            url: api,
-            data: data,
-            async: (async) ? true : false,
-            headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
-        });
-        /* Check whether the HTTP Request is successful or not. */
-        return request;
-    };
-
-});
-
 sg.controller('InventoryController', function($scope, $data) {
     $scope.item = $data.selectedItem;
 
@@ -119,9 +76,10 @@ sg.controller('ReceiptsController', function($scope, $data) {
     };
 });
 
-sg.controller('ReviewReceiptController', function($scope, $data) {
+sg.controller('ReviewReceiptController', function($scope, $data, $timeout) {
     var r = 0; tot = $data.reviewReceipt.receipt_data.length;
-    // Update the pagination depending on the number of receipts
+
+    // Update the pagination for the UI
     $scope.prevReceipts = false;
     $scope.nextReceipts = tot > 1 ? true : false;
     
@@ -141,15 +99,31 @@ sg.controller('ReviewReceiptController', function($scope, $data) {
         butter: ['sticks', 'small tub', 'medium tub', 'large tub']
     };
 
+    $scope.saveItem = function(id) {
+        $scope.processingItem = true;
+        console.log('here?');
+    };
+
     $scope.deleteItem = function(id) {
         var data = { api: 'receipts', method: 'deleteItem', item_id: id };
-        console.log(data);
         var deleteItem = $scope.apiRequest('post', 'api/index.php', data);
         deleteItem.success(function (res) {
             if (res.code == 200) {
-                console.log(res);
-                // $scope.newReceipts = res.data['new']; // new is reserved
-                // $scope.oldReceipts = res.data.old;
+                // Play out deleted animation
+                $scope.receipt.resetItem = false;
+                $scope.receipt.deleted = true;
+                $timeout(function() {
+                    $data.reviewReceipt.receipt_data.splice(r,1);
+                    $scope.receipt.deleted = false;
+                    if ($data.reviewReceipt.receipt_data[r + 1]) {
+                        $scope.changeReceipt('next');
+                    } else if ($data.reviewReceipt.receipt_data[r - 1]) {
+                        console.log('FINISHED!!!!');
+                    }
+                    $scope.receipt.resetItem = true;
+                }, 640);
+                
+                
             } else {
                 console.dir(res);
             }
@@ -270,5 +244,50 @@ sg.controller('MasterController', function($scope, $data, $interval) {
 
 
 
+
+});
+
+// Main controller wrapping entire app
+sg.controller('AppController', function($scope, $data, $http) {
+    // Detect scroll height for sizing the topbar
+    $scope.showMore = function() {
+        console.log('show more triggered');  
+    };
+    
+    $scope.doSomething = function() {
+        setTimeout(function() {
+            ons.notification.alert({ message: 'tapped' });
+        }, 100);
+    };
+
+    var currentTime = new Date();
+    $scope.currentYear = currentTime.getFullYear();
+
+    $scope.apiRequest = function(type, api, data, async) {
+        /*
+         * This fuction makes a basic request to the champHR API
+         * based off of the provided parameter
+         *
+         * @type    = The type of request being made (i.e. POST, GET)
+         * @api     = The api to be requested
+         * @data    = The data payload
+         * @async   = Should the request be sent asyncronysoulsly? [default: false]
+         *
+         * @RETURN = The results of the request as an object
+         */
+
+        // var $http = angular.element(document.body).injector().get('$http');
+        var request = $http({
+            method: type,
+            url: api,
+            data: data,
+            async: (async) ? true : false,
+            headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
+        });
+        /* Check whether the HTTP Request is successful or not. */
+        return request;
+    };
+
+    $scope.col1 = 'style="width: 25%;"';
 
 });

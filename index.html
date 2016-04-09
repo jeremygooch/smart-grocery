@@ -234,100 +234,61 @@
                     </ons-row>
                 </ons-list-item>
             </ons-list>
-            <ons-list class="m-t-10">
+            <ons-list class="m-t-10" ng-class="{ deleted : receipt.deleted, fadeIn : receipt.resetItem }">
                 <ons-list-item class="item">
                     <ons-row>
                         <ons-col>
-
-                            <div class="clearfix"></div>
-                            <span class="spCol col2 m-t-20">
-                                <label class="">Freezing </label>
-                            </span>
-                            <span class="spCol col6 m-t-15">
-                                <ons-switch id="freezer" ng-checked="receipt.freezer"></ons-switch>
-                            </span>
-
-                            <div class="clearfix"></div>
-                            <span class="spCol col2 m-t-10" ng-class="{'fade50' : receipt.freezer}">
-                                <label for="itemExpMo">Expires: </label>
-                            </span>
-                            <span class="spCol col6 calendar" ng-disabled="!receipt.freezer">
-                                <!-- <input type="range" class="range" min="1" max="12" -->
-                                <!--        ng-model="receipt.exp.month" -->
-                                <!--        value="{{ receipt.exp.month }}"> -->
-                                <!-- <div class="calendarMonthLabel">{{ receipt.exp.month | getMonth }}</div> -->
-                            <!-- </span> -->
-                            <!-- <span class="spCol col6" ng-disabled="!receipt.freezer"> -->
-                                <input type="number" id="itemExpMo" class="text-input--underbar"
-                                       placeholder="MM" min="1" max="12"
-                                       value="{{ receipt.exp.month }}"
-                                       ng-disabled="receipt.freezer">
-                                <input type="number" id="itemExpDa" class="text-input--underbar"
-                                       placeholder="DD" min="1" max="31"
-                                       value="{{ receipt.exp.day }}"
-                                       ng-disabled="receipt.freezer">
-                                <input type="number" id="itemExpYr" class="text-input--underbar"
-                                       placeholder="YYYY" min="{{ currentYear }}" max="{{ currentYear + 30 }}"
-                                       value="{{ receipt.exp.year }}" ng-disabled="receipt.freezer">
-                            </span>
+                            <label>Freezing</label>
+                            <ons-switch id="freezer" ng-checked="receipt.freezer"></ons-switch>
+                        </ons-col>
+                    </ons-row>
+                    <ons-row>
+                        <ons-col>
+                            <div class="slider" ng-class="{'closed' : receipt.freezer}">
+                                <label for="itemExpMo" ng-class="{'fade50' : receipt.freezer}">Expires: </label>
+                                <div class="expDate" ng-class="{'fade50' : receipt.freezer}">
+                                    {{ receipt.exp.month | formatMonth }} {{ receipt.exp.day }},
+                                    {{ receipt.exp.year }}</div>
+                                <div class="clearfix"></div>
+                                <label for="expMonth" class="text-right" ng-class="{'fade50' : receipt.freezer}">
+                                    <em>Month</em>
+                                </label>
+                                <input id="expMonth" type="range" class="range" min="1" max="12"
+                                       ng-model="receipt.exp.month" ng-disabled="receipt.freezer"
+                                       value="{{ receipt.exp.month }}">
+                                <div class="clearfix"></div>
+                                <label for="expDay" class="text-right" ng-class="{'fade50' : receipt.freezer}">
+                                    <em>Day</em>
+                                </label>
+                                <input id="expDay" type="range" class="range" min="1" max="31"
+                                       ng-model="receipt.exp.day" ng-disabled="receipt.freezer"
+                                       value="{{ receipt.exp.day }}">
+                                <div class="clearfix"></div>
+                                <label for="expYear" class="text-right" ng-class="{'fade50' : receipt.freezer}">
+                                    <em>Year</em>
+                                </label>
+                                <input id="expYear" type="range" class="range" min="{{ currentYear }}"
+                                       max="{{ currentYear +5 }}" ng-model="receipt.exp.year"
+                                       ng-disabled="receipt.freezer" value="{{ receipt.exp.year }}">
+                                <div class="clearfix"></div>
+                            </div>
                         </ons-col>
                     </ons-row>
                 </ons-list-item>
-                <!-- --------------------------------------------------------- -->
-                <!-- Recipes not yet implemented -->
-                <!-- --------------------------------------------------------- -->
-                <!-- <ons-list-item class="item"> -->
-                <!--     <ons-row> -->
-                <!--         <ons-col> -->
-                <!--             <span class="spCol col2 m-t-20"> -->
-                <!--                 <label>Reserved </label> -->
-                <!--             </span> -->
-                <!--             <span class="spCol col6 m-t-15"> -->
-                <!--                 <ons-switch id="reserved" ng-checked="receipt.reserved"></ons-switch> -->
-                <!--             </span> -->
-                <!--             <div class="clearfix"></div> -->
-                <!--             <span class="spCol col2"> -->
-                <!--                 <label for="itemLabel">Recipe: </label> -->
-                <!--             </span> -->
-                <!--             <span class="spCol col9" ng-class="{'fade50' : !receipt.items[0].reserved}"> -->
-                <!--                 <ons-scroller style="height:100px; width: 100%"> -->
-                <!--                     <ons-list> -->
-                <!--                         <ul class="list"> -->
-                <!--                             <li class="list__item list__item--tappable" -->
-                <!--                                 ng-repeat=" recipe in recipes"> -->
-                <!--                                 <label class="checkbox checkbox--list-item"> -->
-                <!--                                     <input type="checkbox" -->
-                <!--                                            ng-disabled="!receipt.items[0].reserved"> -->
-                <!--                                     <div class="checkbox__checkmark checkbox--noborder checkbox--list-item__checkmark"></div> -->
-                <!--                                     <span class="spCol col4">{{ recipe.label }}</span> -->
-                <!--                                 </label> -->
-                <!--                             </li> -->
-                <!--                         </ul> -->
-                <!--                     </ons-list> -->
-                <!--                 </ons-scroller> -->
-                <!--             </span> -->
-                <!--         </ons-col> -->
-                <!--     </ons-row> -->
-                <!-- </ons-list-item> -->
                 <ons-list-item class="item">
                     <ons-row>
                         <ons-col>
-                            <label for="itemQuantity" class="m-r-10">Quantity: </label>
-                        </ons-col>
-                        <ons-col>
-                            <input type="range" class="range m-r-10" min="1" max="10"
+                            <label for="itemQuantity">Quantity: </label>
+                            <input type="range" class="range" min="1" max="10"
                                    ng-model="receipt.quantity"
                                    value="{{ receipt.quantity }}">
-                        </ons-col>
-                        <ons-col class="range-hint">
-                            {{ receipt.quantity }}
                         </ons-col>
                     </ons-row>
                 </ons-list-item>                
                 <ons-list-item class="item">
                     <ons-row>
                         <ons-col>
-                            <label for="itemUnits" class="m-r-20">Units: </label>
+                            <label for="itemUnits">Units: </label>
                             <div class="select-style">
                                 <select>
                                     <option ng-repeat="unit in units.standard"
@@ -343,10 +304,12 @@
                 <ons-list-item class="item">
                     <ons-row>
                         <ons-col>
-                            <button class="button pull-right">
+                            <button class="button pull-right" ng-class="{ 'test' : processingItem }"
+                                    ng-disabled="processingItem"  ng-click="saveItem(receipt.id)">
                                 <ons-icon icon="fa-floppy-o" size="15px"
-                                          fixed-width="false"
-                                          style=""></ons-icon>
+                                          fixed-width="false"></ons-icon>
+                                <ons-icon icon="fa-spinner fa-spin" size="15px" ng-if="processingItem"
+                                          fixed-width="false"></ons-icon>
                                 <span class="m-l-5">Save</span>
                             </button>
                             <button class="button button--outline pull-left" ng-click="deleteItem(receipt.id)">

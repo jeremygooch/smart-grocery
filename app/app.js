@@ -35,7 +35,7 @@ sg.factory('$data', function() {
 // ////////////////////////////////////
 // Filters
 // ////////////////////////////////////
-sg.filter('getMonth', function() {
+sg.filter('formatMonth', function() {
     return function(item) {
         switch(item) {
             case "1":

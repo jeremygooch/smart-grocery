@@ -133,8 +133,71 @@ label[for="itemUnits"] {
     border: 0;
 }
 
+ons-col > label, ons-col .slider label {
+    display: inline-block;
+    float: left;
+    width: 25%;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+    height: 32px;
+    line-height: 32px;
+    margin-right: 2.5%;
+    padding-bottom: 1%;
+}
+ons-col > ons-switch, ons-col input, ons-col select, ons-col .expDate,
+ons-col .slider ons-switch, ons-col .slider input, ons-col .slider select, ons-col .slider .expDate {
+    display: inline-block;
+    float: left;
+    width: 72.5%;
+    padding: 0;
+    height: 32px;
+    line-height: 32px;
+}
+.expDate {
+    text-align: center;
+}
+
+.slider {
+    overflow-y: hidden;
+    max-height: 145px; /* approximate max height */
+
+    transition-property: all;
+    transition-duration: .75s;
+    transition-timing-function: cubic-bezier(0, 1, 0.5, 1);
+}
+.slider.closed {
+    max-height: 0;
+}
 
 
+
+
+/* ************************************************* */
+/* Delete Item Animation */
+/* ************************************************* */
+.deleted {
+    animation: deletedRotate 550ms ease-in-out forwards,
+    deletedFall 450ms cubic-bezier(0.345, 0.205, 0.870, 0.285) forwards,
+    fadeOut 120ms ease-in forwards;
+    animation-delay: 10ms, 0ms, 200ms;
+}
+
+
+@keyframes deletedRotate {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(13deg); }
+}
+
+@keyframes deletedFall { 100% { margin-top: 150%; } }
+
+.fadeIn {
+    opacity: 0;
+    animation: fadeIn 200ms ease-in-out forwards;
+}
+
+@keyframes fadeIn { 100% { opacity: 1;} }
+@keyframes fadeOut { 100% { opacity: 0;} }
 
 
 
@@ -144,6 +207,7 @@ label[for="itemUnits"] {
 .fade50 { opacity: .5; }
 .danger { color: #b84a0e; }
 .text-center { text-align: center; }
+.text-right { text-align: right; }
 .clearfix {display: block; height: 1px; width: 100%; clear: both;}
 .hide { display: none !important; }
 .pull-right { position: relative; float: right; }
