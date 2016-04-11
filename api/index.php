@@ -62,28 +62,30 @@ case "receipts":
     break;
 
   case "saveItem":
-    //Load DAO
-    $DAO = new receiptsDAO();
-    $data = $DAO->save_item($request['item_id']);
-
-    //Send JSON Response
-    header('Content-Type: application/json');
-    echo $data;
-    break;
-
-  case "deleteItem":
     if ($request['item_id']) {
       //Load DAO
       $DAO = new receiptsDAO();
-      $data = $DAO->delete_item($request['item_id']);
+      $data = $DAO->save_item($request['item_id']);
 
       //Send JSON Response
       header('Content-Type: application/json');
       echo $data;
     } else {
-      $message = "ERROR: Missing item id argument [item_id] for this method";
+      error_missing_arguments($request);
+    }
+    break;
+
+  case "deleteItem":
+    if ($request['item_id'] && $request['quantity'] && $request['units']) {
+      //Load DAO
+      $DAO = new receiptsDAO();
+      $data = $DAO->delete_item($request['item_id'] && $request['quantity'] && $request['units']);
+
+      //Send JSON Response
       header('Content-Type: application/json');
-      echo(json_encode(array("code"=>"403", "message"=>$message, "request"=>print_r($request,1))));
+      echo $data;
+    } else {
+      error_missing_arguments($request);
     }
     break;
 
@@ -115,6 +117,14 @@ default:
 
 
 //----- ERROR FUNCTIONS -----//
+function error_missing_arguments($request){
+  $message = "ERROR: Missing Parameters for this type! ";
+  error_log(print_r($message."\n".print_r($request,1), 1));
+  header('Content-Type: application/json');
+  echo(json_encode(array("code"=>"402", "message"=>$message, "request"=>print_r($request,1))));
+  return;
+}
+
 function error_invalid_api($request){
   $message = "ERROR: Invalid API Type! ";
   error_log(print_r($message."\n".print_r($request,1), 1));

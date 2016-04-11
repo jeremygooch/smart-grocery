@@ -247,7 +247,7 @@
                             <div class="slider" ng-class="{'closed' : receipt.freezer}">
                                 <label for="itemExpMo" ng-class="{'fade50' : receipt.freezer}">Expires: </label>
                                 <div class="expDate" ng-class="{'fade50' : receipt.freezer}">
-                                    {{ receipt.exp.month | formatMonth }} {{ receipt.exp.day }},
+                                    {{ receipt.exp.month | monthToString }} {{ receipt.exp.day }},
                                     {{ receipt.exp.year }}</div>
                                 <div class="clearfix"></div>
                                 <label for="expMonth" class="text-right" ng-class="{'fade50' : receipt.freezer}">
@@ -305,7 +305,7 @@
                     <ons-row>
                         <ons-col>
                             <button class="button pull-right" ng-class="{ 'test' : processingItem }"
-                                    ng-disabled="processingItem"  ng-click="saveItem(receipt.id)">
+                                    ng-disabled="processingItem" ng-click="saveItem(receipt)">
                                 <ons-icon icon="fa-floppy-o" size="15px"
                                           fixed-width="false"></ons-icon>
                                 <ons-icon icon="fa-spinner fa-spin" size="15px" ng-if="processingItem"

@@ -55,7 +55,7 @@ sg.controller('ReceiptsController', function($scope, $data) {
     var newReceipts = $scope.apiRequest('post', 'api/index.php', data);
     newReceipts.success(function (res) {
         if (res.code == 200) {
-            $scope.newReceipts = res.data['new']; // new is reserved
+            $scope.newReceipts = res.data['new']; // new is reserved in JS
             $scope.oldReceipts = res.data.old;
         } else {
             console.dir(res);
@@ -99,9 +99,20 @@ sg.controller('ReviewReceiptController', function($scope, $data, $timeout) {
         butter: ['sticks', 'small tub', 'medium tub', 'large tub']
     };
 
-    $scope.saveItem = function(id) {
+    $scope.saveItem = function(receipt) {
+        console.log(receipt);
         $scope.processingItem = true;
-        console.log('here?');
+        var data = {
+            api      : 'receipts',
+            method   : 'saveItem',
+            item_id  : receipt.id,
+            quantity : receipt.quantity,
+            units    : receipt.units
+        };
+        var saveItem = $scope.apiRequest('post', 'api/index.php', data);
+        saveItem.success(function(res) {
+            console.log(res);
+        });
     };
 
     $scope.deleteItem = function(id) {
@@ -119,6 +130,9 @@ sg.controller('ReviewReceiptController', function($scope, $data, $timeout) {
                         $scope.changeReceipt('next');
                     } else if ($data.reviewReceipt.receipt_data[r - 1]) {
                         console.log('FINISHED!!!!');
+                        console.log('Would you like to add any additional items not detected on the receipt?');
+                        console.log('Would you like to review your current inventory?');
+                        console.log('Would you like to go home?');
                     }
                     $scope.receipt.resetItem = true;
                 }, 640);

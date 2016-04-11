@@ -74,6 +74,16 @@ class receiptsDAO {
     $res = $this->gdao->queryRow($query);
 
     return $this->utilities->prep_response("$id successfully deleted.");
-    /* return; */
+  }
+
+
+  public function save_item($id, $quantity, $units){
+    $query = "INSERT INTO inventory (receipt_id, inventory_item_id, quantity, units, purchase_date, expires, cooked, expired)
+       SELECT receipt_id, '$id', '$quantity', '$units', CURDATE(), expires, 0, 0 FROM receipt_items_ref 
+       WHERE id = 1212;";
+    $res = $this->gdao->queryRow($query);
+
+    return $this->utilities->prep_response("$id successfully saved.");
+    return "working on it...";
   }
 }
