@@ -95,23 +95,47 @@ sg.controller('ReviewReceiptController', function($scope, $data, $timeout) {
     // Setup the various units
     $scope.units = {
         standard: ['bag', 'bottle', 'box', 'bunch', 'can', 'container', 'cups', 'liter',
-                   'oz', 'package', 'quart'],
+                   'oz', 'package', 'quart', ''],
         butter: ['sticks', 'small tub', 'medium tub', 'large tub']
     };
 
+    function removeItemFromView() {
+        $data.reviewReceipt.receipt_data.splice(r,1);
+        if ($data.reviewReceipt.receipt_data[r + 1]) {
+            $scope.changeReceipt('next');
+        } else if ($data.reviewReceipt.receipt_data[r - 1]) {
+            console.log('FINISHED!!!!');
+            console.log('Would you like to add any additional items not detected on the receipt?');
+            console.log('Would you like to review your current inventory?');
+            console.log('Would you like to go home?');
+        }
+    }
+
     $scope.saveItem = function(receipt) {
-        console.log(receipt);
         $scope.processingItem = true;
         var data = {
-            api      : 'receipts',
-            method   : 'saveItem',
-            item_id  : receipt.id,
-            quantity : receipt.quantity,
-            units    : receipt.units
+            api               : 'receipts',
+            method            : 'saveItem',
+            id                : receipt.id,
+            inventory_item_id : receipt.inventory_item_id,
+            expires           : receipt.exp.day + '-' + receipt.exp.month + '-' + receipt.exp.year,
+            quantity          : receipt.quantity,
+            units             : receipt.units
         };
         var saveItem = $scope.apiRequest('post', 'api/index.php', data);
         saveItem.success(function(res) {
-            console.log(res);
+            if (res.code == 200) {
+                $scope.processingItem = true;
+                removeItemFromView();
+            } else {
+                console.dir(res);
+            }
+        });
+        saveItem.error(function(data, status, headers, config){
+            console.dir(data);
+        });
+        saveItem.finally(function() {
+            $scope.processingItem = false;
         });
     };
 
@@ -124,20 +148,10 @@ sg.controller('ReviewReceiptController', function($scope, $data, $timeout) {
                 $scope.receipt.resetItem = false;
                 $scope.receipt.deleted = true;
                 $timeout(function() {
-                    $data.reviewReceipt.receipt_data.splice(r,1);
                     $scope.receipt.deleted = false;
-                    if ($data.reviewReceipt.receipt_data[r + 1]) {
-                        $scope.changeReceipt('next');
-                    } else if ($data.reviewReceipt.receipt_data[r - 1]) {
-                        console.log('FINISHED!!!!');
-                        console.log('Would you like to add any additional items not detected on the receipt?');
-                        console.log('Would you like to review your current inventory?');
-                        console.log('Would you like to go home?');
-                    }
+                    removeItemFromView();
                     $scope.receipt.resetItem = true;
                 }, 640);
-                
-                
             } else {
                 console.dir(res);
             }
@@ -184,15 +198,6 @@ sg.controller('ReviewReceiptController', function($scope, $data, $timeout) {
         }
     };
 
-    $scope.saveItem = function(id) {
-        // Do some logic
-        
-
-        // Advance to next item
-        // $scope.changeReceipt('next');
-    };
-
-    
     // ////////////////////////////////////////////
     // Recipes not yet implemented
     // ////////////////////////////////////////////

@@ -62,10 +62,10 @@ case "receipts":
     break;
 
   case "saveItem":
-    if ($request['item_id']) {
+    if ($request['id'] && $request['inventory_item_id'] && $request['quantity'] && $request['expires']) {
       //Load DAO
       $DAO = new receiptsDAO();
-      $data = $DAO->save_item($request['item_id']);
+      $data = $DAO->save_item($request['id'],$request['inventory_item_id'],$request['quantity'],$request['units'],$request['expires']);
 
       //Send JSON Response
       header('Content-Type: application/json');
@@ -76,10 +76,10 @@ case "receipts":
     break;
 
   case "deleteItem":
-    if ($request['item_id'] && $request['quantity'] && $request['units']) {
+    if ($request['item_id']) {
       //Load DAO
       $DAO = new receiptsDAO();
-      $data = $DAO->delete_item($request['item_id'] && $request['quantity'] && $request['units']);
+      $data = $DAO->delete_item($request['item_id']);
 
       //Send JSON Response
       header('Content-Type: application/json');
