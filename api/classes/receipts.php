@@ -80,10 +80,9 @@ class receiptsDAO {
   public function save_item($id, $inventory_item_id, $quantity, $units = null, $expires){
     $query = "INSERT INTO inventory (receipt_id, inventory_item_id, quantity, units, purchase_date, expires, cooked, expired)
        SELECT receipt_id, '$inventory_item_id', '$quantity', '$units', CURDATE(), '$expires', 0, 0 FROM receipt_items_ref 
-       WHERE id = 1212;";
+       WHERE id = $id;";
     $res = $this->gdao->queryExec($query);
 
-    error_log($res);
 
     if($res) {
       $this->delete_item($id);

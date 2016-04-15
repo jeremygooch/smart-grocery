@@ -207,7 +207,7 @@
                 <div class="left"><ons-back-button>Back</ons-back-button></div>
                 <div class="center">Review</div>
             </ons-toolbar>
-            <ons-list>
+            <ons-list ng-class="{ hide : !receipt }">
                 <ons-list-item class="item">
                     <ons-row>
                         <ons-col>
@@ -234,7 +234,13 @@
                     </ons-row>
                 </ons-list-item>
             </ons-list>
-            <ons-list class="m-t-10" ng-class="{ deleted : receipt.deleted, fadeIn : receipt.resetItem }">
+            <ons-list class="m-t-10 no-receipts" ng-if="!receipt">
+                All Receipts have been reviewed. What would you like to do now?
+                <p><ons-button onclick="myNavigator.pushPage('inventory.html')">Go To Recipes</ons-button></p>
+                <p><ons-button onclick="myNavigator.pushPage('page2.html'')">Go To Inventory</ons-button></p>
+                <p><ons-button onclick="myNavigator.pushPage('inventory.html')">Go Home</ons-button></p>
+            </ons-list>
+            <ons-list class="m-t-10" ng-class="{ deleted : receipt.deleted, saved : receipt.saved, fadeIn : receipt.resetItem, hide : !receipt }">
                 <ons-list-item class="item">
                     <ons-row>
                         <ons-col>
@@ -303,7 +309,7 @@
                 <ons-list-item class="item">
                     <ons-row>
                         <ons-col>
-                            <button class="button pull-right" ng-class="{ 'test' : processingItem }"
+                            <button class="button pull-right"
                                     ng-disabled="processingItem" ng-click="saveItem(receipt)">
                                 <ons-icon icon="fa-floppy-o" size="15px"
                                           fixed-width="false"></ons-icon>

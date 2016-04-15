@@ -170,11 +170,24 @@ ons-col .slider ons-switch, ons-col .slider input, ons-col .slider select, ons-c
     max-height: 0;
 }
 
+/* ************************************************* */
+/* SAVE Item Animation */
+/* ************************************************* */
+.saved {
+    position: relative;
+    z-index: -1;
+    animation: slideUp 750ms ease-in-out forwards,
+    fadeOut 170ms ease-in forwards;
+    animation-delay: 80ms, 0ms;
+}
+@keyframes slideUp { 100% { margin-top: -105%;} }
+
+
 
 
 
 /* ************************************************* */
-/* Delete Item Animation */
+/* DELETE Item Animation */
 /* ************************************************* */
 .deleted {
     animation: deletedRotate 550ms ease-in-out forwards,
@@ -198,6 +211,15 @@ ons-col .slider ons-switch, ons-col .slider input, ons-col .slider select, ons-c
 
 @keyframes fadeIn { 100% { opacity: 1;} }
 @keyframes fadeOut { 100% { opacity: 0;} }
+
+
+
+.no-receipts {
+    text-align: center;
+    padding: 50px 0;
+    color: rgba(0,0,0,.85);
+    font-style: italic;
+}
 
 
 
