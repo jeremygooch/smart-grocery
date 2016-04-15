@@ -102,12 +102,12 @@ sg.controller('ReviewReceiptController', function($scope, $data, $timeout) {
     function removeItemFromView() {
         $data.reviewReceipt.receipt_data.splice(r,1);
         if ($data.reviewReceipt.receipt_data[r + 1]) {
-            $scope.changeReceipt('next');
+            // Update the current receipt
+            $scope.receipt = $data.reviewReceipt.receipt_data[r];
         } else if ($data.reviewReceipt.receipt_data[r - 1]) {
-            console.log('FINISHED!!!!');
-            console.log('Would you like to add any additional items not detected on the receipt?');
-            console.log('Would you like to review your current inventory?');
-            console.log('Would you like to go home?');
+            $scope.receipt = $data.reviewReceipt.receipt_data[r - 1];
+        } else {
+            $scope.receipt = false;
         }
     }
 
@@ -125,8 +125,13 @@ sg.controller('ReviewReceiptController', function($scope, $data, $timeout) {
         var saveItem = $scope.apiRequest('post', 'api/index.php', data);
         saveItem.success(function(res) {
             if (res.code == 200) {
-                $scope.processingItem = true;
-                removeItemFromView();
+                $scope.receipt.resetItem = false;
+                $scope.receipt.saved = true;
+                $timeout(function() {
+                    $scope.processingItem = false;
+                    removeItemFromView();
+                    $scope.receipt.resetItem = true;
+                }, 740);
             } else {
                 console.dir(res);
             }
