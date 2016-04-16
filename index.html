@@ -152,6 +152,21 @@
                 <div class="left"><ons-back-button>Back</ons-back-button></div>
                 <div class="center">Receipts</div>
             </ons-toolbar>
+
+
+
+            <!-- Refresh -->
+            <ons-pull-hook ng-action="load($done)" var="loader">
+                <span ng-switch="loader.getCurrentState()">
+                    <span ng-switch-when="initial"><ons-icon size="35px" icon="ion-arrow-down-a"></ons-icon> Pull down to refresh</span>
+                    <span ng-switch-when="preaction"><ons-icon size="35px" icon="ion-arrow-up-a"></ons-icon> Release to refresh</span>
+                    <span ng-switch-when="action"><ons-icon size="35px" spin="true" icon="ion-load-d"></ons-icon> Loading data...</span>
+                </span>
+            </ons-pull-hook>
+
+
+
+
             <ons-list modifier="inset" style="margin-top: 10px"
                       ng-show="newReceipts.length > 0 || oldReceipts.length > 0">
                 <ul class="list">
@@ -236,9 +251,9 @@
             </ons-list>
             <ons-list class="m-t-10 no-receipts" ng-if="!receipt">
                 All Receipts have been reviewed. What would you like to do now?
-                <p><ons-button onclick="myNavigator.pushPage('inventory.html')">Go To Recipes</ons-button></p>
-                <p><ons-button onclick="myNavigator.pushPage('page2.html'')">Go To Inventory</ons-button></p>
-                <p><ons-button onclick="myNavigator.pushPage('inventory.html')">Go Home</ons-button></p>
+                <p><ons-button onclick="navi.pushPage('inventory.html')">Go To Recipes</ons-button></p>
+                <p><ons-button onclick="navi.pushPage('page2.html'')">Go To Inventory</ons-button></p>
+                <p><ons-button onclick="navi.pushPage('inventory.html')">Go Home</ons-button></p>
             </ons-list>
             <ons-list class="m-t-10" ng-class="{ deleted : receipt.deleted, saved : receipt.saved, fadeIn : receipt.resetItem, hide : !receipt }">
                 <ons-list-item class="item">

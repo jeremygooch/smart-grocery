@@ -179,7 +179,7 @@ class processReceipts{
             }
             
             // Insert the item into the inventory
-            $addItemQuery = "INSERT INTO receipt_items_ref (receipt_id, expires, freezer, quantity, units, inventory_item_id, reviewed) SELECT $rid, $expDate, freezer, $qty, units, id, 0 FROM inventory_items WHERE id = '$getInvItemId';";
+            $addItemQuery = "INSERT INTO receipt_items_ref (receipt_id, expires, freezer, quantity, units, inventory_item_id) SELECT $rid, $expDate, freezer, $qty, units, id FROM inventory_items WHERE id = '$getInvItemId';";
             $addItem = $this->gdao->queryOne($addItemQuery);
           }
         }

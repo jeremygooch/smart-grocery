@@ -10,7 +10,7 @@
    * It will be used to route the users to the proper method/file.
    * This API requires the "api" and "method" paramaters to be sent.
    *
-   np    * @api[str]    : Which API you are wanting to reference.
+   * @api[str]    : Which API you are wanting to reference.
    * @method[str] : API Method to be used.
    * @data[obj]   : Any arguments, data or flags need to be passed in using this "data" object.
    *
@@ -80,6 +80,20 @@ case "receipts":
       //Load DAO
       $DAO = new receiptsDAO();
       $data = $DAO->delete_item($request['item_id']);
+
+      //Send JSON Response
+      header('Content-Type: application/json');
+      echo $data;
+    } else {
+      error_missing_arguments($request);
+    }
+    break;
+
+  case "archiveReceipt":
+    if ($request['id']) {
+      //Load DAO
+      $DAO = new receiptsDAO();
+      $data = $DAO->archive_receipt($request['id']);
 
       //Send JSON Response
       header('Content-Type: application/json');

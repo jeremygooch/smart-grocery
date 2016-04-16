@@ -47,7 +47,7 @@ sg.controller('InventoryController', function($scope, $data) {
 });
 
 
-sg.controller('ReceiptsController', function($scope, $data) {
+sg.controller('ReceiptsController', function($scope, $data, $timeout, $http) {
     $scope.item = $data.selectedItem;
 
     // Get the old and new receipts
@@ -68,12 +68,43 @@ sg.controller('ReceiptsController', function($scope, $data) {
     
     $scope.reviewReceipt = function(id) {
         for (var i=0; i<$scope.newReceipts.length; i++) {
-            if ($scope.newReceipts[i].id) {
+            if ($scope.newReceipts[i].id && ($scope.newReceipts[i].receipt_data && $scope.newReceipts[i].receipt_data.length > 0)) {
                 $data.reviewReceipt = $scope.newReceipts[i];
                 $scope.navi.pushPage('reviewReceipt.html', {title : 'Review Receipt' });
             }
         }
     };
+
+
+
+
+    // /////////////////
+    // Refresh
+    // /////////////////
+    $scope.items = [];
+    $scope.load = function($done) {
+      $timeout(function() {
+        $http.jsonp('http://numbersapi.com/random/year?callback=JSON_CALLBACK')
+          .success(function(data) {
+            $scope.items.unshift({
+              desc: data,
+              rand: Math.random()
+            });
+          })
+          .error(function() {
+            $scope.items.unshift({
+              desc: 'No data',
+              rand: Math.random()
+            });
+          })
+          .finally(function() {
+            $done();
+          });
+      }, 1000);
+    };
+    $scope.reset = function() {
+      $scope.items.length = 0;
+    }
 });
 
 sg.controller('ReviewReceiptController', function($scope, $data, $timeout) {
@@ -108,6 +139,8 @@ sg.controller('ReviewReceiptController', function($scope, $data, $timeout) {
             $scope.receipt = $data.reviewReceipt.receipt_data[r - 1];
         } else {
             $scope.receipt = false;
+            // Send api call to delete the receipt itself
+            $scope.archiveReceipt($data.reviewReceipt.id);
         }
     }
 
@@ -282,6 +315,26 @@ sg.controller('AppController', function($scope, $data, $http) {
         setTimeout(function() {
             ons.notification.alert({ message: 'tapped' });
         }, 100);
+    };
+
+    $scope.archiveReceipt = function(id) {
+        var data = {
+            api               : 'receipts',
+            method            : 'archiveReceipt',
+            id                : id
+        };
+        var archiveRcpt = $scope.apiRequest('post', 'api/index.php', data);
+        archiveRcpt.success(function(res) {
+            if (res.code != 200) {
+                console.dir(res);
+            }
+        });
+        archiveRcpt.error(function(data, status, headers, config){
+            console.dir(data);
+        });
+        archiveRcpt.finally(function() {
+            //
+        });
     };
 
     var currentTime = new Date();

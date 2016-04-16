@@ -78,16 +78,42 @@ class receiptsDAO {
 
 
   public function save_item($id, $inventory_item_id, $quantity, $units = null, $expires){
-    $query = "INSERT INTO inventory (receipt_id, inventory_item_id, quantity, units, purchase_date, expires, cooked, expired)
-       SELECT receipt_id, '$inventory_item_id', '$quantity', '$units', CURDATE(), '$expires', 0, 0 FROM receipt_items_ref 
+    // See if we already have one of these items in the inventory
+    $query = "SELECT * FROM inventory WHERE inventory_item_id = '$inventory_item_id';";
+    $res = $this->gdao->queryAll($query);
+
+
+    if (count($res) > 0) {
+      foreach($res as $item) { 
+        // Update the first match we find in the inventory
+        if ($item['units'] == $units) {
+          $updateQry = "UPDATE inventory SET quantity = '" . ($item['quantity'] + $quantity) . "', expires = '$expires'";
+          $updateRes = $this->gdao->queryExec($updateQry);
+          break;
+        }
+      }
+    } else {
+      // Add the new item since no existing items were found
+      $updateQry = "INSERT INTO inventory (receipt_id, inventory_item_id, quantity, units, purchase_date, expires, cooked, expired)
+       SELECT receipt_id, '$inventory_item_id', '$quantity', '$units', CURDATE(), '$expires', 0, 0 FROM receipt_items_ref
        WHERE id = $id;";
-    $res = $this->gdao->queryExec($query);
-
-
-    if($res) {
+      $updateRes = $this->gdao->queryExec($updateQry);
+    }
+    
+    if($updateRes) {
       $this->delete_item($id);
+      
+      return $this->utilities->prep_response("$id successfully saved.");
+    } else {
+      return $this->utilities->prep_response("$id could not be saved at this time.", 401);
     }
 
-    return $this->utilities->prep_response("$id successfully saved.");
+  }
+
+  public function archive_receipt($id) {
+    $query = "UPDATE receipts SET processed = '1' WHERE id = '$id';";
+    $res = $this->gdao->queryAll($query);
+
+    return $this->utilities->prep_response("$id successfully archived.");
   }
 }
