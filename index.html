@@ -69,6 +69,7 @@
     <!-- ----------------------------------------- -->
     <ons-template id="inventory.html">
         <ons-page ng-controller="InventoryController">
+            <div class="loading" ng-class="{ hide : contentLoaded }"><ons-icon icon="fa-spinner" size="80px" spin="true"></div>
             <ons-toolbar>
                 <div class="left"><ons-back-button>Back</ons-back-button></div>
                 <div class="center">Inventory</div>

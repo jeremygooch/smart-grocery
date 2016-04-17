@@ -44,6 +44,34 @@ sg.controller('InventoryController', function($scope, $data) {
     $scope.switchCatetory = function(cat) {
         $scope.curList = $scope.inventory[cat];
     };
+
+
+    $scope.contentLoaded = false;
+    var data = {
+        api    : 'inventory',
+        method : 'getInventoryItems'
+    };
+    var getInventory = $scope.apiRequest('post', 'api/index.php', data);
+    getInventory.success(function(res) {
+        console.dir(res);
+        // if (res.code == 200) {
+        //     $scope.receipt.resetItem = false;
+        //     $scope.receipt.saved = true;
+        //     $timeout(function() {
+        //         $scope.processingItem = false;
+        //         removeItemFromView();
+        //         $scope.receipt.resetItem = true;
+        //     }, 740);
+        // } else {
+        //     console.dir(res);
+        // }
+    });
+    getInventory.error(function(data, status, headers, config){
+        console.dir(data);
+    });
+    getInventory.finally(function() {
+        $scope.contentLoaded = true;
+    });
 });
 
 

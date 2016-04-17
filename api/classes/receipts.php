@@ -96,8 +96,7 @@ class receipts {
       $updateQry = "INSERT INTO inventory (receipt_id, inventory_item_id, quantity, units, purchase_date, expires, cooked, expired, category)
        SELECT receipt_id, '$inventory_item_id', '$quantity', '$units', CURDATE(), '" . $expiresDate->format('Y-m-d') . "', 0, 0, '$category' FROM receipt_items_ref
        WHERE id = $id;";
-      error_log($updateQry);
-      error_log($category);
+
       $updateRes = $this->gdao->queryExec($updateQry);
     }
     
