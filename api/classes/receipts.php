@@ -1,15 +1,13 @@
 <?php
   // -----
-  // Type: Class [receiptsDAO (Database Abstraction Object)]
-  // Filename: receiptsDAO.php
+  // Type: Class [receipts]
+  // Filename: receipts.php
   // Author: Jeremy Gooch
   //
-  // The receiptsDAO class is used for retrieving the scanned receipts
+  // The receipts class is used for retrieving the scanned receipts
   //
   // -----
-  //Load Config File
-  //include_once("../../config/hr_config.php");
-class receiptsDAO {
+class receipts {
   function __construct(){
     // Generic DAO
     $this->gdao = new genericDAO();
@@ -77,7 +75,7 @@ class receiptsDAO {
   }
 
 
-  public function save_item($id, $inventory_item_id, $quantity, $units = null, $expires){
+  public function save_item($id, $inventory_item_id, $quantity, $units = null, $expires, $category){
     // See if we already have one of these items in the inventory
     $query = "SELECT * FROM inventory WHERE inventory_item_id = '$inventory_item_id';";
     $res = $this->gdao->queryAll($query);
@@ -93,10 +91,13 @@ class receiptsDAO {
         }
       }
     } else {
-      // Add the new item since no existing items were found
-      $updateQry = "INSERT INTO inventory (receipt_id, inventory_item_id, quantity, units, purchase_date, expires, cooked, expired)
-       SELECT receipt_id, '$inventory_item_id', '$quantity', '$units', CURDATE(), '$expires', 0, 0 FROM receipt_items_ref
+      // No existing items were found
+      $expiresDate = new DateTime($expires);
+      $updateQry = "INSERT INTO inventory (receipt_id, inventory_item_id, quantity, units, purchase_date, expires, cooked, expired, category)
+       SELECT receipt_id, '$inventory_item_id', '$quantity', '$units', CURDATE(), '" . $expiresDate->format('Y-m-d') . "', 0, 0, '$category' FROM receipt_items_ref
        WHERE id = $id;";
+      error_log($updateQry);
+      error_log($category);
       $updateRes = $this->gdao->queryExec($updateQry);
     }
     

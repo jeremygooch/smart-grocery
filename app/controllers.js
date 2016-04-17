@@ -102,7 +102,6 @@ sg.controller('ReviewReceiptController', function($scope, $data, $timeout) {
     $scope.getAllReceipts(function() {
         // Hide the loading animation
         $scope.contentLoaded = true;
-        
         if ($data.reviewReceiptId)
             for (var i=0; i<$scope.newReceipts.length; i++) {
                 if ($scope.newReceipts[i].id &&
@@ -150,7 +149,8 @@ sg.controller('ReviewReceiptController', function($scope, $data, $timeout) {
                 inventory_item_id : receipt.inventory_item_id,
                 expires           : receipt.exp.day + '-' + receipt.exp.month + '-' + receipt.exp.year,
                 quantity          : receipt.quantity,
-                units             : receipt.units
+                units             : receipt.units,
+                category          : receipt.category
             };
             var saveItem = $scope.apiRequest('post', 'api/index.php', data);
             saveItem.success(function(res) {
