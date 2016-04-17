@@ -21,24 +21,40 @@ class inventory {
     $res = $this->gdao->queryAll($query);
 
     if ($res) {
+      $output = array('meat'=>array(), 'produce'=>array(), 'dairy'=>array(), 'pantry'=>array(), 'other'=>array());
       for ($i=0; $i< count($res); $i++) {
         // Break the date apart
         $expires = strtotime($res[$i]['expires']);
         $month = date("m",$expires);
         $day = date("d",$expires);
         $year = date("Y",$expires);
-
-        // See if anything is expiring soon......
-        $expDate = new DateTime($res[i]['expires']);
-        $curDate = new DateTime(date());
-        $test = date_diff($expDate, $curDate);
-        /* $test = $expDate->diff($curDate); */
-        error_log(print_r($test,1));
-          
         $res[$i]['exp'] = array('month'=>$month,'day'=>$day,'year'=>$year);
+
+
+
+        // See if anything is expiring soon
+        $curDate = time();
+        $timeDiff = ceil(($expires - $curDate) / (60*60*24));
+        if ($timeDiff > 31) {
+          $res[$i]['daysLeft'] = ceil($timeDiff / 31) . ' mo';
+        } else {
+          $plural = $timeDiff > 1 ? 's' : '';
+          $res[$i]['daysLeft'] = $timeDiff . ' day' . $plural;
+        }
+
+        if ($timeDiff < 2) {
+          $res[$i]['expFlag'] = 'danger';
+        } else if ($timeDiff < 7) {
+          $res[$i]['expFlag'] = 'warning';
+        } else {
+          $res[$i]['expFlag'] = 'none';
+        }
+
+        // Categorize this item accordingly
+        array_push($output[$res[$i]['category']], $res[$i]);
       }
 
-      return $this->utilities->prep_response($res);
+      return $this->utilities->prep_response($output);
     } else {
       return $this->utilities->prep_response("The inventory could not be accessed at this time.", 401);
     }

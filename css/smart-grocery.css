@@ -242,6 +242,7 @@ ons-col .slider ons-switch, ons-col .slider input, ons-col .slider select, ons-c
 /* ************************************************* */
 .fade50 { opacity: .5; }
 .danger { color: #b84a0e; }
+.warning { color: #c58505; }
 .text-center { text-align: center; }
 .text-right { text-align: right; }
 .clearfix {display: block; height: 1px; width: 100%; clear: both;}
