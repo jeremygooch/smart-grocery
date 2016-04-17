@@ -12,7 +12,6 @@ sg.controller('InventoryController', function($scope, $data) {
     var getInventory = $scope.apiRequest('post', 'api/index.php', data);
     getInventory.success(function(res) {
         if (res.code == 200) {
-            console.log(res);
             $scope.inventory = res.data;
             $scope.curList = $scope.inventory.meat;
             $scope.switchCatetory = function(cat) {
