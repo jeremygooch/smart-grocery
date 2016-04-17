@@ -49,30 +49,18 @@ sg.controller('InventoryController', function($scope, $data) {
 
 sg.controller('ReceiptsController', function($scope, $data, $timeout, $http) {
     $scope.item = $data.selectedItem;
-
-    // Get the old and new receipts
-    var data = { api: 'receipts', method: 'getAllReceipts' }
-    var newReceipts = $scope.apiRequest('post', 'api/index.php', data);
-    newReceipts.success(function (res) {
-        if (res.code == 200) {
-            $scope.newReceipts = res.data['new']; // new is reserved in JS
-            $scope.oldReceipts = res.data.old;
-        } else {
-            console.dir(res);
-        }
-    });
-    newReceipts.error(function(data, status, headers, config){
-        console.dir(data);
-    });
+    // Set the loading animation
+    $scope.contentLoaded = false;
 
     
+    // Get the old and new receipts
+    $scope.getAllReceipts(function() {
+        $scope.contentLoaded = true;
+    });
+    
     $scope.reviewReceipt = function(id) {
-        for (var i=0; i<$scope.newReceipts.length; i++) {
-            if ($scope.newReceipts[i].id && ($scope.newReceipts[i].receipt_data && $scope.newReceipts[i].receipt_data.length > 0)) {
-                $data.reviewReceipt = $scope.newReceipts[i];
-                $scope.navi.pushPage('reviewReceipt.html', {title : 'Review Receipt' });
-            }
-        }
+        $data.reviewReceiptId = id;
+        $scope.navi.pushPage('reviewReceipt.html', {title : 'Review Receipt' });
     };
 
 
@@ -108,132 +96,149 @@ sg.controller('ReceiptsController', function($scope, $data, $timeout, $http) {
 });
 
 sg.controller('ReviewReceiptController', function($scope, $data, $timeout) {
-    var r = 0; tot = $data.reviewReceipt.receipt_data.length;
+    // Set the loading animation
+    $scope.contentLoaded = false;
+    // Get the old and new receipts
+    $scope.getAllReceipts(function() {
+        // Hide the loading animation
+        $scope.contentLoaded = true;
+        
+        if ($data.reviewReceiptId)
+            for (var i=0; i<$scope.newReceipts.length; i++) {
+                if ($scope.newReceipts[i].id &&
+                    ($scope.newReceipts[i].receipt_data && $scope.newReceipts[i].receipt_data.length > 0)) {
+                    $data.reviewReceipt = $scope.newReceipts[i];
+                }
+            }
 
-    // Update the pagination for the UI
-    $scope.prevReceipts = false;
-    $scope.nextReceipts = tot > 1 ? true : false;
-    
-    // Assign the current receipt
-    $scope.receipt = $data.reviewReceipt.receipt_data[r];
+        var r = 0; tot = $data.reviewReceipt.receipt_data.length;
 
-    $scope.reviewReceiptTitle = $data.reviewReceipt.location;
+        // Update the pagination for the UI
+        $scope.prevReceipts = false;
+        $scope.nextReceipts = tot > 1 ? true : false;
+        
+        // Assign the current receipt
+        $scope.receipt = $data.reviewReceipt.receipt_data[r];
 
-    // Update the switches
-    $scope.receipt.freezer = $scope.receipt.freezer != '0' ? true : false;
-    $scope.receipt.reserved = $scope.receipt.reserved != '0' ? true : false;
+        $scope.reviewReceiptTitle = $data.reviewReceipt.location;
+
+        // Update the switches
+        $scope.receipt.freezer = $scope.receipt.freezer != '0' ? true : false;
+        $scope.receipt.reserved = $scope.receipt.reserved != '0' ? true : false;
+
+
+        function removeItemFromView() {
+            $data.reviewReceipt.receipt_data.splice(r,1);
+            if ($data.reviewReceipt.receipt_data[r + 1]) {
+                // Update the current receipt
+                $scope.receipt = $data.reviewReceipt.receipt_data[r];
+            } else if ($data.reviewReceipt.receipt_data[r - 1]) {
+                $scope.receipt = $data.reviewReceipt.receipt_data[r - 1];
+            } else {
+                $scope.receipt = false;
+                // Send api call to delete the receipt itself
+                $scope.archiveReceipt($data.reviewReceipt.id);
+            }
+        }
+
+        $scope.saveItem = function(receipt) {
+            $scope.processingItem = true;
+            var data = {
+                api               : 'receipts',
+                method            : 'saveItem',
+                id                : receipt.id,
+                inventory_item_id : receipt.inventory_item_id,
+                expires           : receipt.exp.day + '-' + receipt.exp.month + '-' + receipt.exp.year,
+                quantity          : receipt.quantity,
+                units             : receipt.units
+            };
+            var saveItem = $scope.apiRequest('post', 'api/index.php', data);
+            saveItem.success(function(res) {
+                if (res.code == 200) {
+                    $scope.receipt.resetItem = false;
+                    $scope.receipt.saved = true;
+                    $timeout(function() {
+                        $scope.processingItem = false;
+                        removeItemFromView();
+                        $scope.receipt.resetItem = true;
+                    }, 740);
+                } else {
+                    console.dir(res);
+                }
+            });
+            saveItem.error(function(data, status, headers, config){
+                console.dir(data);
+            });
+            saveItem.finally(function() {
+                $scope.processingItem = false;
+            });
+        };
+
+        $scope.deleteItem = function(id) {
+            var data = { api: 'receipts', method: 'deleteItem', item_id: id };
+            var deleteItem = $scope.apiRequest('post', 'api/index.php', data);
+            deleteItem.success(function (res) {
+                if (res.code == 200) {
+                    // Play out deleted animation
+                    $scope.receipt.resetItem = false;
+                    $scope.receipt.deleted = true;
+                    $timeout(function() {
+                        $scope.receipt.deleted = false;
+                        removeItemFromView();
+                        $scope.receipt.resetItem = true;
+                    }, 640);
+                } else {
+                    console.dir(res);
+                }
+            });
+            deleteItem.error(function(data, status, headers, config){
+                console.dir(data);
+            });
+        };
+
+        
+
+        document.getElementById('freezer').addEventListener('change', function(event) {
+            $scope.$apply(function() { $scope.receipt.freezer = !$scope.receipt.freezer; });
+        });
+
+        // Change receipt
+        $scope.changeReceipt = function(direction) {
+            /* This function progresses through the receipts in the $data object
+             * 
+             * @direction[str]: 'next'  or 'back'
+             */
+            
+            if (direction == 'next') {
+                r = r + 1 <= (tot-1) ? r+1 : r; // Make sure we haven't max-ed out
+            } else {
+                r = r - 1 >= 0 ? r-1 : r; // Make sure we haven't min-ed out
+            }
+
+            function checkPagination() {
+                // Cleanup for afterwards
+                $scope.prevReceipts = r == 0 ? false : true
+                $scope.nextReceipts = r == (tot - 1) ? false : true;
+            }
+            
+            if ($data.reviewReceipt.receipt_data[r]) {
+                $scope.receipt = $data.reviewReceipt.receipt_data[r];
+                // Update the switches
+                $scope.receipt.freezer = $scope.receipt.freezer != '0' ? true : false;
+                $scope.receipt.reserved = $scope.receipt.reserved != '0' ? true : false;
+                checkPagination();
+            } else {
+                // We reached the end of the receipts
+                checkPagination();
+            }
+        };
+    });
 
     // Setup the various units
     $scope.units = {
         standard: ['bag', 'bottle', 'box', 'bunch', 'can', 'container', 'cups', 'liter',
                    'oz', 'package', 'quart', ''],
         butter: ['sticks', 'small tub', 'medium tub', 'large tub']
-    };
-
-    function removeItemFromView() {
-        $data.reviewReceipt.receipt_data.splice(r,1);
-        if ($data.reviewReceipt.receipt_data[r + 1]) {
-            // Update the current receipt
-            $scope.receipt = $data.reviewReceipt.receipt_data[r];
-        } else if ($data.reviewReceipt.receipt_data[r - 1]) {
-            $scope.receipt = $data.reviewReceipt.receipt_data[r - 1];
-        } else {
-            $scope.receipt = false;
-            // Send api call to delete the receipt itself
-            $scope.archiveReceipt($data.reviewReceipt.id);
-        }
-    }
-
-    $scope.saveItem = function(receipt) {
-        $scope.processingItem = true;
-        var data = {
-            api               : 'receipts',
-            method            : 'saveItem',
-            id                : receipt.id,
-            inventory_item_id : receipt.inventory_item_id,
-            expires           : receipt.exp.day + '-' + receipt.exp.month + '-' + receipt.exp.year,
-            quantity          : receipt.quantity,
-            units             : receipt.units
-        };
-        var saveItem = $scope.apiRequest('post', 'api/index.php', data);
-        saveItem.success(function(res) {
-            if (res.code == 200) {
-                $scope.receipt.resetItem = false;
-                $scope.receipt.saved = true;
-                $timeout(function() {
-                    $scope.processingItem = false;
-                    removeItemFromView();
-                    $scope.receipt.resetItem = true;
-                }, 740);
-            } else {
-                console.dir(res);
-            }
-        });
-        saveItem.error(function(data, status, headers, config){
-            console.dir(data);
-        });
-        saveItem.finally(function() {
-            $scope.processingItem = false;
-        });
-    };
-
-    $scope.deleteItem = function(id) {
-        var data = { api: 'receipts', method: 'deleteItem', item_id: id };
-        var deleteItem = $scope.apiRequest('post', 'api/index.php', data);
-        deleteItem.success(function (res) {
-            if (res.code == 200) {
-                // Play out deleted animation
-                $scope.receipt.resetItem = false;
-                $scope.receipt.deleted = true;
-                $timeout(function() {
-                    $scope.receipt.deleted = false;
-                    removeItemFromView();
-                    $scope.receipt.resetItem = true;
-                }, 640);
-            } else {
-                console.dir(res);
-            }
-        });
-        deleteItem.error(function(data, status, headers, config){
-            console.dir(data);
-        });
-    };
-
-    
-
-    document.getElementById('freezer').addEventListener('change', function(event) {
-        $scope.$apply(function() { $scope.receipt.freezer = !$scope.receipt.freezer; });
-    });
-
-    // Change receipt
-    $scope.changeReceipt = function(direction) {
-        /* This function progresses through the receipts in the $data object
-         * 
-         * @direction[str]: 'next'  or 'back'
-         */
-        
-        if (direction == 'next') {
-            r = r + 1 <= (tot-1) ? r+1 : r; // Make sure we haven't max-ed out
-        } else {
-            r = r - 1 >= 0 ? r-1 : r; // Make sure we haven't min-ed out
-        }
-
-        function checkPagination() {
-            // Cleanup for afterwards
-            $scope.prevReceipts = r == 0 ? false : true
-            $scope.nextReceipts = r == (tot - 1) ? false : true;
-        }
-        
-        if ($data.reviewReceipt.receipt_data[r]) {
-            $scope.receipt = $data.reviewReceipt.receipt_data[r];
-            // Update the switches
-            $scope.receipt.freezer = $scope.receipt.freezer != '0' ? true : false;
-            $scope.receipt.reserved = $scope.receipt.reserved != '0' ? true : false;
-            checkPagination();
-        } else {
-            // We reached the end of the receipts
-            checkPagination();
-        }
     };
 
     // ////////////////////////////////////////////
@@ -316,6 +321,23 @@ sg.controller('AppController', function($scope, $data, $http) {
             ons.notification.alert({ message: 'tapped' });
         }, 100);
     };
+
+    $scope.getAllReceipts = function(cb) {
+        var data = { api: 'receipts', method: 'getAllReceipts' };
+        var newReceipts = $scope.apiRequest('post', 'api/index.php', data);
+        newReceipts.success(function (res) {
+            if (res.code == 200) {
+                $scope.newReceipts = res.data['new']; // new is reserved in JS
+                $scope.oldReceipts = res.data.old;
+                if (typeof cb === 'function') { cb(); }
+            } else {
+                console.dir(res);
+            }
+        });
+        newReceipts.error(function(data, status, headers, config){
+            console.dir(data);
+        });
+    }
 
     $scope.archiveReceipt = function(id) {
         var data = {

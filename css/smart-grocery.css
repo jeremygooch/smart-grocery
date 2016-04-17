@@ -221,6 +221,20 @@ ons-col .slider ons-switch, ons-col .slider input, ons-col .slider select, ons-c
     font-style: italic;
 }
 
+.loading {
+    width: 100%;
+    height: 100vh;
+    background-color: #fff;
+    position: absolute;
+    z-index: 9;
+    text-align: center;
+}
+
+.loading * {
+    opacity: .75;
+    margin-top: 50%;
+}
+
 
 
 /* ************************************************* */

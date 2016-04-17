@@ -148,6 +148,7 @@
     <!-- ----------------------------------------- -->
     <ons-template id="receipts.html">
         <ons-page ng-controller="ReceiptsController">
+            <div class="loading" ng-class="{ hide : contentLoaded }"><ons-icon icon="fa-spinner" size="80px" spin="true"></div>
             <ons-toolbar>
                 <div class="left"><ons-back-button>Back</ons-back-button></div>
                 <div class="center">Receipts</div>
@@ -218,6 +219,7 @@
     <!-- ----------------------------------------- -->
     <ons-template id="reviewReceipt.html">
         <ons-page ng-controller="ReviewReceiptController">
+            <div class="loading" ng-class="{ hide : contentLoaded }"><ons-icon icon="fa-spinner" size="80px" spin="true"></div>
             <ons-toolbar>
                 <div class="left"><ons-back-button>Back</ons-back-button></div>
                 <div class="center">Review</div>
