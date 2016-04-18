@@ -82,6 +82,7 @@ label {
 .calendar input {
     width: 30%;
 }
+.button:active { opacity: .75; }
 
 .reviewProgress {
     cursor: pointer;

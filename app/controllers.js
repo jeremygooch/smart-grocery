@@ -278,9 +278,6 @@ sg.controller('MasterController', function($scope, $data, $interval) {
         $scope.navi.pushPage(page, {title : selectedItem.title});
     };
 
-
-
-    
     // Start listening for notifications
     function getNewReceipts() {
         var data = { api: 'receipts', method: 'getNewReceipts' }
@@ -301,11 +298,7 @@ sg.controller('MasterController', function($scope, $data, $interval) {
         });
     }
     getNewReceipts();
-    // $interval(function() { getNewReceipts(); }, 1000);
-
-
-
-
+    $interval(function() { getNewReceipts(); }, 1000);
 });
 
 // Main controller wrapping entire app
