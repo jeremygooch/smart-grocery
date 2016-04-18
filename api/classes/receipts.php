@@ -75,16 +75,16 @@ class receipts {
   }
 
 
-  public function save_item($id, $inventory_item_id, $quantity, $units = null, $expires, $category){
+  public function save_item($id, $inventory_item_id, $quantity, $units = null, $expires, $category, $freezer){
     // See if we already have one of these items in the inventory
     $query = "SELECT * FROM inventory WHERE inventory_item_id = '$inventory_item_id';";
     $res = $this->gdao->queryAll($query);
 
-
+    
     if (count($res) > 0) {
       foreach($res as $item) { 
         // Update the first match we find in the inventory
-        if ($item['units'] == $units) {
+        if ($item['units'] == $units && $item['freezer'] == $freezer) {
           $updateQry = "UPDATE inventory SET quantity = '" . ($item['quantity'] + $quantity) . "', expires = '$expires'";
           $updateRes = $this->gdao->queryExec($updateQry);
           break;
@@ -93,10 +93,9 @@ class receipts {
     } else {
       // No existing items were found
       $expiresDate = new DateTime($expires);
-      $updateQry = "INSERT INTO inventory (receipt_id, inventory_item_id, quantity, units, purchase_date, expires, cooked, expired, category)
-       SELECT receipt_id, '$inventory_item_id', '$quantity', '$units', CURDATE(), '" . $expiresDate->format('Y-m-d') . "', 0, 0, '$category' FROM receipt_items_ref
+      $updateQry = "INSERT INTO inventory (receipt_id, inventory_item_id, quantity, units, purchase_date, expires, cooked, expired, category, freezer)
+       SELECT receipt_id, '$inventory_item_id', '$quantity', '$units', CURDATE(), '" . $expiresDate->format('Y-m-d') . "', 0, 0, '$category', '$freezer' FROM receipt_items_ref
        WHERE id = $id;";
-
       $updateRes = $this->gdao->queryExec($updateQry);
     }
     

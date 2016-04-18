@@ -65,7 +65,7 @@ case "receipts":
     if ($request['id'] && $request['inventory_item_id'] && $request['quantity'] && $request['expires'] && $request['category']) {
       //Load DAO
       $DAO = new receipts();
-      $data = $DAO->save_item($request['id'],$request['inventory_item_id'],$request['quantity'],$request['units'],$request['expires'], $request['category']);
+      $data = $DAO->save_item($request['id'],$request['inventory_item_id'],$request['quantity'],$request['units'],$request['expires'], $request['category'],$request['freezer']);
 
       //Send JSON Response
       header('Content-Type: application/json');

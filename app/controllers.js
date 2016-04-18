@@ -105,8 +105,8 @@ sg.controller('ReviewReceiptController', function($scope, $data, $timeout) {
         $scope.reviewReceiptTitle = $data.reviewReceipt.location;
 
         // Update the switches
-        $scope.receipt.freezer = $scope.receipt.freezer != '0' ? true : false;
-        $scope.receipt.reserved = $scope.receipt.reserved != '0' ? true : false;
+        $scope.receipt.freezer = ($scope.receipt.freezer * 1) != 0 ? true : false;
+        $scope.receipt.reserved = ($scope.receipt.reserved * 1) != 0 ? true : false;
 
 
         function removeItemFromView() {
@@ -117,9 +117,18 @@ sg.controller('ReviewReceiptController', function($scope, $data, $timeout) {
             } else if ($data.reviewReceipt.receipt_data[r - 1]) {
                 $scope.receipt = $data.reviewReceipt.receipt_data[r - 1];
             } else {
-                $scope.receipt = false;
-                // Send api call to delete the receipt itself
-                $scope.archiveReceipt($data.reviewReceipt.id);
+                if ($data.reviewReceipt.receipt_data.length == 0) { // No more items left
+                    $scope.receipt = false;
+                    // Send api call to delete the receipt itself
+                    $scope.archiveReceipt($data.reviewReceipt.id);
+                } else {
+                    // This is the last item
+                    $scope.receipt = $data.reviewReceipt.receipt_data[0];
+                }
+            }
+            // Need to convert freezer to an integer for onsen's switches to work properly
+            if ($scope.receipt) {
+                $scope.receipt.freezer = $data.reviewReceipt.receipt_data[r].freezer * 1;
             }
         }
 
@@ -130,6 +139,7 @@ sg.controller('ReviewReceiptController', function($scope, $data, $timeout) {
                 method            : 'saveItem',
                 id                : receipt.id,
                 inventory_item_id : receipt.inventory_item_id,
+                freezer           : receipt.freezer ? receipt.freezer : '0',
                 expires           : receipt.exp.day + '-' + receipt.exp.month + '-' + receipt.exp.year,
                 quantity          : receipt.quantity,
                 units             : receipt.units,
@@ -143,7 +153,9 @@ sg.controller('ReviewReceiptController', function($scope, $data, $timeout) {
                     $timeout(function() {
                         $scope.processingItem = false;
                         removeItemFromView();
-                        $scope.receipt.resetItem = true;
+                        if ($scope.receipt) {
+                            $scope.receipt.resetItem = true;
+                        }
                     }, 740);
                 } else {
                     console.dir(res);
@@ -182,7 +194,9 @@ sg.controller('ReviewReceiptController', function($scope, $data, $timeout) {
         
 
         document.getElementById('freezer').addEventListener('change', function(event) {
-            $scope.$apply(function() { $scope.receipt.freezer = !$scope.receipt.freezer; });
+            $scope.$apply(function() {
+                $scope.receipt.freezer = !$scope.receipt.freezer;
+            });
         });
 
         // Change receipt
@@ -207,8 +221,10 @@ sg.controller('ReviewReceiptController', function($scope, $data, $timeout) {
             if ($data.reviewReceipt.receipt_data[r]) {
                 $scope.receipt = $data.reviewReceipt.receipt_data[r];
                 // Update the switches
-                $scope.receipt.freezer = $scope.receipt.freezer != '0' ? true : false;
-                $scope.receipt.reserved = $scope.receipt.reserved != '0' ? true : false;
+                console.log($scope.receipt.freezer);
+                $scope.receipt.freezer = ($scope.receipt.freezer * 1) != 0 ? true : false;
+                console.log($scope.receipt.freezer);
+                $scope.receipt.reserved = ($scope.receipt.reserved * 1) != 0 ? true : false;
                 checkPagination();
             } else {
                 // We reached the end of the receipts
@@ -285,7 +301,7 @@ sg.controller('MasterController', function($scope, $data, $interval) {
         });
     }
     getNewReceipts();
-    $interval(function() { getNewReceipts(); }, 1000);
+    // $interval(function() { getNewReceipts(); }, 1000);
 
 
 
@@ -337,9 +353,7 @@ sg.controller('AppController', function($scope, $data, $http) {
         archiveRcpt.error(function(data, status, headers, config){
             console.dir(data);
         });
-        archiveRcpt.finally(function() {
-            //
-        });
+        archiveRcpt.finally(function() {});
     };
 
     var currentTime = new Date();
