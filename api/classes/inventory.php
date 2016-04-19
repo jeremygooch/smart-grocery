@@ -59,4 +59,22 @@ class inventory {
       return $this->utilities->prep_response("The inventory could not be accessed at this time.", 401);
     }
   }
+
+
+  public function delete_item($id){
+    $query = "DELETE FROM inventory WHERE id = '$id';";
+    $res = $this->gdao->queryRow($query);
+
+    return $this->utilities->prep_response("$id successfully deleted.");
+  }
+
+  public function delete_items($items){
+    foreach ($items as $item) {
+      $this->delete_item($item['id']);
+    }
+    /* $query = "DELETE FROM inventory WHERE id = '$id';"; */
+    /* $res = $this->gdao->queryRow($query); */
+
+    return $this->utilities->prep_response("Items successfully deleted.");
+  }
 }

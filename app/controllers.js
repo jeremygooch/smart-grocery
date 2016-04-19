@@ -1,17 +1,19 @@
-sg.controller('InventoryController', function($scope, $data) {
+sg.controller('InventoryController', function($scope, $data, api) {
     $scope.item = $data.selectedItem;
 
     // Setup the fake list of items in the inventory
     $scope.inventory = {};
+    $scope.selectedItems = [];
 
     $scope.contentLoaded = false;
     var data = {
         api    : 'inventory',
         method : 'getInventoryItems'
     };
-    var getInventory = $scope.apiRequest('post', 'api/index.php', data);
+    var getInventory = api.query('post', 'api/index.php', data);
     getInventory.success(function(res) {
         if (res.code == 200) {
+            console.log(res.data);
             $scope.inventory = res.data;
             $scope.curList = $scope.inventory.meat;
             $scope.switchCatetory = function(cat) {
@@ -27,10 +29,35 @@ sg.controller('InventoryController', function($scope, $data) {
     getInventory.finally(function() {
         $scope.contentLoaded = true;
     });
+
+    $scope.showActions = function(e) {
+        if (e.target.checked) {
+            // Add the item to the selected bucket
+            $scope.selectedItems.push($scope.curList[e.target.getAttribute('item-reference')]);
+        } else {
+            // Remove the item from the selected bucket
+            var index = $scope.selectedItems.indexOf($scope.curList[e.target.getAttribute('item-reference')]);
+            if (index > -1) {
+                $scope.selectedItems.splice(index, 1);
+            }
+        }
+    };
+
+    $scope.addNewItem = function() {
+        console.log('Going to add a tasty treat to your stock');
+    };
+    $scope.deleteItems = function(items) {
+        console.log(items);
+        var data = { api: 'inventory', method: 'deleteItems', items: items };
+        var deleteItem = api.query('POST', 'api/index.php', data);
+        deleteItem.success(function(res) {
+            console.log(res);
+        });
+    };
 });
 
 
-sg.controller('ReceiptsController', function($scope, $data, $timeout, $http) {
+sg.controller('ReceiptsController', function($scope, $data, $timeout, $http, api) {
     $scope.item = $data.selectedItem;
     // Set the loading animation
     $scope.contentLoaded = false;
@@ -78,7 +105,7 @@ sg.controller('ReceiptsController', function($scope, $data, $timeout, $http) {
     }
 });
 
-sg.controller('ReviewReceiptController', function($scope, $data, $timeout) {
+sg.controller('ReviewReceiptController', function($scope, $data, $timeout, api) {
     // Set the loading animation
     $scope.contentLoaded = false;
     // Get the old and new receipts
@@ -145,7 +172,7 @@ sg.controller('ReviewReceiptController', function($scope, $data, $timeout) {
                 units             : receipt.units,
                 category          : receipt.category
             };
-            var saveItem = $scope.apiRequest('post', 'api/index.php', data);
+            var saveItem = api.query('post', 'api/index.php', data);
             saveItem.success(function(res) {
                 if (res.code == 200) {
                     $scope.receipt.resetItem = false;
@@ -171,7 +198,7 @@ sg.controller('ReviewReceiptController', function($scope, $data, $timeout) {
 
         $scope.deleteItem = function(id) {
             var data = { api: 'receipts', method: 'deleteItem', item_id: id };
-            var deleteItem = $scope.apiRequest('post', 'api/index.php', data);
+            var deleteItem = api.query('post', 'api/index.php', data);
             deleteItem.success(function (res) {
                 if (res.code == 200) {
                     // Play out deleted animation
@@ -221,9 +248,7 @@ sg.controller('ReviewReceiptController', function($scope, $data, $timeout) {
             if ($data.reviewReceipt.receipt_data[r]) {
                 $scope.receipt = $data.reviewReceipt.receipt_data[r];
                 // Update the switches
-                console.log($scope.receipt.freezer);
                 $scope.receipt.freezer = ($scope.receipt.freezer * 1) != 0 ? true : false;
-                console.log($scope.receipt.freezer);
                 $scope.receipt.reserved = ($scope.receipt.reserved * 1) != 0 ? true : false;
                 checkPagination();
             } else {
@@ -251,11 +276,11 @@ sg.controller('ReviewReceiptController', function($scope, $data, $timeout) {
 
 
 
-sg.controller('DetailController', function($scope, $data) {
+sg.controller('DetailController', function($scope, $data, api) {
     $scope.item = $data.selectedItem;
 });
 
-sg.controller('MasterController', function($scope, $data, $interval) {
+sg.controller('MasterController', function($scope, $data, $interval, api) {
     // Initial Page setup
     $scope.items = $data.items;
     $scope.loadView = function(index) {
@@ -281,7 +306,7 @@ sg.controller('MasterController', function($scope, $data, $interval) {
     // Start listening for notifications
     function getNewReceipts() {
         var data = { api: 'receipts', method: 'getNewReceipts' }
-        var newReceipts = $scope.apiRequest('post', 'api/index.php', data);
+        var newReceipts = api.query('post', 'api/index.php', data);
         newReceipts.success(function (res) {
             if (res.code == 200) {
                 if (res.data.new_receipt_count > 0) {
@@ -302,7 +327,7 @@ sg.controller('MasterController', function($scope, $data, $interval) {
 });
 
 // Main controller wrapping entire app
-sg.controller('AppController', function($scope, $data, $http) {
+sg.controller('AppController', function($scope, $data, $http, api) {
     // Detect scroll height for sizing the topbar
     $scope.showMore = function() {
         console.log('show more triggered');  
@@ -316,7 +341,7 @@ sg.controller('AppController', function($scope, $data, $http) {
 
     $scope.getAllReceipts = function(cb) {
         var data = { api: 'receipts', method: 'getAllReceipts' };
-        var newReceipts = $scope.apiRequest('post', 'api/index.php', data);
+        var newReceipts = api.query('post', 'api/index.php', data);
         newReceipts.success(function (res) {
             if (res.code == 200) {
                 $scope.newReceipts = res.data['new']; // new is reserved in JS
@@ -337,7 +362,7 @@ sg.controller('AppController', function($scope, $data, $http) {
             method            : 'archiveReceipt',
             id                : id
         };
-        var archiveRcpt = $scope.apiRequest('post', 'api/index.php', data);
+        var archiveRcpt = api.query('post', 'api/index.php', data);
         archiveRcpt.success(function(res) {
             if (res.code != 200) {
                 console.dir(res);
@@ -351,31 +376,6 @@ sg.controller('AppController', function($scope, $data, $http) {
 
     var currentTime = new Date();
     $scope.currentYear = currentTime.getFullYear();
-
-    $scope.apiRequest = function(type, api, data, async) {
-        /*
-         * This fuction makes a basic request to the champHR API
-         * based off of the provided parameter
-         *
-         * @type    = The type of request being made (i.e. POST, GET)
-         * @api     = The api to be requested
-         * @data    = The data payload
-         * @async   = Should the request be sent asyncronysoulsly? [default: false]
-         *
-         * @RETURN = The results of the request as an object
-         */
-
-        // var $http = angular.element(document.body).injector().get('$http');
-        var request = $http({
-            method: type,
-            url: api,
-            data: data,
-            async: (async) ? true : false,
-            headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
-        });
-        /* Check whether the HTTP Request is successful or not. */
-        return request;
-    };
 
     $scope.col1 = 'style="width: 25%;"';
 

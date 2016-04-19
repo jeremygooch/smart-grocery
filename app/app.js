@@ -1,5 +1,19 @@
 var sg = angular.module('app', ['onsen']);
 
+sg.factory('api', function($http) {
+    return {
+        query: function(type, path, data) {
+            return $http({
+                method: type,
+                url: path,
+                data: data,
+                async: false,
+                headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
+            });
+        }
+    };
+});
+
 sg.factory('$data', function() {
     var data = {};
 

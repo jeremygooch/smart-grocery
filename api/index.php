@@ -122,6 +122,32 @@ case "inventory":
     header('Content-Type: application/json');
     echo $data;
     break;
+  case "deleteItem":
+    if ($request['item_id']) {
+      //Load DAO
+      $DAO = new inventory();
+      $data = $DAO->delete_item($request['item_id']);
+
+      //Send JSON Response
+      header('Content-Type: application/json');
+      echo $data;
+    } else {
+      error_missing_arguments($request);
+    }
+    break;
+  case "deleteItems":
+    if ($request['items']) {
+      //Load DAO
+      $DAO = new inventory();
+      $data = $DAO->delete_items($request['items']);
+
+      //Send JSON Response
+      header('Content-Type: application/json');
+      echo $data;
+    } else {
+      error_missing_arguments($request);
+    }
+    break;
   default:
     //ERROR! Uncaught Request API
     error_invalid_api($request);
