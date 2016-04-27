@@ -61,7 +61,6 @@ class inventory {
 
   public function delete_item($id){
     $query = "DELETE FROM inventory WHERE inventory_id = '$id';";
-    error_log($query);
     $res = $this->gdao->queryRow($query);
 
     return $this->utilities->prep_response("$id successfully deleted.");
@@ -71,9 +70,18 @@ class inventory {
     foreach ($items as $item) {
       $this->delete_item($item['inventory_id']);
     }
-    /* $query = "DELETE FROM inventory WHERE inventory_id = '$id';"; */
-    /* $res = $this->gdao->queryRow($query); */
-
     return $this->utilities->prep_response("Items successfully deleted.");
   }
+
+  
+  public function update_item($id, $data){
+    $query = '';
+    foreach ($data as $key => $value) {
+      $query .= "UPDATE inventory SET $key = '$value' WHERE inventory_id = '$id'; ";
+    }
+    $res = $this->gdao->queryRow($query); 
+
+    return $this->utilities->prep_response("$id successfully updated.");
+  }
+
 }

@@ -135,6 +135,19 @@ case "inventory":
       error_missing_arguments($request);
     }
     break;
+  case "updateItem":
+    if ($request['id'] && $request['data']) {
+      //Load Class
+      $class = new inventory();
+      $data = $class->update_item($request['id'], $request['data']);
+
+      //Send JSON Response
+      header('Content-Type: application/json');
+      echo $data;
+    } else {
+      error_missing_arguments($request);
+    }
+    break;
   case "deleteItems":
     if ($request['items']) {
       //Load Class

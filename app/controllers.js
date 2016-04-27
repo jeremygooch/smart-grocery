@@ -66,19 +66,34 @@ sg.controller('InventoryController', function($scope, $data, api) {
         });
     };
 
-    $scope.adjustQuantity = function(curQuantity) {
-        var quantityHTML = '<input type="number" id="adjustQuantity" min="1" value="' + curQuantity + '">';
+    function updateItem (id, field, value) {
+        var fields = {};
+        fields[field] = value;
+        var data = { api: 'inventory', method: 'updateItem', id: id, data: fields};
+        var updateItem = api.query('POST', 'api/index.php', data);
+        updateItem.success(function(res) {
+            if (res.code == 200) {
+                // update the view
+                var index = _.indexOf($scope.curList, _.find($scope.curList, {inventory_id: id}));
+                $scope.curList[index][field] = value;
+            }
+        });
+    }
+
+    $scope.adjustItmValue = function(type, title, itm) {
+        var curValue = itm[type];
+        var messageHTML = '<input type="number" id="adjustItmValue" min="1" value="' + curValue + '">';
         setTimeout(function() {
             ons.notification.confirm({
-                messageHTML: quantityHTML,
+                messageHTML: messageHTML,
                 buttonLabels: ["Cancel", "OK"],
                 cancelable: true,
                 animation: 'fade',
-                title: 'Adjust Quantity',
+                title: title,
                 callback: function(index) {
-                    var q = document.getElementById('adjustQuantity').value;
-                    if (q != curQuantity && index) {
-                        console.log('send call to update the quantity to the new value of: ' + q);
+                    var q = document.getElementById('adjustItmValue').value;
+                    if (q != curValue && index) {
+                        updateItem(itm.inventory_id, type, q);
                     }
                 }
             });
