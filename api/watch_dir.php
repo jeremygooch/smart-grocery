@@ -1,3 +1,4 @@
+#! /usr/local/bin/php
 <?php
 if (array_key_exists(1, $argv)) {
   $option = $argv[1];

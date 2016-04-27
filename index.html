@@ -14,6 +14,7 @@
     <meta name="mobile-web-app-capable" content="yes" />
 
     <!-- JS dependencies (order matters!) -->
+    <script src="libs/lodash.js"></script>
     <script src="libs/angular/angular.js"></script>
     <script src="libs/onsenui.js"></script>
 
@@ -43,7 +44,7 @@
     <ons-navigator var="navi">
         <ons-page>
             <ons-toolbar><div class="center">Smart Grocery</div></ons-toolbar>
-            <ons-list ng-controller="MasterController">
+            <ons-list ng-controller="MainScreenController">
                 <ons-list-item modifier="chevron" class="item" ng-repeat="item in items" ng-click="loadView($index)">
                     <ons-row>
                         <ons-col width="60px">
@@ -78,31 +79,31 @@
             <div class="navigation-bar">
                 <div class="navigation-bar__center">
                     <div class="button-bar" style="margin: 7px auto; padding: 0 10px;">
-                        <div class="button-bar__item"
+                        <div class="button-bar__item" id="invMeat"
                              ng-click="switchCatetory('meat')">
                             <input type="radio" name="navi-segment-a" checked>
                             <div class="button-bar__button">Meat</div>
                         </div>
 
-                        <div class="button-bar__item"
+                        <div class="button-bar__item" id="invProduce"
                              ng-click="switchCatetory('produce')">
                             <input type="radio" name="navi-segment-a">
                             <div class="button-bar__button">Produce</div>
                         </div>
 
-                        <div class="button-bar__item"
+                        <div class="button-bar__item" id="invDairy"
                              ng-click="switchCatetory('dairy')">
                             <input type="radio" name="navi-segment-a">
                             <div class="button-bar__button">Dairy</div>
                         </div>
 
-                        <div class="button-bar__item"
+                        <div class="button-bar__item" id="invPantry"
                              ng-click="switchCatetory('pantry')">
                             <input type="radio" name="navi-segment-a">
                             <div class="button-bar__button">Panty</div>
                         </div>
 
-                        <div class="button-bar__item"
+                        <div class="button-bar__item" id="invOther"
                              ng-click="switchCatetory('other')">
                             <input type="radio" name="navi-segment-a">
                             <div class="button-bar__button">Other</div>

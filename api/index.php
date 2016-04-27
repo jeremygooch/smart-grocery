@@ -43,8 +43,8 @@ case "receipts":
   switch($request['method']){
   case "getNewReceipts":
     //Load DAO
-    $DAO = new receipts();
-    $data = $DAO->get_new_receipts();
+    $class = new receipts();
+    $data = $class->get_new_receipts();
 
     //Send JSON Response
     header('Content-Type: application/json');
@@ -53,8 +53,8 @@ case "receipts":
 
   case "getAllReceipts":
     //Load DAO
-    $DAO = new receipts();
-    $data = $DAO->get_all_scans();
+    $class = new receipts();
+    $data = $class->get_all_scans();
 
     //Send JSON Response
     header('Content-Type: application/json');
@@ -64,8 +64,8 @@ case "receipts":
   case "saveItem":
     if ($request['id'] && $request['inventory_item_id'] && $request['quantity'] && $request['expires'] && $request['category']) {
       //Load DAO
-      $DAO = new receipts();
-      $data = $DAO->save_item($request['id'],$request['inventory_item_id'],$request['quantity'],$request['units'],$request['expires'], $request['category'],$request['freezer']);
+      $class = new receipts();
+      $data = $class->save_item($request['id'],$request['inventory_item_id'],$request['quantity'],$request['units'],$request['expires'], $request['category'],$request['freezer']);
 
       //Send JSON Response
       header('Content-Type: application/json');
@@ -78,8 +78,8 @@ case "receipts":
   case "deleteItem":
     if ($request['item_id']) {
       //Load DAO
-      $DAO = new receipts();
-      $data = $DAO->delete_item($request['item_id']);
+      $class = new receipts();
+      $data = $class->delete_item($request['item_id']);
 
       //Send JSON Response
       header('Content-Type: application/json');
@@ -92,8 +92,8 @@ case "receipts":
   case "archiveReceipt":
     if ($request['id']) {
       //Load DAO
-      $DAO = new receipts();
-      $data = $DAO->archive_receipt($request['id']);
+      $class = new receipts();
+      $data = $class->archive_receipt($request['id']);
 
       //Send JSON Response
       header('Content-Type: application/json');
@@ -115,8 +115,8 @@ case "inventory":
   switch($request['method']){
   case "getInventoryItems":
     //Load DAO
-    $DAO = new inventory();
-    $data = $DAO->get_inventory_items();
+    $class = new inventory();
+    $data = $class->get_inventory_items();
 
     //Send JSON Response
     header('Content-Type: application/json');
@@ -125,8 +125,8 @@ case "inventory":
   case "deleteItem":
     if ($request['item_id']) {
       //Load DAO
-      $DAO = new inventory();
-      $data = $DAO->delete_item($request['item_id']);
+      $class = new inventory();
+      $data = $class->delete_item($request['item_id']);
 
       //Send JSON Response
       header('Content-Type: application/json');
@@ -138,8 +138,8 @@ case "inventory":
   case "deleteItems":
     if ($request['items']) {
       //Load DAO
-      $DAO = new inventory();
-      $data = $DAO->delete_items($request['items']);
+      $class = new inventory();
+      $data = $class->delete_items($request['items']);
 
       //Send JSON Response
       header('Content-Type: application/json');

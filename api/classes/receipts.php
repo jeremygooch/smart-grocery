@@ -75,7 +75,7 @@ class receipts {
   }
 
 
-  public function save_item($id, $inventory_item_id, $quantity, $units = null, $expires, $category, $freezer){
+  public function save_item($id, $inventory_item_id, $quantity, $units = null, $expires, $category, $freezer = null){
     // See if we already have one of these items in the inventory
     $query = "SELECT * FROM inventory WHERE inventory_item_id = '$inventory_item_id';";
     $res = $this->gdao->queryAll($query);

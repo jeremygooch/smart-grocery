@@ -10,25 +10,28 @@ sg.controller('InventoryController', function($scope, $data, api) {
         api    : 'inventory',
         method : 'getInventoryItems'
     };
-    var getInventory = api.query('post', 'api/index.php', data);
-    getInventory.success(function(res) {
-        if (res.code == 200) {
-            console.log(res.data);
-            $scope.inventory = res.data;
-            $scope.curList = $scope.inventory.meat;
-            $scope.switchCatetory = function(cat) {
-                $scope.curList = $scope.inventory[cat];
-            };
-        } else {
-            console.dir(res);
-        }
-    });
-    getInventory.error(function(data, status, headers, config){
-        console.dir(data);
-    });
-    getInventory.finally(function() {
-        $scope.contentLoaded = true;
-    });
+
+    $scope.getInventory = function() {
+        var getInventory = api.query('post', 'api/index.php', data);
+        getInventory.success(function(res) {
+            if (res.code == 200) {
+                $scope.inventory = res.data;
+                $scope.curList = $scope.inventory.meat;
+                $scope.switchCatetory = function(cat) {
+                    $scope.curList = $scope.inventory[cat];
+                };
+            } else {
+                console.dir(res);
+            }
+        });
+        getInventory.error(function(data, status, headers, config){
+            console.dir(data);
+        });
+        getInventory.finally(function() {
+            $scope.contentLoaded = true;
+        });
+    };
+    $scope.getInventory();
 
     $scope.showActions = function(e) {
         if (e.target.checked) {
@@ -47,11 +50,15 @@ sg.controller('InventoryController', function($scope, $data, api) {
         console.log('Going to add a tasty treat to your stock');
     };
     $scope.deleteItems = function(items) {
-        console.log(items);
         var data = { api: 'inventory', method: 'deleteItems', items: items };
         var deleteItem = api.query('POST', 'api/index.php', data);
         deleteItem.success(function(res) {
-            console.log(res);
+            if (res.code == 200) {
+                // Drop the item from the view
+                $scope.curList = _.difference($scope.curList, $scope.selectedItems);
+                // Reset the selection
+                $scope.selectedItems = [];
+            }
         });
     };
 });
@@ -164,7 +171,7 @@ sg.controller('ReviewReceiptController', function($scope, $data, $timeout, api) 
             var data = {
                 api               : 'receipts',
                 method            : 'saveItem',
-                id                : receipt.id,
+                id                : receipt.inventory_id,
                 inventory_item_id : receipt.inventory_item_id,
                 freezer           : receipt.freezer ? receipt.freezer : '0',
                 expires           : receipt.exp.day + '-' + receipt.exp.month + '-' + receipt.exp.year,
@@ -280,7 +287,8 @@ sg.controller('DetailController', function($scope, $data, api) {
     $scope.item = $data.selectedItem;
 });
 
-sg.controller('MasterController', function($scope, $data, $interval, api) {
+
+sg.controller('MainScreenController', function($scope, $data, $interval, api) {
     // Initial Page setup
     $scope.items = $data.items;
     $scope.loadView = function(index) {
@@ -323,7 +331,7 @@ sg.controller('MasterController', function($scope, $data, $interval, api) {
         });
     }
     getNewReceipts();
-    $interval(function() { getNewReceipts(); }, 1000);
+    // $interval(function() { getNewReceipts(); }, 1000);
 });
 
 // Main controller wrapping entire app
