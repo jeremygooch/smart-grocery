@@ -42,7 +42,7 @@ switch($request['api']){
 case "receipts":
   switch($request['method']){
   case "getNewReceipts":
-    //Load DAO
+    //Load Class
     $class = new receipts();
     $data = $class->get_new_receipts();
 
@@ -52,7 +52,7 @@ case "receipts":
     break;
 
   case "getAllReceipts":
-    //Load DAO
+    //Load Class
     $class = new receipts();
     $data = $class->get_all_scans();
 
@@ -63,7 +63,7 @@ case "receipts":
 
   case "saveItem":
     if ($request['id'] && $request['inventory_item_id'] && $request['quantity'] && $request['expires'] && $request['category']) {
-      //Load DAO
+      //Load Class
       $class = new receipts();
       $data = $class->save_item($request['id'],$request['inventory_item_id'],$request['quantity'],$request['units'],$request['expires'], $request['category'],$request['freezer']);
 
@@ -77,7 +77,7 @@ case "receipts":
 
   case "deleteItem":
     if ($request['item_id']) {
-      //Load DAO
+      //Load Class
       $class = new receipts();
       $data = $class->delete_item($request['item_id']);
 
@@ -91,7 +91,7 @@ case "receipts":
 
   case "archiveReceipt":
     if ($request['id']) {
-      //Load DAO
+      //Load Class
       $class = new receipts();
       $data = $class->archive_receipt($request['id']);
 
@@ -114,7 +114,7 @@ case "receipts":
 case "inventory":
   switch($request['method']){
   case "getInventoryItems":
-    //Load DAO
+    //Load Class
     $class = new inventory();
     $data = $class->get_inventory_items();
 
@@ -124,7 +124,7 @@ case "inventory":
     break;
   case "deleteItem":
     if ($request['item_id']) {
-      //Load DAO
+      //Load Class
       $class = new inventory();
       $data = $class->delete_item($request['item_id']);
 
@@ -137,7 +137,7 @@ case "inventory":
     break;
   case "deleteItems":
     if ($request['items']) {
-      //Load DAO
+      //Load Class
       $class = new inventory();
       $data = $class->delete_items($request['items']);
 

@@ -56,10 +56,33 @@ sg.controller('InventoryController', function($scope, $data, api) {
             if (res.code == 200) {
                 // Drop the item from the view
                 $scope.curList = _.difference($scope.curList, $scope.selectedItems);
+                // Drop it from the main list
+                Object.keys($scope.inventory).forEach(function(cat) {
+                    $scope.inventory[cat] = _.difference($scope.inventory[cat], $scope.selectedItems);
+                });
                 // Reset the selection
                 $scope.selectedItems = [];
             }
         });
+    };
+
+    $scope.adjustQuantity = function(curQuantity) {
+        var quantityHTML = '<input type="number" id="adjustQuantity" min="1" value="' + curQuantity + '">';
+        setTimeout(function() {
+            ons.notification.confirm({
+                messageHTML: quantityHTML,
+                buttonLabels: ["Cancel", "OK"],
+                cancelable: true,
+                animation: 'fade',
+                title: 'Adjust Quantity',
+                callback: function(index) {
+                    var q = document.getElementById('adjustQuantity').value;
+                    if (q != curQuantity && index) {
+                        console.log('send call to update the quantity to the new value of: ' + q);
+                    }
+                }
+            });
+        }, 100);
     };
 });
 
@@ -171,7 +194,8 @@ sg.controller('ReviewReceiptController', function($scope, $data, $timeout, api) 
             var data = {
                 api               : 'receipts',
                 method            : 'saveItem',
-                id                : receipt.inventory_id,
+                id                : receipt.id,
+                inventory_id      : receipt.inventory_id,
                 inventory_item_id : receipt.inventory_item_id,
                 freezer           : receipt.freezer ? receipt.freezer : '0',
                 expires           : receipt.exp.day + '-' + receipt.exp.month + '-' + receipt.exp.year,
@@ -366,9 +390,9 @@ sg.controller('AppController', function($scope, $data, $http, api) {
 
     $scope.archiveReceipt = function(id) {
         var data = {
-            api               : 'receipts',
-            method            : 'archiveReceipt',
-            id                : id
+            api    : 'receipts',
+            method : 'archiveReceipt',
+            id     : id
         };
         var archiveRcpt = api.query('post', 'api/index.php', data);
         archiveRcpt.success(function(res) {

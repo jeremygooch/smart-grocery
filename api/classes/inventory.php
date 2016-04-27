@@ -19,9 +19,9 @@ class inventory {
   public function get_inventory_items(){
     $query = "SELECT * FROM inventory AS i LEFT JOIN inventory_items AS ii ON i.inventory_item_id = ii.id;";
     $res = $this->gdao->queryAll($query);
+    $output = array('meat'=>array(), 'produce'=>array(), 'dairy'=>array(), 'pantry'=>array(), 'other'=>array());
 
     if ($res) {
-      $output = array('meat'=>array(), 'produce'=>array(), 'dairy'=>array(), 'pantry'=>array(), 'other'=>array());
       for ($i=0; $i< count($res); $i++) {
         // Break the date apart
         $expires = strtotime($res[$i]['expires']);
@@ -54,10 +54,8 @@ class inventory {
         array_push($output[$res[$i]['category']], $res[$i]);
       }
 
-      return $this->utilities->prep_response($output);
-    } else {
-      return $this->utilities->prep_response("The inventory could not be accessed at this time.", 401);
     }
+    return $this->utilities->prep_response($output);
   }
 
 

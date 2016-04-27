@@ -129,7 +129,7 @@
                                     {{ item.freezer == '1' ? 'Frozen' : item.daysLeft }}
                                 </button>
                             </span>
-                            <span class="spCol col2" ng-click="doSomething()">
+                            <span class="spCol col2" ng-click="adjustQuantity(item.quantity)">
                                 <button class="button--quiet">
                                     {{ item.quantity }}{{ item.units ? item.units : '' }}
                                 </button>
