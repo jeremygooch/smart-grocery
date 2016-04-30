@@ -81,11 +81,13 @@ sg.controller('InventoryController', function($scope, $data, api) {
     }
 
     $scope.adjustItmValue = function(type, title, itm) {
+        var units = itm.units ? ' ' + itm.units : "";
         var curValue = itm[type];
-        var messageHTML = '<input type="number" id="adjustItmValue" min="1" value="' + curValue + '">';
+        var messageHTML = '<input class="range" type="range" id="adjustItmValue" min="1" max="10" value="' + curValue + '">';
+        var valDisplay = '<span id="valDisplay" class="m-l-5 fade50">(' + itm.quantity + units + ')</span>';
         setTimeout(function() {
             ons.notification.confirm({
-                messageHTML: messageHTML,
+                messageHTML: messageHTML + valDisplay,
                 buttonLabels: ["Cancel", "OK"],
                 cancelable: true,
                 animation: 'fade',
@@ -96,6 +98,10 @@ sg.controller('InventoryController', function($scope, $data, api) {
                         updateItem(itm.inventory_id, type, q);
                     }
                 }
+            });
+            document.getElementById('adjustItmValue').addEventListener('change', function(e) {
+                var newVal = e.target.value;
+                document.getElementById('valDisplay').innerHTML = '(' + newVal + units + ')';
             });
         }, 100);
     };
