@@ -17,7 +17,7 @@ class inventory {
   }
 
   public function get_inventory_items(){
-    $query = "SELECT * FROM inventory AS i LEFT JOIN inventory_items AS ii ON i.inventory_item_id = ii.id;";
+    $query = "SELECT i.*, ii.description FROM inventory AS i LEFT JOIN inventory_items AS ii ON i.inventory_item_id = ii.id;";
     $res = $this->gdao->queryAll($query);
     $output = array('meat'=>array(), 'produce'=>array(), 'dairy'=>array(), 'pantry'=>array(), 'other'=>array());
 

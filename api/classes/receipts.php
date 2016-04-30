@@ -82,7 +82,7 @@ class receipts {
 
     
     if (count($res) > 0) {
-      foreach($res as $item) { 
+      foreach($res as $item) {
         // Update the first match we find in the inventory
         if ($item['units'] == $units && $item['freezer'] == $freezer) {
           $updateQry = "UPDATE inventory SET quantity = '" . ($item['quantity'] + $quantity) . "', expires = '$expires'";
