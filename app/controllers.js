@@ -1,4 +1,4 @@
-sg.controller('InventoryController', function($scope, $data, api) {
+sg.controller('InventoryController', function($scope, $filter, $data, api) {
     $scope.item = $data.selectedItem;
 
     // Setup the fake list of items in the inventory
@@ -80,28 +80,81 @@ sg.controller('InventoryController', function($scope, $data, api) {
         });
     }
 
-    $scope.adjustItmValue = function(type, title, itm) {
+    $scope.adjustQtyValue = function(itm) {
         var units = itm.units ? ' ' + itm.units : "";
-        var curValue = itm[type];
-        var messageHTML = '<input class="range" type="range" id="adjustItmValue" min="1" max="10" value="' + curValue + '">';
-        var valDisplay = '<span id="valDisplay" class="m-l-5 fade50">(' + itm.quantity + units + ')</span>';
+        var curValue = itm['quantity'];
+        var messageHTML = '<input class="range" type="range" id="adjustQtyValue" min="1" max="10" value="' + curValue + '">';
+        var qtyDisplay = '<span id="qtyDisplay" class="m-l-5 fade50">(' + itm.quantity + units + ')</span>';
         setTimeout(function() {
             ons.notification.confirm({
-                messageHTML: messageHTML + valDisplay,
+                messageHTML: messageHTML + qtyDisplay,
                 buttonLabels: ["Cancel", "OK"],
                 cancelable: true,
                 animation: 'fade',
-                title: title,
+                title: 'Adjust Quantity',
                 callback: function(index) {
-                    var q = document.getElementById('adjustItmValue').value;
+                    var q = document.getElementById('adjustQtyValue').value;
                     if (q != curValue && index) {
-                        updateItem(itm.inventory_id, type, q);
+                        updateItem(itm.inventory_id, 'quantity', q);
                     }
                 }
             });
-            document.getElementById('adjustItmValue').addEventListener('change', function(e) {
+            document.getElementById('adjustQtyValue').addEventListener('change', function(e) {
                 var newVal = e.target.value;
-                document.getElementById('valDisplay').innerHTML = '(' + newVal + units + ')';
+                document.getElementById('qtyDisplay').innerHTML = '(' + newVal + units + ')';
+            });
+        }, 100);
+    };
+
+
+    $scope.adjustExpValue = function(itm) {
+        console.log(itm);
+        var content = document.getElementById('hiddenExpContent'); // Grab the popup contents
+        // Cannot use angular within the dom to update the values. They must unfortunately be controlled here
+        content.querySelector('.expDate').innerHTML = $filter('monthToString')(itm.exp.month) + ' ' + 
+            itm.exp.day + ', ' + itm.exp.year;
+        
+        // Update the freezer
+        content.querySelector('.updateFreezer').id = 'updateFreezer_' + itm.inventory_id;
+        content.querySelector('.slider').id = 'slider_' + itm.inventory_id;
+        if (itm.freezer == "1") {
+            content.querySelector('.updateFreezer').setAttribute('checked','');
+            content.querySelector('.slider').classList.add('closed');
+        } else {
+            content.querySelector('.updateFreezer').removeAttribute('checked','');
+            content.querySelector('.slider').classList.remove('closed');
+        }
+
+
+        setTimeout(function() {
+            ons.notification.confirm({
+                messageHTML: content.innerHTML,
+                buttonLabels: ["Cancel", "OK"],
+                cancelable: true,
+                animation: 'fade',
+                title: 'Adjust Expiration',
+                callback: function(index) {
+                    // var q = document.getElementById('adjustExpValue').value;
+                    // if (q != curValue && index) {
+                    //     updateItem(itm.inventory_id, 'quantity', q);
+                    // }
+                }
+            });
+            // Listen for the freezer click
+
+            // ////////////////////////////////
+            // This is not updating the ui for some reason!!!!!!!
+            // ////////////////////////////////
+            document.querySelector('body').addEventListener('click', function(event) {
+                if (event.target.id === 'updateFreezer_' + itm.inventory_id) {
+                    if (event.target.checked) {
+                        document.getElementById('slider_' + itm.inventory_id).classList.add('closed');
+                        console.log(document.getElementById('slider_' + itm.inventory_id));
+                    } else {
+                        document.getElementById('slider_' + itm.inventory_id).classList.remove('closed');
+                        console.log(document.getElementById('slider_' + itm.inventory_id));
+                    }
+                }
             });
         }, 100);
     };

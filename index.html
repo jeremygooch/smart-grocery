@@ -123,13 +123,13 @@
                                    ng-click="showActions($event);">
                             <div class="checkbox__checkmark checkbox--noborder checkbox--list-item__checkmark"></div>
                             <span class="spCol col4">{{ item.description }}</span>
-                            <span class="spCol col2" ng-click="doSomething()">
+                            <span class="spCol col2" ng-click="adjustExpValue(item)">
                                 <button class="button--quiet"
-                                        ng-class="{ 'danger': item.expFlag == 'danger', 'warning': item.expFlag == 'warning' }">
+                                        ng-class="{ 'danger': item.expFlag == 'danger' && item.freezer != '1', 'warning': item.expFlag == 'warning' && item.freezer != '1' }">
                                     {{ item.freezer == '1' ? 'Frozen' : item.daysLeft }}
                                 </button>
                             </span>
-                            <span class="spCol col2" ng-click="adjustItmValue('quantity', 'Adjust Quantity', item)">
+                            <span class="spCol col2" ng-click="adjustQtyValue(item)">
                                 <button class="button--quiet">
                                     {{ item.quantity }} {{ item.units ? item.units : '' }}
                                 </button>
@@ -143,6 +143,57 @@
                         </label>
                     </li>
                 </ul>
+
+
+
+
+
+                <div id="hiddenExpContent" class="hide">
+                    <ons-row>
+                        <ons-col>
+                            <label class="checkbox checkbox--list-item">
+                                Freezing
+                                <input type="checkbox" class="updateFreezer">
+                                <div class="checkbox__checkmark checkbox--list-item__checkmark"></div>
+                            </label>
+                        </ons-col>
+                    </ons-row>
+                    <ons-row>
+                        <ons-col>
+                            <div class="slider">
+                                <label for="itemExpMo" ng-class="{'fade50' : adjustItem.freezer}">Expires: </label>
+                                <div class="expDate" ng-class="{'fade50' : adjustItem.freezer}"></div>
+                                <div class="clearfix"></div>
+                                <label for="expMonth" class="text-right" ng-class="{'fade50' : adjustItem.freezer}">
+                                    <em>Month</em>
+                                </label>
+                                <input id="expMonth" type="range" class="range" min="1" max="12"
+                                       ng-model="adjustItem.exp.month" ng-disabled="adjustItem.freezer"
+                                       value="{{ adjustItem.exp.month }}">
+                                <div class="clearfix"></div>
+                                <label for="expDay" class="text-right" ng-class="{'fade50' : adjustItem.freezer}">
+                                    <em>Day</em>
+                                </label>
+                                <input id="expDay" type="range" class="range" min="1" max="31"
+                                       ng-model="adjustItem.exp.day" ng-disabled="adjustItem.freezer"
+                                       value="{{ adjustItem.exp.day }}">
+                                <div class="clearfix"></div>
+                                <label for="expYear" class="text-right" ng-class="{'fade50' : adjustItem.freezer}">
+                                    <em>Year</em>
+                                </label>
+                                <input id="expYear" type="range" class="range" min="{{ currentYear }}"
+                                       max="{{ currentYear +5 }}" ng-model="adjustItem.exp.year"
+                                       ng-disabled="adjustItem.freezer" value="{{ adjustItem.exp.year }}">
+                                <div class="clearfix"></div>
+                            </div>
+                        </ons-col>
+                    </ons-row>
+                </div>
+
+
+
+
+                
             </ons-list>
             <button class="button button-small pull-right m-t-15 m-r-5"
                     ng-click="addNewItem()">Add New</button>
