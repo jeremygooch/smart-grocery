@@ -147,10 +147,41 @@ sg.controller('InventoryController', function($scope, $filter, $data, api) {
                 animation: 'fade',
                 title: itm.description,
                 callback: function(index) {
-                    // var q = document.getElementById('adjustExpValue').value;
-                    // if (q != curValue && index) {
-                    //     updateItem(itm.inventory_id, 'quantity', q);
-                    // }
+                    if (index) {
+                        // See if we need to update the expiration date
+                        function updateExp() {
+
+                            // //////////////////////////////////
+                            // Need to update dom after the db is updated
+                            // Look at the updateItem function
+                            // //////////////////////////////////
+                            
+                            if (!freezer.checked) {
+                                // See if the exp date changed
+                                var expDay = document.querySelector('.alert-dialog-content #expDay_' + itm.inventory_id);
+                                var expMonth = document.querySelector('.alert-dialog-content #expMonth_' + itm.inventory_id);
+                                var expYear = document.querySelector('.alert-dialog-content #expYear_' + itm.inventory_id);
+                                
+                                if ((expDay.value != itm.exp.day) ||
+                                    (expMonth.value != itm.exp.month) ||
+                                    (expYear.value != itm.exp.year)) {
+                                    updateItem(itm.inventory_id, 'expires', expYear.value+'-'+expMonth.value+'-'+expDay.value,
+                                               function() {
+                                                   //
+                                               });
+                                }
+                            }
+                        }
+                        
+                        // See if the freezer value changed
+                        var freezer = document.querySelector('.alert-dialog-content #updateFreezer_' + itm.inventory_id);
+                        if ((freezer.checked && itm.freezer == '0') || (!freezer.checked && itm.freezer == '1')) {
+                            updateItem(itm.inventory_id, 'freezer', f, function() {
+                                // $scope.qtyPending[itm.inventory_id] = false;
+                                updateExp();
+                            });
+                        } else { updateExp(); }
+                    }
                 }
             });
 
