@@ -66,7 +66,9 @@ sg.controller('InventoryController', function($scope, $filter, $data, api) {
         });
     };
 
-    function updateItem (id, field, value) {
+    $scope.qtyPending = []; // Need this to store which row may need to show a loading icon for updating a value
+
+    function updateItem (id, field, value, cb) {
         var fields = {};
         fields[field] = value;
         var data = { api: 'inventory', method: 'updateItem', id: id, data: fields};
@@ -77,6 +79,9 @@ sg.controller('InventoryController', function($scope, $filter, $data, api) {
                 var index = _.indexOf($scope.curList, _.find($scope.curList, {inventory_id: id}));
                 $scope.curList[index][field] = value;
             }
+        });
+        updateItem.finally(function() {
+            if (typeof cb == "function") { cb(); }
         });
     }
 
@@ -91,11 +96,14 @@ sg.controller('InventoryController', function($scope, $filter, $data, api) {
                 buttonLabels: ["Cancel", "OK"],
                 cancelable: true,
                 animation: 'fade',
-                title: 'Adjust Quantity',
+                title: itm.description,
                 callback: function(index) {
+                    $scope.qtyPending[itm.inventory_id] = true; // Icon
                     var q = document.getElementById('adjustQtyValue').value;
                     if (q != curValue && index) {
-                        updateItem(itm.inventory_id, 'quantity', q);
+                        updateItem(itm.inventory_id, 'quantity', q, function() {
+                            $scope.qtyPending[itm.inventory_id] = false;
+                        });
                     }
                 }
             });
@@ -110,13 +118,18 @@ sg.controller('InventoryController', function($scope, $filter, $data, api) {
     $scope.adjustExpValue = function(itm) {
         console.log(itm);
         var content = document.getElementById('hiddenExpContent'); // Grab the popup contents
-        // Cannot use angular within the dom to update the values. They must unfortunately be controlled here
-        content.querySelector('.expDate').innerHTML = $filter('monthToString')(itm.exp.month) + ' ' + 
-            itm.exp.day + ', ' + itm.exp.year;
+        // Cannot use angular within the dom to update the values.
+        // Update the elements before inserting them into the DOM
+        content.querySelector('.expDate').innerHTML = '<span class="mo">' + $filter('monthToString')(itm.exp.month)+
+            '</span> <span class="da">' + itm.exp.day + '</span>, <span class="yr">' + itm.exp.year + '</span>';
+        content.querySelector('.slider').id = 'slider_' + itm.inventory_id;
+
+        content.querySelector('.expDay').id = 'expDay_' + itm.inventory_id;
+        content.querySelector('.expMonth').id = 'expMonth_' + itm.inventory_id;
+        content.querySelector('.expYear').id = 'expYear_' + itm.inventory_id;
         
         // Update the freezer
         content.querySelector('.updateFreezer').id = 'updateFreezer_' + itm.inventory_id;
-        content.querySelector('.slider').id = 'slider_' + itm.inventory_id;
         if (itm.freezer == "1") {
             content.querySelector('.updateFreezer').setAttribute('checked','');
             content.querySelector('.slider').classList.add('closed');
@@ -132,7 +145,7 @@ sg.controller('InventoryController', function($scope, $filter, $data, api) {
                 buttonLabels: ["Cancel", "OK"],
                 cancelable: true,
                 animation: 'fade',
-                title: 'Adjust Expiration',
+                title: itm.description,
                 callback: function(index) {
                     // var q = document.getElementById('adjustExpValue').value;
                     // if (q != curValue && index) {
@@ -140,22 +153,37 @@ sg.controller('InventoryController', function($scope, $filter, $data, api) {
                     // }
                 }
             });
-            // Listen for the freezer click
 
-            // ////////////////////////////////
-            // This is not updating the ui for some reason!!!!!!!
-            // ////////////////////////////////
+            // Updating slider values after they're rendered in the dom
+            document.querySelector('.alert-dialog-content #expDay_' + itm.inventory_id).value = itm.exp.day;
+            document.querySelector('.alert-dialog-content #expMonth_' + itm.inventory_id).value = itm.exp.month;
+            document.querySelector('.alert-dialog-content #expYear_' + itm.inventory_id).value = itm.exp.year;
+
             document.querySelector('body').addEventListener('click', function(event) {
-                if (event.target.id === 'updateFreezer_' + itm.inventory_id) {
-                    if (event.target.checked) {
-                        document.getElementById('slider_' + itm.inventory_id).classList.add('closed');
-                        console.log(document.getElementById('slider_' + itm.inventory_id));
+                var target = event.target;
+                switch (target.id) {
+                case 'updateFreezer_' + itm.inventory_id:
+                    if (target.checked) {
+                        document.querySelector('.alert-dialog-content #slider_' + itm.inventory_id).classList.add('closed');
                     } else {
-                        document.getElementById('slider_' + itm.inventory_id).classList.remove('closed');
-                        console.log(document.getElementById('slider_' + itm.inventory_id));
+                        document.querySelector('.alert-dialog-content #slider_' + itm.inventory_id).classList.remove('closed');
                     }
-                }
+                    break;
+                case 'expMonth_' + itm.inventory_id:
+                    document.querySelector('.alert-dialog-content .mo').innerHTML = $filter('monthToString')(target.value);
+                    break;
+                case 'expDay_' + itm.inventory_id:
+                    document.querySelector('.alert-dialog-content .da').innerHTML = target.value;
+                    break;
+                case 'expYear_' + itm.inventory_id:
+                    document.querySelector('.alert-dialog-content .yr').innerHTML = target.value;
+                    break;
+                default:
+                    break;
+                };
+                
             });
+            
         }, 100);
     };
 });

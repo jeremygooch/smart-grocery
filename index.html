@@ -131,7 +131,11 @@
                             </span>
                             <span class="spCol col2" ng-click="adjustQtyValue(item)">
                                 <button class="button--quiet">
-                                    {{ item.quantity }} {{ item.units ? item.units : '' }}
+                                    <span ng-show="!qtyPending[item.inventory_id]">
+                                        {{ item.quantity }} {{ item.units ? item.units : '' }}
+                                    </span>
+                                    <ons-icon icon="fa-spinner fa-spin" size="15px" fixed-width="false"
+                                              ng-show="qtyPending[item.inventory_id]"></ons-icon>
                                 </button>
                             </span>
                             <span class="pull-right" ng-click="doSomething()">
@@ -152,7 +156,7 @@
                     <ons-row>
                         <ons-col>
                             <label class="checkbox checkbox--list-item">
-                                Freezing
+                                <div class="pull-left m-r-10">Freezing</div>
                                 <input type="checkbox" class="updateFreezer">
                                 <div class="checkbox__checkmark checkbox--list-item__checkmark"></div>
                             </label>
@@ -161,29 +165,23 @@
                     <ons-row>
                         <ons-col>
                             <div class="slider">
-                                <label for="itemExpMo" ng-class="{'fade50' : adjustItem.freezer}">Expires: </label>
-                                <div class="expDate" ng-class="{'fade50' : adjustItem.freezer}"></div>
+                                <label for="itemExpMo">Expires: </label>
+                                <div class="expDate"></div>
                                 <div class="clearfix"></div>
-                                <label for="expMonth" class="text-right" ng-class="{'fade50' : adjustItem.freezer}">
+                                <label for="expMonth" class="text-right">
                                     <em>Month</em>
                                 </label>
-                                <input id="expMonth" type="range" class="range" min="1" max="12"
-                                       ng-model="adjustItem.exp.month" ng-disabled="adjustItem.freezer"
-                                       value="{{ adjustItem.exp.month }}">
+                                <input type="range" class="range expMonth" min="1" max="12" value="">
                                 <div class="clearfix"></div>
-                                <label for="expDay" class="text-right" ng-class="{'fade50' : adjustItem.freezer}">
+                                <label for="expDay" class="text-right">
                                     <em>Day</em>
                                 </label>
-                                <input id="expDay" type="range" class="range" min="1" max="31"
-                                       ng-model="adjustItem.exp.day" ng-disabled="adjustItem.freezer"
-                                       value="{{ adjustItem.exp.day }}">
+                                <input type="range" class="range expDay" min="1" max="31" value="">
                                 <div class="clearfix"></div>
-                                <label for="expYear" class="text-right" ng-class="{'fade50' : adjustItem.freezer}">
+                                <label for="expYear" class="text-right">
                                     <em>Year</em>
                                 </label>
-                                <input id="expYear" type="range" class="range" min="{{ currentYear }}"
-                                       max="{{ currentYear +5 }}" ng-model="adjustItem.exp.year"
-                                       ng-disabled="adjustItem.freezer" value="{{ adjustItem.exp.year }}">
+                                <input type="range" class="range expYear" min="{{ currentYear }}" max="{{ currentYear +5 }}" value="">
                                 <div class="clearfix"></div>
                             </div>
                         </ons-col>
@@ -260,7 +258,7 @@
                             <ons-icon icon="fa-list-alt" size="15px" fixed-width="false"
                                       class="m-l-10" ng-click="doSomething()"
                                       style="color:rgba(136,148,96,0.81);">
-                            </ons-icon>
+                            </ons-icon>o
                         </span>
                     </li>
                 </ul>

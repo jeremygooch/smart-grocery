@@ -236,6 +236,8 @@ ons-col .slider ons-switch, ons-col .slider input, ons-col .slider select, ons-c
     margin-top: 50%;
 }
 
+.button--quiet { min-width: 45px; } /* To ensure that truncation doesn't happen when this switches to a loading icon */
+
 
 
 /* ************************************************* */
