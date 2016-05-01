@@ -25,6 +25,9 @@ define("SITE_RESOURCE_NAME", "XXXXXXXXXX");
 define("SITE_DIRECTORY", "XXXXXXXXXX"); // Absolute Path, no trailing slash
 define("IMG_ARCHIVE_PATH", "XXXXXXXXXX"); // Absolute Path, no trailing slash
 
+// Food2Fork API key
+define("F2F_KEY", "XXXXXXXXXX");
+
 
 
 include_once("include_files.php");

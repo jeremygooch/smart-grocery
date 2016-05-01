@@ -167,6 +167,21 @@ case "inventory":
     break;
   }
   break;
+
+
+case "recipes":
+  switch($request['method']){
+  case "getRecipesByCurrentInventory":
+    //Load Class
+    $class = new recipes();
+    $data = $class->get_recipes_by_current_inventory();
+
+    //Send JSON Response
+    header('Content-Type: application/json');
+    echo $data;
+    break;
+  }
+  break;
   
 case 'NEXT':
   switch($request['TYPE']){

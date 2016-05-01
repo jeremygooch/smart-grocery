@@ -220,6 +220,26 @@ sg.controller('InventoryController', function($scope, $filter, $data, api) {
     };
 });
 
+sg.controller('recipesController', function($scope, $data, api) {
+    // Load the recipes initially
+    var data = { api: 'recipes', method: 'getRecipesByCurrentInventory' };
+    var newRecipes = api.query('post', 'api/index.php', data);
+    newRecipes.success(function (res) {
+        console.log(res);
+        // if (res.code == 200) {
+        //     $scope.newReceipts = res.data['new']; // new is reserved in JS
+        //     $scope.oldReceipts = res.data.old;
+        //     if (typeof cb === 'function') { cb(); }
+        // } else {
+        //     console.dir(res);
+        // }
+    });
+    newRecipes.error(function(data, status, headers, config){
+        console.dir(data);
+    });
+    newRecipes.finally(function() { $scope.contentLoaded = true; });
+
+});
 
 sg.controller('ReceiptsController', function($scope, $data, $timeout, $http, api) {
     $scope.item = $data.selectedItem;
@@ -454,6 +474,9 @@ sg.controller('MainScreenController', function($scope, $data, $interval, api) {
         switch (index) {
         case 0:
             page = 'inventory.html';
+            break;
+        case 1:
+            page = 'recipes.html';
             break;
         case 2:
             page = 'receipts.html';
