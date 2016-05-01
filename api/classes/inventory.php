@@ -23,32 +23,12 @@ class inventory {
 
     if ($res) {
       for ($i=0; $i< count($res); $i++) {
-        // Break the date apart
-        $expires = strtotime($res[$i]['expires']);
-        $month = date("m",$expires);
-        $day = date("d",$expires);
-        $year = date("Y",$expires);
-        $res[$i]['exp'] = array('month'=>$month,'day'=>$day,'year'=>$year);
-
-
 
         // See if anything is expiring soon
-        $curDate = time();
-        $timeDiff = ceil(($expires - $curDate) / (60*60*24));
-        if ($timeDiff > 31) {
-          $res[$i]['daysLeft'] = ceil($timeDiff / 31) . ' mo';
-        } else {
-          $plural = $timeDiff > 1 ? 's' : '';
-          $res[$i]['daysLeft'] = $timeDiff . ' day' . $plural;
-        }
-
-        if ($timeDiff < 2) {
-          $res[$i]['expFlag'] = 'danger';
-        } else if ($timeDiff < 7) {
-          $res[$i]['expFlag'] = 'warning';
-        } else {
-          $res[$i]['expFlag'] = 'none';
-        }
+        $daysLeft = $this->calc_days_left($res[$i]['expires']);
+        $res[$i]['exp'] = $daysLeft['exp'];
+        $res[$i]['daysLeft'] = $daysLeft['daysLeft'];
+        $res[$i]['expFlag'] = $daysLeft['flag'];
 
         // Categorize this item accordingly
         array_push($output[$res[$i]['category']], $res[$i]);
@@ -58,6 +38,33 @@ class inventory {
     return $this->utilities->prep_response($output);
   }
 
+  private function calc_days_left($exp) {
+    $output = array();
+    $curDate = time();
+    // Break the date apart
+    $exp = strtotime($exp);
+    $month = date("m",$exp);
+    $day = date("d",$exp);
+    $year = date("Y",$exp);
+    $output['exp'] = array('month'=>$month,'day'=>$day,'year'=>$year);
+    $output['timeDiff'] = ceil(($exp - $curDate) / (60*60*24));
+    if ($output['timeDiff'] > 31) {
+      $output['daysLeft'] = ceil($output['timeDiff'] / 31) . ' mo';
+    } else {
+      $plural = $output['timeDiff'] > 1 ? 's' : '';
+      $output['daysLeft'] = $output['timeDiff'] . ' day' . $plural;
+    }
+
+    if ($output['timeDiff'] < 2) {
+      $output['flag'] = 'danger';
+    } else if ($output['timeDiff'] < 7) {
+      $output['flag'] = 'warning';
+    } else {
+      $output['flag'] = 'none';
+    }
+    
+    return $output;
+  }
 
   public function delete_item($id){
     $query = "DELETE FROM inventory WHERE inventory_id = '$id';";
@@ -78,10 +85,28 @@ class inventory {
     $query = '';
     foreach ($data as $key => $value) {
       $query .= "UPDATE inventory SET $key = '$value' WHERE inventory_id = '$id'; ";
+      // If updating expiration, we'll need to do some post processing
+      if ($key == 'expires') {
+        $ymd = DateTime::createFromFormat('Y-m-d', $value);
+        $expires = $ymd->format('Y-m-d');
+        $daysLeft = $this->calc_days_left($expires);
+      }
     }
-    $res = $this->gdao->queryRow($query); 
+    $res = $this->gdao->queryRow($query);
+    if ($daysLeft) {
+      $output = array(
+                      'message' => "$id successfully updated.",
+                      'daysLeft' => $daysLeft['daysLeft'],
+                      'flag' => $daysLeft['flag'],
+                      /* 'expired' => $daysLeft[''], */
+                      /* 'expires' => '', */
+                      'exp' => $daysLeft['exp']
+                      );
+    } else {
+      $output = "$id successfully updated.";
+    }
 
-    return $this->utilities->prep_response("$id successfully updated.");
+    return $this->utilities->prep_response($output);
   }
 
 }

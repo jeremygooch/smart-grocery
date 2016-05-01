@@ -77,7 +77,13 @@ sg.controller('InventoryController', function($scope, $filter, $data, api) {
             if (res.code == 200) {
                 // update the view
                 var index = _.indexOf($scope.curList, _.find($scope.curList, {inventory_id: id}));
-                $scope.curList[index][field] = value;
+                if (field != 'expires') {
+                    $scope.curList[index][field] = value;
+                } else {
+                    $scope.curList[index]['daysLeft'] = res.data.daysLeft;
+                    $scope.curList[index]['exp'] = res.data.exp;
+                    $scope.curList[index]['expFlag'] = res.data.flag;
+                }
             }
         });
         updateItem.finally(function() {
@@ -150,12 +156,6 @@ sg.controller('InventoryController', function($scope, $filter, $data, api) {
                     if (index) {
                         // See if we need to update the expiration date
                         function updateExp() {
-
-                            // //////////////////////////////////
-                            // Need to update dom after the db is updated
-                            // Look at the updateItem function
-                            // //////////////////////////////////
-                            
                             if (!freezer.checked) {
                                 // See if the exp date changed
                                 var expDay = document.querySelector('.alert-dialog-content #expDay_' + itm.inventory_id);
@@ -176,6 +176,7 @@ sg.controller('InventoryController', function($scope, $filter, $data, api) {
                         // See if the freezer value changed
                         var freezer = document.querySelector('.alert-dialog-content #updateFreezer_' + itm.inventory_id);
                         if ((freezer.checked && itm.freezer == '0') || (!freezer.checked && itm.freezer == '1')) {
+                            var f = freezer.checked ? "1" : "0";
                             updateItem(itm.inventory_id, 'freezer', f, function() {
                                 // $scope.qtyPending[itm.inventory_id] = false;
                                 updateExp();
