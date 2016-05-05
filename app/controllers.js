@@ -225,7 +225,12 @@ sg.controller('recipesController', function($scope, $data, api) {
     var data = { api: 'recipes', method: 'getRecipesByCurrentInventory' };
     var newRecipes = api.query('post', 'api/index.php', data);
     newRecipes.success(function (res) {
-        console.log(res);
+
+        if (res.code == 200) {
+            var recipes = JSON.parse(res.data);
+            $scope.recipes = recipes.recipes;
+        }
+
         // if (res.code == 200) {
         //     $scope.newReceipts = res.data['new']; // new is reserved in JS
         //     $scope.oldReceipts = res.data.old;
