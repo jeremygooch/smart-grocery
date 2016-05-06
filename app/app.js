@@ -20,24 +20,15 @@ sg.factory('$data', function() {
     data.items = [
         {
             title: 'Inventory',
-            controller: '',
-            icon: 'inventory-thum',
-            desc: 'View and update any of the items in your currrent inventory.'
         },
         {
             title: 'Recipes',
-            icon: 'recipes',
-            desc: 'View and update up any of your saved recipes.'
         },
         {
             title: 'Receipts',
-            icon: 'receipts',
-            desc: 'Review any uploaded receipts, and view any previous receipts.'
         },
         {
             title: 'Grocery List',
-            icon: 'grocery',
-            desc: 'Build a grocery list based off any new or old receipes.'
         }
     ];
 

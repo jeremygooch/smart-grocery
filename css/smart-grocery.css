@@ -9,36 +9,33 @@
   font-style: normal;
 }
 
-ons-toolbar.navigation-bar {
-    background: #4C212A;
-    background: #4C212A url(images/header.png) bottom left no-repeat;;
-    height: 86px;
+.navigation-bar {
+    box-shadow: 0px 2px 5px #000;
+    height: 66px;
 }
 ons-toolbar + .page__background + .page__content {
     top: 85px;
 }
 .navigation-bar__title {
-    font-size: 28px;
-    line-height: 85px;
+    font-size: 24px;
+    line-height: 66px;
 }
 ons-toolbar.navigation-bar div {
     color: #fff;
     font-weight: bold;
 }
 
-.item-thum { height: 75px !important; width: 75px !important; }
-.inventory-thum { background: url(images/inventory-thum.png) 50% no-repeat; }
-.recipes { background: url(images/recipes.png) 50% no-repeat; }
-.receipts { background: url(images/receipts.png) 50% no-repeat; }
-.grocery { background: url(images/grocery.png) 50% no-repeat; }
+/* .item-thum { height: 75px !important; width: 75px !important; } */
+/* .inventory-thum { background: url(images/inventory-thum.png) 50% no-repeat; } */
+/* .recipes { background: url(images/recipes.png) 50% no-repeat; } */
+/* .receipts { background: url(images/receipts.png) 50% no-repeat; } */
+/* .grocery { background: url(images/grocery.png) 50% no-repeat; } */
 
 .toolbar-button, .toolbar-button--outline, .toolbar-button--quiet {
-    color: #889460;
-    font-size: 25px;
     opacity: .65;
 }
 .back-button__label, .ons-back-button__icon {
-    line-height: 85px !important;
+    line-height: 70px !important;
 }
 
 .item {
@@ -69,15 +66,41 @@ ons-toolbar.navigation-bar div {
 .item-label {
     font-size: 12px;
     color: #999;
-    float: right;
 }
 .checkbox--noborder > .checkbox__checkmark, .checkbox > .checkbox__checkmark { float: left; }
 .button-small {
     padding: 0px 10px;
     line-height: 24px;
 }
+.button--outline {
+    background-color: rgba(128,203,196,0.54);
+    border: 0px;
+    color: rgba(255,255,255,.87);
+    text-transform: uppercase;
+    padding: 5px 10px;
+    font-size: 14px;
+}
+.button--outline:hover { border: 0; }
+.button--outline:active {
+    border: 0;
+    background-color: rgba(128,203,196,0.24);
+}
+.floating-action-button {
+    position: absolute;
+    right: 20px;
+    height: 84px;
+    width: 84px;
+    border-radius: 42px;
+    bottom: 5%;
+    box-shadow: 0px 10px 10px rgba(0,0,0,.4);
+    background-color: rgba(128,203,196,0.87);
+}
+.floating-action-button:active {
+    background-color: rgba(128,203,196,0.87);   
+}
 label {
     display: inline-block;
+    color: rgba(255,255,255,.54);
 }
 .calendar input {
     width: 30%;
@@ -91,6 +114,42 @@ label {
 .reviewProgress:hover, .reviewProgress:active {
     opacity: .5;
 }
+
+/* ************************************************* */
+/* Main Screen Specific */
+/* ************************************************* */
+ons-toolbar + .page__background + .page__content {
+    top:65px;
+}
+
+.main-screen ons-list-item {
+    border: 0 !important;
+    background-size: cover !important;
+    height: 148px;
+    text-align: center;
+    line-height: 100px;
+}
+.main-screen ons-list-item.inventory {
+    background: transparent url(images/inventory-slide.jpg) center center no-repeat;
+}
+.main-screen ons-list-item.recipes {
+    background: transparent url(images/recipe-slide.jpg) center center no-repeat;
+}
+.main-screen ons-list-item.receipts {
+    background: transparent url(images/receipt-slide.jpg) center center no-repeat;
+}
+.main-screen ons-list-item.grocery-list {
+    background: transparent url(images/grocery-list-slide.jpg) center center no-repeat;
+}
+
+.main-screen .item-title {
+    font-size: 20px;
+}
+
+
+/* ************************************************* */
+/* Form input */
+/* ************************************************* */
 input[type="range"] {
     output: 0;
     
@@ -236,7 +295,13 @@ ons-col .slider ons-switch, ons-col .slider input, ons-col .slider select, ons-c
     margin-top: 50%;
 }
 
-.button--quiet { min-width: 45px; } /* To ensure that truncation doesn't happen when this switches to a loading icon */
+.button--quiet {
+    min-width: 45px; /* To ensure that truncation doesn't happen when this switches to a loading icon */
+    text-transform: uppercase;
+    font-size: 14px;
+    color: rgba(255,255,255,.87);
+    font-weight: bold;
+}
 
 
 /* ************************************************* */

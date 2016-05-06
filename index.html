@@ -19,6 +19,10 @@
     <script src="libs/angular/angular.js"></script>
     <script src="libs/onsenui.js"></script>
 
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet'"type="text/css">
+
+
     <!-- CSS dependencies -->
     <link rel="stylesheet" href="css/onsenui.css" />
     <link rel="stylesheet" href="css/onsen-css-components-blue-basic-theme.css" />
@@ -45,12 +49,9 @@
     <ons-navigator var="navi">
         <ons-page>
             <ons-toolbar><div class="center">Smart Grocery</div></ons-toolbar>
-            <ons-list ng-controller="MainScreenController">
-                <ons-list-item modifier="chevron" class="item" ng-repeat="item in items" ng-click="loadView($index)">
+            <ons-list ng-controller="MainScreenController" class="main-screen">
+                <ons-list-item modifier="chevron" class="item" ng-class="{'inventory' : item.title == 'Inventory', 'recipes' : item.title == 'Recipes', 'receipts' : item.title == 'Receipts', 'grocery-list' : item.title == 'Grocery List'}" ng-repeat="item in items" ng-click="loadView($index)">
                     <ons-row>
-                        <ons-col width="60px">
-                            <div class="item-thum {{ item.icon }}"></div>
-                        </ons-col>
                         <ons-col>
                             <header class="p-l-25">
                                 <span class="item-title">{{item.title}}</span>
@@ -58,7 +59,6 @@
                                     <span class="notification" data-ng-show="item.notify">{{item.notify}}</span>
                                 </span>
                             </header>
-                            <p class="item-desc p-l-25">{{item.desc}}</p>
                         </ons-col>
                     </ons-row>
                 </ons-list-item>
@@ -73,43 +73,39 @@
         <ons-page ng-controller="InventoryController">
             <div class="loading" ng-class="{ hide : contentLoaded }"><ons-icon icon="fa-spinner" size="80px" spin="true"></div>
             <ons-toolbar>
-                <div class="left"><ons-back-button>Back</ons-back-button></div>
+                <div class="left"><ons-back-button></ons-back-button></div>
                 <div class="center">Inventory</div>
             </ons-toolbar>
-            <!-- Segmented Navigation Bar-->
-            <div class="navigation-bar">
-                <div class="navigation-bar__center">
-                    <div class="button-bar" style="margin: 7px auto; padding: 0 10px;">
-                        <div class="button-bar__item" id="invMeat"
-                             ng-click="switchCatetory('meat')">
-                            <input type="radio" name="navi-segment-a" checked>
-                            <div class="button-bar__button">Meat</div>
-                        </div>
 
-                        <div class="button-bar__item" id="invProduce"
-                             ng-click="switchCatetory('produce')">
-                            <input type="radio" name="navi-segment-a">
-                            <div class="button-bar__button">Produce</div>
-                        </div>
+            <div class="button-bar" style="margin: 25px auto 7px auto; padding: 0 10px;">
+                <div class="button-bar__item" id="invMeat"
+                     ng-click="switchCatetory('meat')">
+                    <input type="radio" name="navi-segment-a" checked>
+                    <div class="button-bar__button">Meat</div>
+                </div>
 
-                        <div class="button-bar__item" id="invDairy"
-                             ng-click="switchCatetory('dairy')">
-                            <input type="radio" name="navi-segment-a">
-                            <div class="button-bar__button">Dairy</div>
-                        </div>
+                <div class="button-bar__item" id="invProduce"
+                     ng-click="switchCatetory('produce')">
+                    <input type="radio" name="navi-segment-a">
+                    <div class="button-bar__button">Produce</div>
+                </div>
 
-                        <div class="button-bar__item" id="invPantry"
-                             ng-click="switchCatetory('pantry')">
-                            <input type="radio" name="navi-segment-a">
-                            <div class="button-bar__button">Panty</div>
-                        </div>
+                <div class="button-bar__item" id="invDairy"
+                     ng-click="switchCatetory('dairy')">
+                    <input type="radio" name="navi-segment-a">
+                    <div class="button-bar__button">Dairy</div>
+                </div>
 
-                        <div class="button-bar__item" id="invOther"
-                             ng-click="switchCatetory('other')">
-                            <input type="radio" name="navi-segment-a">
-                            <div class="button-bar__button">Other</div>
-                        </div>
-                    </div>
+                <div class="button-bar__item" id="invPantry"
+                     ng-click="switchCatetory('pantry')">
+                    <input type="radio" name="navi-segment-a">
+                    <div class="button-bar__button">Panty</div>
+                </div>
+
+                <div class="button-bar__item" id="invOther"
+                     ng-click="switchCatetory('other')">
+                    <input type="radio" name="navi-segment-a">
+                    <div class="button-bar__button">Other</div>
                 </div>
             </div>
             <ons-list style="margin-top: 10px">
@@ -138,12 +134,6 @@
                                     <ons-icon icon="fa-spinner fa-spin" size="15px" fixed-width="false"
                                               ng-show="qtyPending[item.inventory_id]"></ons-icon>
                                 </button>
-                            </span>
-                            <span class="pull-right" ng-click="doSomething()">
-                                <!-- <ons-icon icon="{{ item.reserved ? 'fa-lock' : 'fa-unlock' }}" size="15px" -->
-                                <!--      fixed-width="false" -->
-                                <!--      style="{{ item.reserved ? 'color:rgba(136,148,96,0.81);' : 'color:rgba(136,148,96,0.41);' }}"> -->
-                                <!-- </ons-icon> -->
                             </span>
                         </label>
                     </li>
@@ -186,11 +176,11 @@
                 </div>
                 
             </ons-list>
-            <button class="button button-small pull-right m-t-15 m-r-5"
-                    ng-click="addNewItem()">Add New</button>
-            <button class="button button-small button--outline pull-left m-t-15 m-l-5"
+            <button class="button button-small floating-action-button"
+                    ng-click="addNewItem()"><ons-icon size="35px" icon="ion-plus"></ons-icon></button>
+            <button class="button button-small button--outline pull-left m-t-15 m-l-15"
                     ng-click="deleteItems(selectedItems)"
-                    ng-class="{ hide: selectedItems.length <= 0 }">Delete ({{ selectedItems.length }})</button>
+                    ng-class="{ hide: selectedItems.length <= 0 }">Delete Selected ({{ selectedItems.length }})</button>
         </ons-page>
     </ons-template>
 
@@ -202,7 +192,7 @@
         <ons-page ng-controller="ReceiptsController">
             <div class="loading" ng-class="{ hide : contentLoaded }"><ons-icon icon="fa-spinner" size="80px" spin="true"></div>
             <ons-toolbar>
-                <div class="left"><ons-back-button>Back</ons-back-button></div>
+                <div class="left"><ons-back-button></ons-back-button></div>
                 <div class="center">Receipts</div>
             </ons-toolbar>
 
@@ -274,7 +264,7 @@
         <ons-page ng-controller="ReviewReceiptController">
             <div class="loading" ng-class="{ hide : contentLoaded }"><ons-icon icon="fa-spinner" size="80px" spin="true"></div>
             <ons-toolbar>
-                <div class="left"><ons-back-button>Back</ons-back-button></div>
+                <div class="left"><ons-back-button></ons-back-button></div>
                 <div class="center">Review</div>
             </ons-toolbar>
             <ons-list ng-class="{ hide : !receipt }">
@@ -406,14 +396,14 @@
 
             <div class="loading" ng-class="{ hide : contentLoaded }"><ons-icon icon="fa-spinner" size="80px" spin="true"></div>
             <ons-toolbar>
-                <div class="left"><ons-back-button>Back</ons-back-button></div>
+                <div class="left"><ons-back-button></ons-back-button></div>
                 <div class="center">Recipes</div>
             </ons-toolbar>
 
 
             <!-- Segmented Navigation Bar-->
-            <div class="navigation-bar">
-                <div class="navigation-bar__center">
+            <!-- <div class="navigation-bar"> -->
+            <!--     <div class="navigation-bar__center"> -->
                     <div class="button-bar" style="margin: 7px auto; padding: 0 10px;">
                         <div class="button-bar__item" id="invMeat"
                              ng-click="switchCatetory('meat')">
@@ -434,8 +424,8 @@
                         </div>
 
                     </div>
-                </div>
-            </div>
+            <!--     </div> -->
+            <!-- </div> -->
 
 
             <ons-list modifier="inset" class="settings-list">
@@ -479,7 +469,7 @@
     <ons-template id="detail.html">
         <ons-page ng-controller="DetailController">
             <ons-toolbar>
-                <div class="left"><ons-back-button>Back</ons-back-button></div>
+                <div class="left"><ons-back-button></ons-back-button></div>
                 <div class="center">Details</div>
             </ons-toolbar>
 
