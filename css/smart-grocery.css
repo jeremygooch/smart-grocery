@@ -12,6 +12,7 @@
 .navigation-bar {
     box-shadow: 0px 2px 5px #000;
     height: 66px;
+    border: 0;
 }
 ons-toolbar + .page__background + .page__content {
     top: 85px;
@@ -86,7 +87,7 @@ ons-toolbar.navigation-bar div {
     background-color: rgba(128,203,196,0.24);
 }
 .floating-action-button {
-    position: absolute;
+    position: fixed;
     right: 20px;
     height: 84px;
     width: 84px;

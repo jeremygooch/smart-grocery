@@ -3430,6 +3430,10 @@ input[type="search"].search-input::-webkit-search-cancel-button {
   padding: 0px 8px 0px 8px;
   text-align: center;
   color: rgba(255,255,255,0.54);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  margin: 0 5px 0 0;
 }
 .alert-dialog-content {
   -webkit-box-sizing: border-box;
