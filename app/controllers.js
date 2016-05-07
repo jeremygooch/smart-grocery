@@ -105,9 +105,9 @@ sg.controller('InventoryController', function($scope, $filter, $data, api) {
                 animation: 'fade',
                 title: itm.description,
                 callback: function(index) {
-                    $scope.qtyPending[itm.inventory_id] = true; // Icon
                     var q = document.getElementById('adjustQtyValue').value;
-                    if (q != curValue && index) {
+                    if (q != curValue && index === 1) {
+                        $scope.qtyPending[itm.inventory_id] = true; // Icon
                         updateItem(itm.inventory_id, 'quantity', q, function() {
                             $scope.qtyPending[itm.inventory_id] = false;
                         });
@@ -123,7 +123,6 @@ sg.controller('InventoryController', function($scope, $filter, $data, api) {
 
 
     $scope.adjustExpValue = function(itm) {
-        console.log(itm);
         var content = document.getElementById('hiddenExpContent'); // Grab the popup contents
         // Cannot use angular within the dom to update the values.
         // Update the elements before inserting them into the DOM
