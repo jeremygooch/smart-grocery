@@ -39,13 +39,8 @@ class processReceipts{
       // ////////////////////////////////////////////
       /* error_log(file_exists("/home/jgooch/smart-grocery" . $image_url)); */
       /* rename("/home/jgooch/smart-grocery" . $image_url, IMG_ARCHIVE_PATH); */
-
-      if ($debug) {
-        if ($debug['ocr']) {
-          error_log(print_r($ocrData->output, 1));
-          return;
-        }
-      }
+      
+      $this->logging($debug, 'ocr', $ocrData->output);
 
       // Break the results apart
       $itmList = explode("\n", $ocrData->output);
@@ -61,6 +56,7 @@ class processReceipts{
 
       for ($i = 0; $i < count($collapsedList); $i++) {
         $clnList[$i] = array(); // For this row
+        $this->logging($debug, 'spell', '=======================================');
         $words = explode(" ", $collapsedList[$i]);
         // Make sure we have more than one word on this row. If there is only
         // one word, this is likely a serial number or gibbirish so we dont 
@@ -80,10 +76,12 @@ class processReceipts{
 
               if ($wordMatch) {
                 $clnList[$i][$x] = $label;
+                $this->logging($debug, 'spell', $label);
               } else {
                 $swapQuery = "SELECT s.label FROM spellings AS s LEFT JOIN spellings_alternatives_ref AS sa ON s.id=sa.spelling_id WHERE sa.alt_spelling = '$label';";
                 $swapWord = $this->gdao->queryOne($swapQuery);
                 if ($swapWord) {
+                  $this->logging($debug, 'spell', $swapWord);
                   $clnList[$i][$x] = $swapWord;
                 } else {
                   /* error_log('I couldnt locate a match for ' . $clnList[$i][$x] . ' in the line ' . $words[0] . $words[1] . $words[2]); */
@@ -98,7 +96,7 @@ class processReceipts{
                 }
               }
             } // End minimum word length
-            
+
             // See if we can find any quantities for our items
             $quantity = 1;
             if (is_numeric($words[0])) {
@@ -200,6 +198,15 @@ class processReceipts{
       /* break; */
     }
     
+  }
+
+  public function logging($debug, $type, $itm) {
+    if ($debug) {
+      if ($debug[$type]) {
+        error_log(print_r($itm, 1));
+        return;
+      }
+    }
   }
 
 

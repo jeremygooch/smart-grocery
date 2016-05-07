@@ -22,7 +22,7 @@ class recipes {
     $ch = curl_init(); 
 
     // set url 
-    curl_setopt($ch, CURLOPT_URL, "http://food2fork.com/api/search?key=". F2F_KEY ."&q=shredded%20chicken,goat&cheese,tortilla&chips");
+    curl_setopt($ch, CURLOPT_URL, "http://food2fork.com/api/search?key=". F2F_KEY ."&q=chicken,goat&cheese,tortilla&chips,cilantro,french&bread,mustard");
     /* curl_setopt($ch, CURLOPT_URL, "http://food2fork.com/api/get?key=". F2F_KEY ."&rId=35382");  */
 
     //return the transfer as a string 

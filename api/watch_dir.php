@@ -19,6 +19,13 @@ if (isset($option)) {
     case 'ocr':
       $debug['ocr'] = 1;
       echo("OCR monitoring\n");
+      break;
+    case 'spell':
+      $debug['spell'] = 1;
+      echo("Spelling monitoring\n");
+      break;
+    default:
+      break;
     }
     break;
   default:
