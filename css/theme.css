@@ -2081,7 +2081,7 @@ h6 {
   position: relative;
   overflow: hidden;
   width: 28px;
-  height: 28px;
+  height: 30px;
 }
 .checkbox > .checkbox__checkmark:after {
   content: '';

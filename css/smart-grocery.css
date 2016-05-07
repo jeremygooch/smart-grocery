@@ -13,6 +13,7 @@
     box-shadow: 0px 2px 5px #000;
     height: 66px;
     border: 0;
+    background: transparent;
 }
 ons-toolbar + .page__background + .page__content {
     top: 85px;
@@ -416,7 +417,7 @@ ons-col .slider ons-switch, ons-col .slider input, ons-col .slider select, ons-c
 /* Standard Utility Classes */
 /* ************************************************* */
 .fade50 { opacity: .5; }
-.danger { color: #b84a0e; }
+.danger { color: #D6852C; }
 .warning { color: #c58505; }
 .text-center { text-align: center; }
 .text-right { text-align: right; }

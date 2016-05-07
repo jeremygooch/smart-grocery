@@ -18,6 +18,7 @@ sg.controller('InventoryController', function($scope, $filter, $data, api) {
                 $scope.inventory = res.data;
                 $scope.curList = $scope.inventory.meat;
                 $scope.switchCatetory = function(cat) {
+                    $scope.selectedItems.length = 0; // Uncheck the checkboxes
                     $scope.curList = $scope.inventory[cat];
                 };
             } else {

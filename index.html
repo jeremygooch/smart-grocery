@@ -119,7 +119,9 @@
                             <input type="checkbox" item-reference="{{ $index }}"
                                    ng-click="showActions($event);">
                             <div class="checkbox__checkmark checkbox--noborder checkbox--list-item__checkmark"></div>
-                            <span class="spCol col4">{{ item.description }}</span>
+                            <span class="spCol col3" ng-class="{ 'danger': item.expFlag == 'danger' && item.freezer != '1', 'warning': item.expFlag == 'warning' && item.freezer != '1' }">
+                                {{ item.description }}
+                            </span>
                             <span class="spCol col2" ng-click="adjustExpValue(item)">
                                 <button class="button--quiet"
                                         ng-class="{ 'danger': item.expFlag == 'danger' && item.freezer != '1', 'warning': item.expFlag == 'warning' && item.freezer != '1' }">
