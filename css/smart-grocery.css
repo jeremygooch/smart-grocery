@@ -55,14 +55,16 @@ ons-toolbar.navigation-bar div {
 .item-title {
     font-size: 15px;
     font-weight: 500;
+    color: rgba(255,255,255,0.54);
 }
 
 .item-desc {
     font-size: 14px;
-    color: #666;
+    color: rgba(255,255,255,.87);
     line-height: 1.3;
     margin: 4px 0 0 0;
     padding: 0 30px 0 0;
+    font-weight: bold;
 }
 
 .item-label {
@@ -456,6 +458,7 @@ ons-col .slider ons-switch, ons-col .slider input, ons-col .slider select, ons-c
 /* Standard Utility Classes */
 /* ************************************************* */
 .fade50 { opacity: .5; }
+.primary { color: rgba(128,203,196,.87); }
 .danger { color: #D6852C; }
 .warning { color: #c58505; }
 .text-center { text-align: center; }

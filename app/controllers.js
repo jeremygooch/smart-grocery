@@ -453,7 +453,7 @@ sg.controller('ReviewReceiptController', function($scope, $data, $timeout, api) 
     // Setup the various units
     $scope.units = {
         standard: ['bag', 'bottle', 'box', 'bunch', 'can', 'container', 'cups', 'liter',
-                   'oz', 'package', 'quart', ''],
+                   'oz', 'package', 'quart', 'ea'],
         butter: ['sticks', 'small tub', 'medium tub', 'large tub']
     };
 

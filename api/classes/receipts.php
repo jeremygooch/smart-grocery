@@ -80,7 +80,7 @@ class receipts {
     $query = "SELECT * FROM inventory WHERE inventory_item_id = '$inventory_item_id';";
     $res = $this->gdao->queryAll($query);
 
-    
+    $updateRes = false;
     if (count($res) > 0) {
       foreach($res as $item) {
         // Update the first match we find in the inventory
@@ -88,25 +88,30 @@ class receipts {
           $updateQry = "UPDATE inventory SET quantity = '" . ($item['quantity'] + $quantity) . "', expires = '$expires'";
           $updateRes = $this->gdao->queryExec($updateQry);
           break;
+        } else {
+          $updateRes = $this->add_new_item($id, $inventory_item_id, $quantity, $units, $expires, $category, $freezer);
         }
       }
     } else {
       // No existing items were found
-      $expiresDate = new DateTime($expires);
-      $updateQry = "INSERT INTO inventory (receipt_id, inventory_item_id, quantity, units, purchase_date, expires, cooked, expired, category, freezer)
-       SELECT receipt_id, '$inventory_item_id', '$quantity', '$units', CURDATE(), '" . $expiresDate->format('Y-m-d') . "', 0, 0, '$category', '$freezer' FROM receipt_items_ref
-       WHERE id = $id;";
-      $updateRes = $this->gdao->queryExec($updateQry);
+      $updateRes = $this->add_new_item($id, $inventory_item_id, $quantity, $units, $expires, $category, $freezer);
     }
     
     if($updateRes) {
       $this->delete_item($id);
-      
       return $this->utilities->prep_response("$id successfully saved.");
     } else {
       return $this->utilities->prep_response("$id could not be saved at this time.", 401);
     }
 
+  }
+
+  public function add_new_item($id, $inventory_item_id, $quantity, $units, $expires, $category, $freezer) {
+    $expiresDate = new DateTime($expires);
+    $updateQry = "INSERT INTO inventory (receipt_id, inventory_item_id, quantity, units, purchase_date, expires, cooked, expired, category, freezer)
+       SELECT receipt_id, '$inventory_item_id', '$quantity', '$units', CURDATE(), '" . $expiresDate->format('Y-m-d') . "', 0, 0, '$category', '$freezer' FROM receipt_items_ref
+       WHERE id = $id;";
+    return $this->gdao->queryExec($updateQry);
   }
 
   public function archive_receipt($id) {

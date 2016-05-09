@@ -229,8 +229,8 @@
                         <span class="spCol col2">{{ receipt.location }}</span>
                         <span class="spCol col2">{{ receipt.receipt_data.length }} Items</span>
                         <span class="pull-right">
-                            <button class="button button-small m-t-5 m-b-5" ng-click="reviewReceipt(receipt.id);">Review</button>
-                            <button class="button button-small button--outline m-t-5 m-b-5">Delete</button>
+                            <button class="button button--quiet warning m-t-5 m-b-5">Delete</button>
+                            <button class="button button--quiet primary m-t-5 m-b-5" ng-click="reviewReceipt(receipt.id);">Review</button>
                         </span>
                     </li>
                     <li class="list__header" ng-show="oldReceipts.length > 0">
@@ -256,10 +256,7 @@
             <p class="text-center" ng-show="receipts.oldReceipts.length<=0 && receipts.newReceipts.length<=0">
                 No receipts have been uploaded yet
             </p>
-            
-
             <br>
-
         </ons-page>
     </ons-template>
 
@@ -273,34 +270,29 @@
             <ons-toolbar>
                 <div class="left"><ons-back-button></ons-back-button></div>
                 <div class="center">Review</div>
-            </ons-toolbar>
-            <ons-list ng-class="{ hide : !receipt }">
-                <ons-list-item class="item">
-                    <ons-row>
-                        <ons-col>
-                            <ons-icon icon="fa-chevron-left" size="35px"
-                                      class="reviewProgress" ng-click="changeReceipt('back')"
-                                      fixed-width="false"
-                                      style="float: left; padding-top: 10px; color: #889460; z-index: 1; font-size: 35px; opacity: {{ prevReceipts ? '1' : '.25'}}"></ons-icon>
-                        </ons-col>
-                        <ons-col>
-                            <header class="text-center">
-                                <span class="item-title">{{ reviewReceiptTitle }}</span>
-                            </header>
-                            <p class="item-desc text-center p-r-0">{{ receipt.description }}</p>
-                        </ons-col>
+            </ons-toolbar> 
+            <ons-row ng-class="{ hide : !receipt }" class="m-t-10">
+                <ons-col>
+                    <ons-icon icon="fa-chevron-left" size="35px"
+                              class="reviewProgress" ng-click="changeReceipt('back')"
+                              fixed-width="false"
+                              style="float: left; padding-top: 10px; color: #889460; z-index: 1; font-size: 35px; opacity: {{ prevReceipts ? '1' : '.25'}}"></ons-icon>
+                </ons-col>
+                <ons-col>
+                    <header class="text-center">
+                        <span class="item-title">{{ reviewReceiptTitle }}</span>
+                    </header>
+                    <p class="item-desc text-center p-r-0">{{ receipt.description }}</p>
+                </ons-col>
 
-                        <ons-col>
-                            <ons-icon icon="fa-chevron-right" size="35px"
-                                      class="reviewProgress" ng-click="changeReceipt('next')"
-                                      fixed-width="false"
-                                      style="float: right; padding-top: 10px; color: #889460; z-index: 1; font-size: 35px; opacity: {{ nextReceipts ? '1' : '.25'}}"></ons-icon>
-                        </ons-col>
+                <ons-col>
+                    <ons-icon icon="fa-chevron-right" size="35px"
+                              class="reviewProgress" ng-click="changeReceipt('next')"
+                              fixed-width="false"
+                              style="float: right; padding-top: 10px; color: #889460; z-index: 1; font-size: 35px; opacity: {{ nextReceipts ? '1' : '.25'}}"></ons-icon>
+                </ons-col>
 
-
-                    </ons-row>
-                </ons-list-item>
-            </ons-list>
+            </ons-row>
             <ons-list class="m-t-10 no-receipts" ng-if="!receipt">
                 All Receipts have been reviewed. What would you like to do now?
                 <p><ons-button onclick="navi.pushPage('inventory.html')">Go To Recipes</ons-button></p>
@@ -374,18 +366,14 @@
                 <ons-list-item class="item">
                     <ons-row>
                         <ons-col>
-                            <button class="button pull-right"
-                                    ng-disabled="processingItem" ng-click="saveItem(receipt)">
+                            <button class="button pull-right button--outline" ng-disabled="processingItem" ng-click="saveItem(receipt)">
                                 <ons-icon icon="fa-floppy-o" size="15px" ng-if="!processingItem"
                                           fixed-width="false"></ons-icon>
-                                <ons-icon icon="fa-spinner fa-spin" size="15px" ng-if="processingItem"
-                                          fixed-width="false"></ons-icon>
+                                <ons-icon icon="fa-spinner fa-spin" size="15px" ng-if="processingItem" fixed-width="false"></ons-icon>
                                 <span class="m-l-5">Save</span>
                             </button>
-                            <button class="button button--outline pull-left" ng-click="deleteItem(receipt.id)">
-                                <ons-icon icon="fa-trash-o" size="15px"
-                                          fixed-width="false"
-                                          style=""></ons-icon>
+                            <button class="button button--quiet warning pull-left" ng-click="deleteItem(receipt.id)">
+                                <ons-icon icon="fa-trash-o" size="15px" fixed-width="false" style=""></ons-icon>
                                 <span class="m-r-5">Delete!</span>
                             </button>
                         </ons-col>
