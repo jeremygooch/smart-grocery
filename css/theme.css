@@ -1296,6 +1296,8 @@ h6 {
   position: relative;
   margin: 0;
   border: none;
+  /* flex-wrap: nowrap; */
+  /* display: flex; */
 }
 .button-bar__item {
   font-family: 'Roboto', sans-serif;

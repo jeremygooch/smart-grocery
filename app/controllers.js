@@ -11,7 +11,7 @@ sg.controller('InventoryController', function($scope, $filter, $data, api) {
         method : 'getInventoryItems'
     };
 
-    $scope.getInventory = function() {
+    $scope.getInventory = function(e) {
         var getInventory = api.query('post', 'api/index.php', data);
         getInventory.success(function(res) {
             if (res.code == 200) {
@@ -20,6 +20,8 @@ sg.controller('InventoryController', function($scope, $filter, $data, api) {
                 $scope.switchCatetory = function(cat) {
                     $scope.selectedItems.length = 0; // Uncheck the checkboxes
                     $scope.curList = $scope.inventory[cat];
+                    // Highlight the icon
+                    // e.target.classList.add('alt');
                 };
             } else {
                 console.dir(res);

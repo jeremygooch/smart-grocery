@@ -305,6 +305,45 @@ ons-col .slider ons-switch, ons-col .slider input, ons-col .slider select, ons-c
     font-weight: bold;
 }
 
+/* ************************************************* */
+/* Food Icons */
+/* ************************************************* */
+.fI {
+    height: 100px;
+    width: 1;
+    background-size: 100% auto !important;
+    opacity: .54;
+}
+.fI:after {
+    content: "";
+    display: block;
+    height: 1px;
+    width: 100px;
+}
+.turkey {
+    background: url(food-icons/turkey.png) bottom center no-repeat;
+    background-size: 98% auto !important;
+}
+.tomato {
+    background: url(food-icons/tomato.png) bottom center no-repeat;
+    background-size: 64% auto !important;
+}
+.cheese {
+    background: url(food-icons/cheese.png) bottom center no-repeat;
+    background-size: 74% auto !important;
+}
+.bread {
+    background: url(food-icons/bread.png) bottom center no-repeat;
+    background-size: 95% auto !important;
+}
+.bowl {
+    background: url(food-icons/bowl.png) bottom center no-repeat;
+    background-size: 84% auto !important;
+}
+.fI.turkey {
+    background: url(food-icons/turkey-alt.png) bottom center no-repeat;
+}
+
 
 /* ************************************************* */
 /* Timeline Classes */
