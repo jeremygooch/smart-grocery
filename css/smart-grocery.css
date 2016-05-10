@@ -288,7 +288,7 @@ ons-col .slider ons-switch, ons-col .slider input, ons-col .slider select, ons-c
 .loading {
     width: 100%;
     height: 100vh;
-    background-color: #fff;
+    background-color: #474747;
     position: absolute;
     z-index: 9;
     text-align: center;

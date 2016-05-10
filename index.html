@@ -243,12 +243,12 @@
                         <span class="pull-right">
                             <ons-icon icon="fa-search" size="15px" fixed-width="false"
                                       ng-click="doSomething()"
-                                      style="color:rgba(136,148,96,0.81);">
+                                      style="color:rgba(255,255,255,.54);">
                             </ons-icon>
                             <ons-icon icon="fa-list-alt" size="15px" fixed-width="false"
                                       class="m-l-10" ng-click="doSomething()"
-                                      style="color:rgba(136,148,96,0.81);">
-                            </ons-icon>o
+                                      style="color:rgba(255,255,255,.54);">
+                            </ons-icon>
                         </span>
                     </li>
                 </ul>
@@ -388,8 +388,7 @@
     <!-- ----------------------------------------- -->
     <ons-template id="recipes.html">
         <ons-page ng-controller="recipesController">
-
-            <div class="loading" ng-class="{ hide : contentLoaded }"><ons-icon icon="fa-spinner" size="80px" spin="true"></div>
+            <div class="loading" ng-class="{ hide : contentLoaded }"><ons-icon icon="fa-spinner" size="80px" spin="true"></ons-icon></div>
             <ons-toolbar>
                 <div class="left"><ons-back-button></ons-back-button></div>
                 <div class="center">Recipes</div>

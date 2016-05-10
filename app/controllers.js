@@ -223,6 +223,7 @@ sg.controller('InventoryController', function($scope, $filter, $data, api) {
 });
 
 sg.controller('recipesController', function($scope, $data, api) {
+    $scope.contentLoaded = false;
     // Load the recipes initially
     var data = { api: 'recipes', method: 'getRecipesByCurrentInventory' };
     var newRecipes = api.query('post', 'api/index.php', data);
