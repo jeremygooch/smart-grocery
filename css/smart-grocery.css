@@ -548,6 +548,7 @@ body.no-touch .boxInner:hover .titleBox, body.touch .boxInner.touchFocus .titleB
 .text-right { text-align: right; }
 .clearfix {display: block; height: 1px; width: 100%; clear: both;}
 .hide { display: none !important; }
+.pull-center { display: block; margin: 0 auto; }
 .pull-right { position: relative; float: right; }
 .pull-left { position: relative; float: left; }
 

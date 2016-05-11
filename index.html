@@ -397,22 +397,22 @@
 
             <div class="button-bar" style="margin: 7px auto; padding: 0 10px;">
                 <div class="button-bar__item" id="invMeat"
-                     ng-click="switchCatetory('meat')">
+                     ng-click="switchRecipes('all')">
                     <input type="radio" name="navi-segment-a" checked>
-                    <div class="button-bar__button">All Recipes</div>
+                    <div class="button-bar__button">Trending Recipes</div>
                 </div>
 
                 <div class="button-bar__item" id="invProduce"
-                     ng-click="switchCatetory('produce')">
+                     ng-click="switchRecipes('saved')">
                     <input type="radio" name="navi-segment-a">
-                    <div class="button-bar__button">Favorite Recipes</div>
+                    <div class="button-bar__button">Your Recipes</div>
                 </div>
 
-                <div class="button-bar__item" id="invProduce"
-                     ng-click="switchCatetory('produce')">
-                    <input type="radio" name="navi-segment-a">
-                    <div class="button-bar__button">Custom Search</div>
-                </div>
+                <!-- <div class="button-bar__item" id="invProduce" -->
+                <!--      ng-click="switchCatetory('produce')"> -->
+                <!--     <input type="radio" name="navi-segment-a"> -->
+                <!--     <div class="button-bar__button"> Search</div> -->
+                <!-- </div> -->
             </div>
 
 
@@ -422,10 +422,6 @@
                     <ons-switch modifier="list-item" checked></ons-switch>
                 </ons-list-item>
             </ons-list>
-
-
-
-
             <ons-list class="timeline" modifier="inset">
                 <div class="wrap">
                     <div class="box" ng-repeat="recipe in recipes" modifier="tappable" ng-click="getRecipe(recipe)">
@@ -435,6 +431,10 @@
                         </div>
                     </div>
                 </div>
+                <button class="button--quiet pull-center" ng-click="getRecipes()">
+                    <span ng-show="!loadingRecipes">Load More</span>
+                    <ons-icon icon="fa-spinner fa-spin" size="15px" fixed-width="false" ng-show="loadingRecipes"></ons-icon>
+                </button>
             </ons-list>
         </ons-page>
     </ons-template>

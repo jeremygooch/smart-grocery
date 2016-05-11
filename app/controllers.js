@@ -225,24 +225,36 @@ sg.controller('InventoryController', function($scope, $filter, $data, api) {
 sg.controller('recipesController', function($scope, $data, api) {
     $scope.contentLoaded = false;
     // Load the recipes initially
-    var data = { api: 'recipes', method: 'getRecipesByCurrentInventory' };
-    var newRecipes = api.query('post', 'api/index.php', data);
-    newRecipes.success(function (res) {
-        if (res.code == 200) {
-            var recipes = JSON.parse(res.data);
-            console.log(recipes.recipes);
-            $scope.recipes = recipes.recipes;
-        }
-    });
-    newRecipes.error(function(data, status, headers, config){
-        console.dir(data);
-    });
-    newRecipes.finally(function() { $scope.contentLoaded = true; });
+    $scope.resultPage = 1;
+    $scope.loadingRecipes = false;
+    $scope.getRecipes = function() {
+        $scope.loadingRecipes = true;        
+        var data = { api: 'recipes', method: 'getRecipesByCurrentInventory', page: $scope.resultPage++ };
+        var newRecipes = api.query('post', 'api/index.php', data);
+        newRecipes.success(function (res) {
+            if (res.code == 200) {
+                var recipes = JSON.parse(res.data);
+                if (!$scope.recipes) {
+                    $scope.recipes = recipes.recipes;
+                } else {
+                    // Add the new items to the existing array
+                    $scope.recipes = _.union($scope.recipes, recipes.recipes);
+                }
+            }
+        });
+        newRecipes.error(function(data, status, headers, config){
+            console.dir(data);
+        });
+        newRecipes.finally(function() {
+            $scope.loadingRecipes = false;
+            $scope.contentLoaded = true;
+        });
+    };
+    $scope.getRecipes();
 
     $scope.getRecipe = function(recipe) {
         console.log(recipe);
     };
-
 });
 
 sg.controller('ReceiptsController', function($scope, $data, $timeout, $http, api) {

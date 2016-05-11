@@ -16,7 +16,7 @@ class recipes {
     $this->utilities = new utilities();
   }
 
-  public function get_recipes_by_current_inventory(){
+  public function get_recipes_by_current_inventory($page){
     // Get the current list of inventory items
     $curInvQry = "SELECT i.inventory_item_id, ii.id, ii.brief FROM inventory i, inventory_items ii WHERE i.inventory_item_id = ii.id;";
     $curInv = $this->gdao->queryAll($curInvQry);
@@ -27,6 +27,10 @@ class recipes {
         $f2fURL .= $itm['brief'] . ',';
         
       }
+      if ($page) {
+        $f2fURL .= "&page=$page";
+      }
+      
       $f2fURL .= "&sort='r'";
       // create curl resource 
       $ch = curl_init(); 

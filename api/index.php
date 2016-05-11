@@ -174,7 +174,7 @@ case "recipes":
   case "getRecipesByCurrentInventory":
     //Load Class
     $class = new recipes();
-    $data = $class->get_recipes_by_current_inventory();
+    $data = $class->get_recipes_by_current_inventory($request['page']);
 
     //Send JSON Response
     header('Content-Type: application/json');
