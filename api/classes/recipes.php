@@ -17,23 +17,36 @@ class recipes {
   }
 
   public function get_recipes_by_current_inventory(){
+    // Get the current list of inventory items
+    $curInvQry = "SELECT i.inventory_item_id, ii.id, ii.brief FROM inventory i, inventory_items ii WHERE i.inventory_item_id = ii.id;";
+    $curInv = $this->gdao->queryAll($curInvQry);
 
-    // create curl resource 
-    $ch = curl_init(); 
+    if ($curInv) {
+      $f2fURL = "http://food2fork.com/api/search?key=". F2F_KEY ."&q=";
+      foreach ($curInv as $itm) {
+        $f2fURL .= $itm['brief'] . ',';
+        
+      }
+      $f2fURL .= "&sort='r'";
+      // create curl resource 
+      $ch = curl_init(); 
 
-    // set url 
-    curl_setopt($ch, CURLOPT_URL, "http://food2fork.com/api/search?key=". F2F_KEY ."&q=chicken,goat&cheese,tortilla&chips,cilantro,french&bread,mustard");
-    /* curl_setopt($ch, CURLOPT_URL, "http://food2fork.com/api/get?key=". F2F_KEY ."&rId=35382");  */
+      // set url 
+      curl_setopt($ch, CURLOPT_URL, $f2fURL);
 
-    //return the transfer as a string 
-    curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1); 
+      //return the transfer as a string 
+      curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1); 
 
-    // $output contains the output string 
-    $output = curl_exec($ch);
-    error_log(F2F_KEY);
+      // $output contains the output string 
+      $output = curl_exec($ch);
+      error_log(print_r($output,1));
 
-    // close curl resource to free up system resources 
-    curl_close($ch);
-    return $this->utilities->prep_response($output);
+      // close curl resource to free up system resources 
+      curl_close($ch);
+      return $this->utilities->prep_response($output);
+    } else {
+      return $this->utilities->prep_response("The inventory is currently inaccessable so the recipes could not be loaded correctly.", 401);
+    }
+
   }
   }

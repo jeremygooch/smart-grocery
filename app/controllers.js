@@ -228,24 +228,20 @@ sg.controller('recipesController', function($scope, $data, api) {
     var data = { api: 'recipes', method: 'getRecipesByCurrentInventory' };
     var newRecipes = api.query('post', 'api/index.php', data);
     newRecipes.success(function (res) {
-
         if (res.code == 200) {
             var recipes = JSON.parse(res.data);
+            console.log(recipes.recipes);
             $scope.recipes = recipes.recipes;
         }
-
-        // if (res.code == 200) {
-        //     $scope.newReceipts = res.data['new']; // new is reserved in JS
-        //     $scope.oldReceipts = res.data.old;
-        //     if (typeof cb === 'function') { cb(); }
-        // } else {
-        //     console.dir(res);
-        // }
     });
     newRecipes.error(function(data, status, headers, config){
         console.dir(data);
     });
     newRecipes.finally(function() { $scope.contentLoaded = true; });
+
+    $scope.getRecipe = function(recipe) {
+        console.log(recipe);
+    };
 
 });
 
