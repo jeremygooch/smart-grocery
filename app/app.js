@@ -35,6 +35,19 @@ sg.factory('$data', function() {
     return data;
 });
 
+sg.service('$recipe', function () {
+    var recipe = {};
+
+    return {
+        getRecipe: function () {
+            return recipe;
+        },
+        setRecipe: function(value) {
+            recipe = value;
+        }
+    };
+});
+
 
 
 // ////////////////////////////////////

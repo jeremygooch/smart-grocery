@@ -6,6 +6,7 @@
 <!-- 3. Receipts -->
 <!-- 4. Review Receipt -->
 <!-- 5. Recipes -->
+<!-- 6. Recipe -->
 <!-- ??. General Detail -->
 <!-- ------------------------------------ -->
 <html lang="en" ng-app="app" ng-csp>
@@ -219,7 +220,7 @@
             <div ng-show="newReceipts.length == 0 && oldReceipts.length == 0" class="fade50 text-center m-t-10 m-b-10">
                 <em>No receipts have been scanned yet.</em>
             </div>
-            <ons-list modifier="inset" style="margin-top: 10px" ng-show="newReceipts.length > 0 || oldReceipts.length > 0">
+            <ons-list modifier="inset" class="m-t-10" ng-show="newReceipts.length > 0 || oldReceipts.length > 0">
                 <ul class="list">
                     <li class="list__header" ng-show="newReceipts.length > 0">
                         New Receipts
@@ -396,23 +397,17 @@
 
 
             <div class="button-bar" style="margin: 7px auto; padding: 0 10px;">
-                <div class="button-bar__item" id="invMeat"
+                <div class="button-bar__item" id="recipeTrending"
                      ng-click="switchRecipes('all')">
                     <input type="radio" name="navi-segment-a" checked>
                     <div class="button-bar__button">Trending Recipes</div>
                 </div>
 
-                <div class="button-bar__item" id="invProduce"
+                <div class="button-bar__item" id="recipeLibrary"
                      ng-click="switchRecipes('saved')">
                     <input type="radio" name="navi-segment-a">
                     <div class="button-bar__button">Your Recipes</div>
                 </div>
-
-                <!-- <div class="button-bar__item" id="invProduce" -->
-                <!--      ng-click="switchCatetory('produce')"> -->
-                <!--     <input type="radio" name="navi-segment-a"> -->
-                <!--     <div class="button-bar__button"> Search</div> -->
-                <!-- </div> -->
             </div>
 
 
@@ -438,6 +433,34 @@
             </ons-list>
         </ons-page>
     </ons-template>
+
+
+
+    <!-- ----------------------------------------- -->
+    <!-- 6. RECIPE -->
+    <!-- ----------------------------------------- -->
+    <ons-template id="recipe.html">
+        <ons-page ng-controller="recipeController">
+            <div class="loading" ng-class="{ hide : contentLoaded }"><ons-icon icon="fa-spinner" size="80px" spin="true"></ons-icon></div>
+            <ons-toolbar>
+                <div class="left"><ons-back-button></ons-back-button></div>
+                <div class="center">{{ recipe.title }}</div>
+            </ons-toolbar>
+            <ons-list modifier="inset" class="m-t-10" ng-show="!showFrame">
+                <ul class="list">
+                    <li class="list__header">
+                       Ingredients
+                    </li>
+                    <li class="list__item" ng-repeat="ing in recipe.ingredients">{{ ing }}</li>
+                </ul>
+            </ons-list>
+            <button class="button--quiet pull-center" ng-click="showFrame = true;" ng-show="!showFrame">View Complete Recipe</button>
+            <span ng-show="showFrame">
+                <iframe ng-src="{{ recipe_url }}" class="recipe_frame"></iframe>
+            </span>
+        </ons-page>
+    </ons-template>
+
 
 
     <!-- ----------------------------------------- -->

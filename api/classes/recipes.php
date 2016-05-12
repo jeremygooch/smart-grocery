@@ -32,20 +32,8 @@ class recipes {
       }
       
       $f2fURL .= "&sort='r'";
-      // create curl resource 
-      $ch = curl_init(); 
 
-      // set url 
-      curl_setopt($ch, CURLOPT_URL, $f2fURL);
-
-      //return the transfer as a string 
-      curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1); 
-
-      // $output contains the output string 
-      $output = curl_exec($ch);
-
-      // close curl resource to free up system resources 
-      curl_close($ch);
+      $output = $this->curlRqst($f2fURL);
       return $this->utilities->prep_response($output);
     } else {
       return $this->utilities->prep_response("The inventory is currently inaccessable so the recipes could not be loaded correctly.", 401);
@@ -54,11 +42,19 @@ class recipes {
   
   public function get_recipes_by_id($id){
     if ($id) {
-      return $id;
+      $output = $this->curlRqst("http://food2fork.com/api/get?key=" . F2F_KEY . "&rId=$id");
+      return $this->utilities->prep_response($output);
     } else {
       return $this->utilities->prep_response("Missing paramters. No recipe id provided.", 401);
     }
   }
 
+  private function curlRqst($url) {
+    // create curl resource 
+    $ch = curl_init(); 
+    curl_setopt($ch, CURLOPT_URL, $url);
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1); 
+    return curl_exec($ch);
+  }
   
   }

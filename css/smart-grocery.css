@@ -13,7 +13,7 @@
     box-shadow: 0px 2px 5px #000;
     height: 66px;
     border: 0;
-    background: transparent;
+    background: #474747;
 }
 ons-toolbar + .page__background + .page__content {
     top: 85px;
@@ -450,6 +450,12 @@ ons-col .slider ons-switch, ons-col .slider input, ons-col .slider select, ons-c
 
 .settings-list {
   margin-top: 10px;
+}
+
+.recipe_frame {
+    height: 100%;
+    width: 100%;
+    border: 0;
 }
 
 
