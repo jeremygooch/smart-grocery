@@ -172,19 +172,35 @@ case "inventory":
 case "recipes":
   switch($request['method']){
   case "getRecipesByCurrentInventory":
-    //Load Class
-    $class = new recipes();
-    $data = $class->get_recipes_by_current_inventory($request['page']);
+    if ($request['page']) {
+      error_log('=======================');
+      //Load Class
+      $class = new recipes();
+      $data = $class->get_recipes_by_current_inventory($request['page']);
 
-    //Send JSON Response
-    header('Content-Type: application/json');
-    echo $data;
+      //Send JSON Response
+      header('Content-Type: application/json');
+      echo $data;
+    } else {
+      error_missing_arguments($request);
+    }
     break;
+  /* case "getRecipesById": */
+  /*   //Load Class */
+  /*   $class = new recipes(); */
+  /*   $data = $class->get_recipes_by_id($request['id']); */
+
+  /*   //Send JSON Response */
+  /*   header('Content-Type: application/json'); */
+  /*   echo $data; */
+  /*   break; */
+  /* default: */
+  /*   //ERROR! Uncaught Request API */
+  /*   error_invalid_api($request); */
+  /*   break; */
   }
-  break;
-  
 case 'NEXT':
-  switch($request['TYPE']){
+  switch($request['method']){
   case "xxx":
     //
     break;

@@ -424,7 +424,7 @@
             </ons-list>
             <ons-list class="timeline" modifier="inset">
                 <div class="wrap">
-                    <div class="box" ng-repeat="recipe in recipes" modifier="tappable" ng-click="getRecipe(recipe)">
+                    <div class="box" ng-repeat="recipe in recipes" modifier="tappable" ng-click="getRecipeById(recipe.recipe_id)">
                         <div class="boxInner">
                             <img src="{{ recipe.image_url }}" />
                             <div class="titleBox">{{ recipe.title }}</div>

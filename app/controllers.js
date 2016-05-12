@@ -252,8 +252,28 @@ sg.controller('recipesController', function($scope, $data, api) {
     };
     $scope.getRecipes();
 
-    $scope.getRecipe = function(recipe) {
-        console.log(recipe);
+    $scope.getRecipeById = function(id) {
+        var data = { api: 'recipes', method: 'getRecipesById', id: id };
+        var newRecipes = api.query('post', 'api/index.php', data);
+        newRecipes.success(function (res) {
+            console.log(res);
+            // if (res.code == 200) {
+            //     var recipes = JSON.parse(res.data);
+            //     if (!$scope.recipes) {
+            //         $scope.recipes = recipes.recipes;
+            //     } else {
+            //         // Add the new items to the existing array
+            //         $scope.recipes = _.union($scope.recipes, recipes.recipes);
+            //     }
+            // }
+        });
+        newRecipes.error(function(data, status, headers, config){
+            console.dir(data);
+        });
+        newRecipes.finally(function() {
+            $scope.loadingRecipes = false;
+            $scope.contentLoaded = true;
+        });
     };
 });
 

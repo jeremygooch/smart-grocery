@@ -43,7 +43,6 @@ class recipes {
 
       // $output contains the output string 
       $output = curl_exec($ch);
-      error_log(print_r($output,1));
 
       // close curl resource to free up system resources 
       curl_close($ch);
@@ -51,6 +50,15 @@ class recipes {
     } else {
       return $this->utilities->prep_response("The inventory is currently inaccessable so the recipes could not be loaded correctly.", 401);
     }
-
   }
+  
+  public function get_recipes_by_id($id){
+    /* if ($id) { */
+    /*   return $id; */
+    /* } else { */
+    /*   return $this->utilities->prep_response("Missing paramters. No recipe id provided.", 401); */
+    /* } */
+  }
+
+  
   }
