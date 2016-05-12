@@ -185,20 +185,21 @@ case "recipes":
       error_missing_arguments($request);
     }
     break;
-  /* case "getRecipesById": */
-  /*   //Load Class */
-  /*   $class = new recipes(); */
-  /*   $data = $class->get_recipes_by_id($request['id']); */
+  case "getRecipesById":
+    //Load Class
+    $class = new recipes();
+    $data = $class->get_recipes_by_id($request['id']);
 
-  /*   //Send JSON Response */
-  /*   header('Content-Type: application/json'); */
-  /*   echo $data; */
-  /*   break; */
-  /* default: */
-  /*   //ERROR! Uncaught Request API */
-  /*   error_invalid_api($request); */
-  /*   break; */
+    //Send JSON Response
+    header('Content-Type: application/json');
+    echo $data;
+    break;
+  default:
+    //ERROR! Uncaught Request API
+    error_invalid_api($request);
+    break;
   }
+  break;
 case 'NEXT':
   switch($request['method']){
   case "xxx":

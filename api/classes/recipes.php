@@ -53,11 +53,11 @@ class recipes {
   }
   
   public function get_recipes_by_id($id){
-    /* if ($id) { */
-    /*   return $id; */
-    /* } else { */
-    /*   return $this->utilities->prep_response("Missing paramters. No recipe id provided.", 401); */
-    /* } */
+    if ($id) {
+      return $id;
+    } else {
+      return $this->utilities->prep_response("Missing paramters. No recipe id provided.", 401);
+    }
   }
 
   
