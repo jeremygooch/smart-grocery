@@ -228,7 +228,7 @@
                     <li class="list__item" ng-show="newReceipts.length > 0"
                         ng-repeat="receipt in newReceipts">
                         <span class="spCol col2">{{ receipt.location }}</span>
-                        <span class="spCol col2">{{ receipt.receipt_data.length }} Items</span>
+                        <span class="spCol col2">{{ receipt.receipt_data.length > 0 ? receipt.receipt_data.length : 'No' }} Items</span>
                         <span class="pull-right">
                             <button class="button button--quiet warning m-t-5 m-b-5"
                                     ng-click="deleteReceipt(receipt.id)">Delete</button>

@@ -130,6 +130,7 @@ class processReceipts{
       // Try to locate the store name
       $store = "Unknown";
       if ($this->utilitiesCLASS->in_array_r("HEB", $clnList)) { $store = "HEB"; }
+      elseif ($this->utilitiesCLASS->in_array_r("SFY SEL", $clnList)) { $store = "Randalls"; }
 
       // Get the next receipt id
       $ridQuery = "(SELECT MAX(receipt_id) FROM receipts)";
