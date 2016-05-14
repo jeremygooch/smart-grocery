@@ -77,10 +77,11 @@ case "receipts":
     break;
 
   case "saveItem":
-    if ($request['id'] && $request['inventory_item_id'] && $request['quantity'] && $request['expires'] && $request['category']) {
+    $qty = !$request['quantity'] ? 1 : $request['quantity'];
+    if ($request['id'] && $request['inventory_item_id'] && $request['expires'] && $request['category']) {
       //Load Class
       $class = new receipts();
-      $data = $class->save_item($request['id'],$request['inventory_item_id'],$request['quantity'],$request['units'],$request['expires'], $request['category'],$request['freezer']);
+      $data = $class->save_item($request['id'],$request['inventory_item_id'],$qty,$request['units'],$request['expires'], $request['category'],$request['freezer']);
 
       //Send JSON Response
       header('Content-Type: application/json');
@@ -188,7 +189,6 @@ case "recipes":
   switch($request['method']){
   case "getRecipesByCurrentInventory":
     if ($request['page']) {
-      error_log('=======================');
       //Load Class
       $class = new recipes();
       $data = $class->get_recipes_by_current_inventory($request['page']);

@@ -75,8 +75,11 @@ class receipts {
   }
 
   public function delete_receipt($id){
-    $query = "DELETE FROM receipts WHERE id = '$id';";
-    $res = $this->gdao->queryRow($query);
+    $delRecQry = "DELETE FROM receipts WHERE id = '$id';";
+    $res = $this->gdao->queryRow($delRecQry);
+
+    $delRecRefQry = "DELETE FROM receipt_items_ref WHERE receipt_id = '$id';";
+    $res = $this->gdao->queryRow($delRecRefQry);
 
     return $this->utilities->prep_response("$id successfully deleted.");
   }

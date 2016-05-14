@@ -56,6 +56,28 @@ class processReceipts{
 
       for ($i = 0; $i < count($collapsedList); $i++) {
         $clnList[$i] = array(); // For this row
+
+        // See if we can find common groups of letters to form whole words before we
+        // drill down to the individual words
+
+        // Select all spelling alternatives with a space
+        $multiWrdsQry = "SELECT * FROM spellings_alternatives_ref WHERE alt_spelling LIKE '% %'";
+        $multiWrds = $this->gdao->queryAll($multiWrdsQry);
+
+        foreach ($multiWrds as $multiWrd) {
+          $altSpelling = $multiWrd['alt_spelling'];
+          $match = strpos($collapsedList[$i], $altSpelling);
+          if ($match) {
+            // Get the correct spelling of the matched word
+            $wordId = $multiWrd['spelling_id'];
+            $matchedWrdQry = "SELECT label FROM spellings WHERE id = '$wordId';";
+            $matchedWrd = $this->gdao->queryOne($matchedWrdQry);
+            $collapsedList[$i] = str_replace($altSpelling,$matchedWrd,$collapsedList[$i]);
+          }
+        }
+
+        
+        
         $this->logging($debug, 'spell', '=======================================');
         $words = explode(" ", $collapsedList[$i]);
         // Make sure we have more than one word on this row. If there is only
@@ -114,9 +136,6 @@ class processReceipts{
 
             $lastChar = $clnList[$i-1][count($clnList[$i-1]) - 1];
             if ($lastChar == '') { $lastChar = $clnList[$i-1][count($clnList[$i-1]) - 2]; }
-            /* error_log("$i), i'm sticking $quantity on $lastChar for the row " . */
-            /*           $clnList[$i-1][0] . " " . $clnList[$i-1][1]); */
-
             
             if (!is_numeric($lastChar)) {
               array_push($clnList[$i - 1],$quantity);
@@ -130,10 +149,10 @@ class processReceipts{
       // Try to locate the store name
       $store = "Unknown";
       if ($this->utilitiesCLASS->in_array_r("HEB", $clnList)) { $store = "HEB"; }
-      elseif ($this->utilitiesCLASS->in_array_r("SFY SEL", $clnList)) { $store = "Randalls"; }
+      elseif ($this->utilitiesCLASS->in_array_r("LUCERNE", $clnList)) { $store = "Randalls"; }
 
       // Get the next receipt id
-      $ridQuery = "(SELECT MAX(receipt_id) FROM receipts)";
+      $ridQuery = "SELECT MAX(id) FROM receipts";
       $rid = $this->gdao->queryOne($ridQuery);
       $rid++;
       // Add the new receipt
@@ -183,22 +202,8 @@ class processReceipts{
           }
         }
       }
-
-
-      
-      
       unset($gdao);
-
-
-
-
-      
-      //Send JSON Response
-      /* header('Content-Type: application/json'); */
-      /* echo ($res); */
-      /* break; */
     }
-    
   }
 
   public function logging($debug, $type, $itm) {
@@ -214,7 +219,5 @@ class processReceipts{
   public function extractQuantity($rcpt) {
     error_log('im going fishing for quantities...');
   }
-
-  
 
   }
