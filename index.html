@@ -230,8 +230,10 @@
                         <span class="spCol col2">{{ receipt.location }}</span>
                         <span class="spCol col2">{{ receipt.receipt_data.length }} Items</span>
                         <span class="pull-right">
-                            <button class="button button--quiet warning m-t-5 m-b-5">Delete</button>
-                            <button class="button button--quiet primary m-t-5 m-b-5" ng-click="reviewReceipt(receipt.id);">Review</button>
+                            <button class="button button--quiet warning m-t-5 m-b-5"
+                                    ng-click="deleteReceipt(receipt.id)">Delete</button>
+                            <button class="button button--quiet primary m-t-5 m-b-5"
+                                    ng-click="reviewReceipt(receipt.id);">Review</button>
                         </span>
                     </li>
                     <li class="list__header" ng-show="oldReceipts.length > 0">

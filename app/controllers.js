@@ -1,7 +1,6 @@
 sg.controller('InventoryController', function($scope, $filter, $data, api) {
     $scope.item = $data.selectedItem;
 
-    // Setup the fake list of items in the inventory
     $scope.inventory = {};
     $scope.selectedItems = [];
 
@@ -296,6 +295,33 @@ sg.controller('ReceiptsController', function($scope, $data, $timeout, $http, api
     $scope.reviewReceipt = function(id) {
         $data.reviewReceiptId = id;
         $scope.navi.pushPage('reviewReceipt.html', {title : 'Review Receipt' });
+    };
+
+    $scope.deleteReceipt = function(id) {
+        var data = {
+            api    : 'receipt',
+            method : 'deleteReceipt'
+        };
+        var delReceipt = api.query('post', 'api/index.php', data);
+        delReceipt.success(function(res) {
+            console.log(res);
+            // if (res.code == 200) {
+            //     $scope.inventory = res.data;
+            //     $scope.curList = $scope.inventory.meat;
+            //     $scope.switchCatetory = function(cat) {
+            //         $scope.selectedItems.length = 0; // Uncheck the checkboxes
+            //         $scope.curList = $scope.inventory[cat];
+            //     };
+            // } else {
+            //     console.dir(res);
+            // }
+        });
+        delReceipt.error(function(data, status, headers, config){
+            console.dir(data);
+        });
+        delReceipt.finally(function() {
+            //
+        });
     };
 
 
