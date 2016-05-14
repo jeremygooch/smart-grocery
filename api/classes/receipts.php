@@ -35,7 +35,7 @@ class receipts {
         // NEW RECEIPT
 
         // Since this is a new receipt, lets get it's various items for reviewing
-        $rid = $value['receipt_id'];
+        $rid = $value['id'];
         $indQuery = "SELECT *, r.id FROM receipt_items_ref AS r LEFT JOIN inventory_items AS i ON r.inventory_item_id=i.id WHERE r.receipt_id = $rid;";
         $indRes = $this->gdao->queryAll($indQuery);
 
@@ -79,6 +79,7 @@ class receipts {
     $res = $this->gdao->queryRow($delRecQry);
 
     $delRecRefQry = "DELETE FROM receipt_items_ref WHERE receipt_id = '$id';";
+    error_log($delRecRefQry);
     $res = $this->gdao->queryRow($delRecRefQry);
 
     return $this->utilities->prep_response("$id successfully deleted.");

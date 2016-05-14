@@ -151,13 +151,13 @@ class processReceipts{
       if ($this->utilitiesCLASS->in_array_r("HEB", $clnList)) { $store = "HEB"; }
       elseif ($this->utilitiesCLASS->in_array_r("LUCERNE", $clnList)) { $store = "Randalls"; }
 
-      // Get the next receipt id
+      // Add the new receipt
+      $newReceiptQuery = "INSERT INTO receipts (scan_date, location, processed) VALUES (now(),'$store',0);";
+      $newReceipt = $this->gdao->queryOne($newReceiptQuery);
+
+      // Get the new receipt id
       $ridQuery = "SELECT MAX(id) FROM receipts";
       $rid = $this->gdao->queryOne($ridQuery);
-      $rid++;
-      // Add the new receipt
-      $newReceiptQuery = "INSERT INTO receipts (receipt_id, scan_date, location, processed) VALUES ($rid,now(),'$store',0);";
-      $newReceipt = $this->gdao->queryOne($newReceiptQuery);
       
 
       // Figure out what we bought by looking in the inventory_items and ref tables
