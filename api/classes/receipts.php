@@ -90,12 +90,15 @@ class receipts {
     $query = "SELECT * FROM inventory WHERE inventory_item_id = '$inventory_item_id';";
     $res = $this->gdao->queryAll($query);
 
+    // Make sure the expires date is formatted correctly
+    $expires = date("Y-m-d", strtotime($expires));
+
     $updateRes = false;
     if (count($res) > 0) {
       foreach($res as $item) {
         // Update the first match we find in the inventory
         if ($item['units'] == $units && $item['freezer'] == $freezer) {
-          $updateQry = "UPDATE inventory SET quantity = '" . ($item['quantity'] + $quantity) . "', expires = '$expires'";
+          $updateQry = "UPDATE inventory SET quantity = '" . ($item['quantity'] + $quantity) . "', expires = '$expires' WHERE inventory_id = '".$item['inventory_id']."';";
           $updateRes = $this->gdao->queryExec($updateQry);
           break;
         } else {
