@@ -18,11 +18,15 @@ if (isset($option)) {
     switch ($parameter) {
     case 'ocr':
       $debug['ocr'] = 1;
-      echo("OCR monitoring\n");
+      echo("Showing OCR output\n");
       break;
     case 'spell':
       $debug['spell'] = 1;
-      echo("Spelling monitoring\n");
+      echo("Showing spelling corrections\n");
+      break;
+    case 'db':
+      $debug['db'] = 1;
+      echo("What goes in the DB\n");
       break;
     default:
       break;
