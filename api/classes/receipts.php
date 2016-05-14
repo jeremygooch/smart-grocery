@@ -74,6 +74,13 @@ class receipts {
     return $this->utilities->prep_response("$id successfully deleted.");
   }
 
+  public function delete_receipt($id){
+    $query = "DELETE FROM receipts WHERE id = '$id';";
+    $res = $this->gdao->queryRow($query);
+
+    return $this->utilities->prep_response("$id successfully deleted.");
+  }
+
 
   public function save_item($id, $inventory_item_id, $quantity, $units = null, $expires, $category, $freezer = null){
     // See if we already have one of these items in the inventory

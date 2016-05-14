@@ -299,28 +299,20 @@ sg.controller('ReceiptsController', function($scope, $data, $timeout, $http, api
 
     $scope.deleteReceipt = function(id) {
         var data = {
-            api    : 'receipt',
-            method : 'deleteReceipt'
+            api    : 'receipts',
+            method : 'deleteReceipt',
+            id     : id
         };
         var delReceipt = api.query('post', 'api/index.php', data);
         delReceipt.success(function(res) {
-            console.log(res);
-            // if (res.code == 200) {
-            //     $scope.inventory = res.data;
-            //     $scope.curList = $scope.inventory.meat;
-            //     $scope.switchCatetory = function(cat) {
-            //         $scope.selectedItems.length = 0; // Uncheck the checkboxes
-            //         $scope.curList = $scope.inventory[cat];
-            //     };
-            // } else {
-            //     console.dir(res);
-            // }
+            if (res.code == 200) {
+                $scope.getAllReceipts();
+            } else {
+                console.dir(res);
+            }
         });
         delReceipt.error(function(data, status, headers, config){
             console.dir(data);
-        });
-        delReceipt.finally(function() {
-            //
         });
     };
 

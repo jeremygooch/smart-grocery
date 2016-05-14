@@ -61,6 +61,21 @@ case "receipts":
     echo $data;
     break;
 
+  case "deleteReceipt":
+    if ($request['id']) {
+      //Load Class
+      $class = new receipts();
+      $data = $class->delete_receipt($request['id']);
+
+      //Send JSON Response
+      header('Content-Type: application/json');
+      echo $data;
+    } else {
+      error_missing_arguments($request);
+    }
+      
+    break;
+
   case "saveItem":
     if ($request['id'] && $request['inventory_item_id'] && $request['quantity'] && $request['expires'] && $request['category']) {
       //Load Class
