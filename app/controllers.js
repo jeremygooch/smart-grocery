@@ -285,7 +285,6 @@ sg.controller('ReceiptsController', function($scope, $data, $timeout, $http, api
     $scope.item = $data.selectedItem;
     // Set the loading animation
     $scope.contentLoaded = false;
-
     
     // Get the old and new receipts
     $scope.getAllReceipts(function() {
@@ -502,13 +501,6 @@ sg.controller('ReviewReceiptController', function($scope, $data, $timeout, api) 
         };
     });
 
-    // Setup the various units
-    $scope.units = {
-        standard: ['bag', 'bottle', 'box', 'bunch', 'can', 'container', 'cups', 'liter',
-                   'oz', 'package', 'quart', 'ea'],
-        butter: ['sticks', 'small tub', 'medium tub', 'large tub']
-    };
-
     // ////////////////////////////////////////////
     // Recipes not yet implemented
     // ////////////////////////////////////////////
@@ -594,6 +586,7 @@ sg.controller('AppController', function($scope, $data, $http, api) {
             if (res.code == 200) {
                 $scope.newReceipts = res.data['new']; // new is reserved in JS
                 $scope.oldReceipts = res.data.old;
+                $scope.units = res.data.units;
                 if (typeof cb === 'function') { cb(); }
             } else {
                 console.dir(res);

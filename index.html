@@ -359,8 +359,8 @@
                             <label for="itemUnits">Units: </label>
                             <div class="select-style">
                                 <select>
-                                    <option ng-repeat="unit in units.standard"
-                                            ng-selected="unit == receipt.units">{{ unit }}</option>
+                                    <option ng-repeat="unit in units"
+                                            ng-selected="receipt.units == unit">{{ unit }}</option>
                                 </select>
                             </div>
                         </ons-col>

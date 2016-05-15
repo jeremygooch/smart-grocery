@@ -150,6 +150,7 @@ class processReceipts{
       $store = "Unknown";
       if ($this->utilitiesCLASS->in_array_r("HEB", $clnList)) { $store = "HEB"; }
       elseif ($this->utilitiesCLASS->in_array_r("LUCERNE", $clnList)) { $store = "Randalls"; }
+      elseif ($this->utilitiesCLASS->in_array_r("MP", $clnList)) { $store = "Target"; } // MP = Market Place
 
       // Add the new receipt
       $newReceiptQuery = "INSERT INTO receipts (scan_date, location, processed) VALUES (now(),'$store',0);";

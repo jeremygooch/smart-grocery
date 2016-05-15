@@ -26,7 +26,7 @@ class receipts {
     $out = array();
     $out['new'] = array();
     $out['old'] = array();
-    
+
     $query = "SELECT * FROM receipts;";
     $res = $this->gdao->queryAll($query);
 
@@ -62,6 +62,15 @@ class receipts {
         // Add the item as an old receipt
         array_push($out['old'], $value);
       }
+    }
+
+    // Get a unique list of all available unit types
+    $unitsQry = "SELECT DISTINCT(units) FROM inventory_items;";
+    $units = $this->gdao->queryAll($unitsQry);
+    // Format the output to be an array instead of an array of objects
+    $out['units'] = array();
+    foreach ($units as $unit) {
+      array_push($out['units'], $unit['units']);
     }
     
     return $this->utilities->prep_response($out);
