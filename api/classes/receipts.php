@@ -88,7 +88,6 @@ class receipts {
     $res = $this->gdao->queryRow($delRecQry);
 
     $delRecRefQry = "DELETE FROM receipt_items_ref WHERE receipt_id = '$id';";
-    error_log($delRecRefQry);
     $res = $this->gdao->queryRow($delRecRefQry);
 
     return $this->utilities->prep_response("$id successfully deleted.");
