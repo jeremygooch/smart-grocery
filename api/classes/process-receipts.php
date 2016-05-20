@@ -54,6 +54,7 @@ class processReceipts{
         }
       }
 
+      $this->logging($debug, 'ocr', '==========STRING=REPLACEMENT===========');
       for ($i = 0; $i < count($collapsedList); $i++) {
         $clnList[$i] = array(); // For this row
 
@@ -78,7 +79,7 @@ class processReceipts{
 
         
         
-        $this->logging($debug, 'spell', '=======================================');
+        $this->logging($debug, 'ocr', '=======================================');
         $words = explode(" ", $collapsedList[$i]);
         // Make sure we have more than one word on this row. If there is only
         // one word, this is likely a serial number or gibbirish so we dont 
@@ -98,12 +99,12 @@ class processReceipts{
 
               if ($wordMatch) {
                 $clnList[$i][$x] = $label;
-                $this->logging($debug, 'spell', $label);
+                $this->logging($debug, 'ocr', $label);
               } else {
                 $swapQuery = "SELECT s.label FROM spellings AS s LEFT JOIN spellings_alternatives_ref AS sa ON s.id=sa.spelling_id WHERE sa.alt_spelling = '$label';";
                 $swapWord = $this->gdao->queryOne($swapQuery);
                 if ($swapWord) {
-                  $this->logging($debug, 'spell', $swapWord);
+                  $this->logging($debug, 'ocr', $swapWord);
                   $clnList[$i][$x] = $swapWord;
                 } else {
                   /* error_log('I couldnt locate a match for ' . $clnList[$i][$x] . ' in the line ' . $words[0] . $words[1] . $words[2]); */
@@ -151,7 +152,8 @@ class processReceipts{
       if ($this->utilitiesCLASS->in_array_r("HEB", $clnList)) { $store = "HEB"; }
       elseif ($this->utilitiesCLASS->in_array_r("LUCERNE", $clnList)) { $store = "Randalls"; }
       elseif ($this->utilitiesCLASS->in_array_r("SIGNATURE", $clnList)) { $store = "Randalls"; }
-      elseif ($this->utilitiesCLASS->in_array_r("MP", $clnList)) { $store = "Target"; } // MP = Market Place
+      elseif ($this->utilitiesCLASS->in_array_r("MARKET PANT", $clnList)) { $store = "Target"; }
+      elseif ($this->utilitiesCLASS->in_array_r("MP", $clnList)) { $store = "Target"; } // MP = Market Pantry
 
       // Add the new receipt
       $newReceiptQuery = "INSERT INTO receipts (scan_date, location, processed) VALUES (now(),'$store',0);";
