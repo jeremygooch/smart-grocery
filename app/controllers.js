@@ -566,8 +566,9 @@ sg.controller('MainScreenController', function($scope, $data, $interval, api) {
     // $interval(function() { getNewReceipts(); }, 1000);
 });
 
+
 // Main controller wrapping entire app
-sg.controller('AppController', function($scope, $data, $http, api) {
+sg.controller('AppController', function ($scope, $data, $http, api) {
     // Detect scroll height for sizing the topbar
     $scope.showMore = function() {
         console.log('show more triggered');  
@@ -578,6 +579,14 @@ sg.controller('AppController', function($scope, $data, $http, api) {
             ons.notification.alert({ message: 'tapped' });
         }, 100);
     };
+
+
+    $scope.z = 0;
+    $scope.sum = function() {
+        $scope.z = $scope.x + $scope.y;
+    };
+
+
 
     $scope.getAllReceipts = function(cb) {
         var data = { api: 'receipts', method: 'getAllReceipts' };
