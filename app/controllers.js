@@ -1,4 +1,4 @@
-sg.controller('InventoryController', function($scope, $filter, $data, api) {
+sg.controller('InventoryController', function($scope, $filter, $data, $http, api) {
     $scope.item = $data.selectedItem;
 
     $scope.inventory = {};
@@ -11,27 +11,22 @@ sg.controller('InventoryController', function($scope, $filter, $data, api) {
     };
 
     $scope.getInventory = function(e) {
-        var getInventory = api.query('post', 'api/index.php', data);
-        getInventory.success(function(res) {
-            if (res.code == 200) {
-                $scope.inventory = res.data;
-                $scope.curList = $scope.inventory.meat;
-                $scope.switchCatetory = function(cat) {
-                    $scope.selectedItems.length = 0; // Uncheck the checkboxes
-                    $scope.curList = $scope.inventory[cat];
-                    // Highlight the icon
-                    // e.target.classList.add('alt');
-                };
-            } else {
-                console.dir(res);
-            }
-        });
-        getInventory.error(function(data, status, headers, config){
-            console.dir(data);
-        });
-        getInventory.finally(function() {
-            $scope.contentLoaded = true;
-        });
+        $http.post('api/index.php', data).then(
+            function(res) {
+                if (res.data.code == 200) {
+                    $scope.inventory = res.data.data;
+                    $scope.curList = $scope.inventory.meat;
+                    $scope.switchCatetory = function(cat) {
+                        $scope.selectedItems.length = 0; // Uncheck the checkboxes
+                        $scope.curList = $scope.inventory[cat];
+                        // Highlight the icon
+                        // e.target.classList.add('alt');
+                    };
+                }
+            },
+            function(error) {
+                console.dir(error);
+            }).finally(function() { $scope.contentLoaded = true; });
     };
     $scope.getInventory();
 
@@ -53,19 +48,22 @@ sg.controller('InventoryController', function($scope, $filter, $data, api) {
     };
     $scope.deleteItems = function(items) {
         var data = { api: 'inventory', method: 'deleteItems', items: items };
-        var deleteItem = api.query('POST', 'api/index.php', data);
-        deleteItem.success(function(res) {
-            if (res.code == 200) {
-                // Drop the item from the view
-                $scope.curList = _.difference($scope.curList, $scope.selectedItems);
-                // Drop it from the main list
-                Object.keys($scope.inventory).forEach(function(cat) {
-                    $scope.inventory[cat] = _.difference($scope.inventory[cat], $scope.selectedItems);
-                });
-                // Reset the selection
-                $scope.selectedItems = [];
-            }
-        });
+        $http.post('api/index.php', data).then(
+            function(res) {
+                if (res.data.code == 200) {
+                    // Drop the item from the view
+                    $scope.curList = _.difference($scope.curList, $scope.selectedItems);
+                    // Drop it from the main list
+                    Object.keys($scope.inventory).forEach(function(cat) {
+                        $scope.inventory[cat] = _.difference($scope.inventory[cat], $scope.selectedItems);
+                    });
+                    // Reset the selection
+                    $scope.selectedItems = [];
+                }
+            },
+            function(error) {
+                console.dir(error);
+            });
     };
 
     $scope.qtyPending = []; // Need this to store which row may need to show a loading icon for updating a value
@@ -580,30 +578,28 @@ sg.controller('AppController', function ($scope, $data, $http, api) {
         }, 100);
     };
 
-
-    $scope.z = 0;
-    $scope.sum = function() {
-        $scope.z = $scope.x + $scope.y;
-    };
-
-
-
     $scope.getAllReceipts = function(cb) {
         var data = { api: 'receipts', method: 'getAllReceipts' };
-        var newReceipts = api.query('post', 'api/index.php', data);
-        newReceipts.success(function (res) {
-            if (res.code == 200) {
-                $scope.newReceipts = res.data['new']; // new is reserved in JS
-                $scope.oldReceipts = res.data.old;
-                $scope.units = res.data.units;
-                if (typeof cb === 'function') { cb(); }
-            } else {
+        $http.post('api/index.php', data)
+            .then(
+            function(res) {
+                if (res.status == 200 && res.data.code == 200) {
+                    $scope.newReceipts = res.data.data['new']; // new is reserved in JS
+                    $scope.oldReceipts = res.data.data.old;
+                    $scope.units = res.data.data.units;
+                    if (typeof cb === 'function') { cb(); }
+                } else {
+                    console.dir(res);
+                }
+            },
+            function(error) {
                 console.dir(res);
             }
-        });
-        newReceipts.error(function(data, status, headers, config){
-            console.dir(data);
-        });
+        ).finally(
+            function() {
+                
+            }
+        );
     }
 
     $scope.archiveReceipt = function(id) {
@@ -612,16 +608,15 @@ sg.controller('AppController', function ($scope, $data, $http, api) {
             method : 'archiveReceipt',
             id     : id
         };
-        var archiveRcpt = api.query('post', 'api/index.php', data);
-        archiveRcpt.success(function(res) {
-            if (res.code != 200) {
-                console.dir(res);
-            }
-        });
-        archiveRcpt.error(function(data, status, headers, config){
-            console.dir(data);
-        });
-        archiveRcpt.finally(function() {});
+        $http.post('api/index.php', data).then(
+            function(res) {
+                if (res.data.code != 200) {
+                    console.dir(res);
+                }
+            },
+            function(error) {
+                console.dir(error);
+            });
     };
 
     var currentTime = new Date();
