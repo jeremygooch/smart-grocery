@@ -177,6 +177,15 @@ case "inventory":
       error_missing_arguments($request);
     }
     break;
+  case "getAllInventoryItems":
+    //Load Class
+    $class = new inventory();
+    $data = $class->get_all_inventory_items();
+
+    //Send JSON Response
+    header('Content-Type: application/json');
+    echo $data;
+    break;
   default:
     //ERROR! Uncaught Request API
     error_invalid_api($request);

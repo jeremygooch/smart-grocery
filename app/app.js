@@ -100,3 +100,29 @@ sg.filter('monthToString', function() {
         }
     };
 });
+
+sg.filter('categoryTitle', function() {
+    return function(itm)  {
+        switch (itm) {
+        case 'bread':
+            return 'BREAD / BAKERY';
+            break;
+        case 'can':
+            return 'CANNED / JARRED';
+            break;
+        case 'dry':
+            return 'DRY / BAKING GOODS';
+            break;
+        case 'meat':
+        case 'dairy':
+        case 'instant':
+        case 'produce':
+        case 'other':
+            return itm.toUpperCase();
+            break;
+        default:
+            return itm;
+            break;
+        }
+    };
+});

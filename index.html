@@ -7,6 +7,7 @@
 <!-- 4. Review Receipt -->
 <!-- 5. Recipes -->
 <!-- 6. Recipe -->
+<!-- 7. Add Item To Inventor -->
 <!-- ??. General Detail -->
 <!-- ------------------------------------ -->
 <html lang="en" ng-app="app" ng-csp>
@@ -433,13 +434,6 @@
                 </div>
             </div>
 
-
-            <ons-list modifier="inset" class="settings-list">
-                <ons-list-item>
-                    <label>Show Recipes Based On Current Inventory? </label>
-                    <ons-switch modifier="list-item" checked></ons-switch>
-                </ons-list-item>
-            </ons-list>
             <ons-list class="timeline" modifier="inset">
                 <div class="wrap">
                     <div class="box" ng-repeat="recipe in recipes" modifier="tappable" ng-click="getRecipeById(recipe.recipe_id)">
@@ -484,6 +478,33 @@
         </ons-page>
     </ons-template>
 
+
+
+    <!-- ----------------------------------------- -->
+    <!-- 7. ADD ITEM TO INVENTORY -->
+    <!-- ----------------------------------------- -->
+    <ons-template id="addItem.html">
+        <ons-page ng-controller="AddItemController">
+            <ons-toolbar>
+                <div class="left"><ons-back-button></ons-back-button></div>
+                <div class="center">Add Food</div>
+            </ons-toolbar>
+            <div class="loading" ng-class="{ hide : contentLoaded }"><ons-icon icon="fa-spinner" size="80px" spin="true"></ons-icon></div>
+            <p class="text-center p-l-25 p-r-25">What type of food would you like to add to the inventory?</p>
+            <ons-list modifier="inset" class="settings-list p-10">
+                <ons-list-item ng-repeat="category in categories" ng-click="test()" class="addItemCategory"
+                               modifier="tappable">
+                    <div class="{{ category }}"></div>
+                    {{ category | categoryTitle }}
+                </ons-list-item>
+            </ons-list>
+            
+
+
+            <br>
+
+        </ons-page>
+    </ons-template>
 
 
     <!-- ----------------------------------------- -->
