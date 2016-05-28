@@ -11,7 +11,7 @@ class processReceipts{
 
     error_reporting(E_ALL ^ E_NOTICE); // Silence notices
     
-    $grocr = 'http://local.grocr.com:5000/v1/ocr';
+    $grocr = 'http://0.0.0.0:5000/v1/ocr';
     $ch = curl_init($grocr);
     curl_setopt($ch, CURLOPT_POST, true);
     curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/json'));

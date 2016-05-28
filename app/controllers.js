@@ -15,12 +15,10 @@ sg.controller('InventoryController', function($scope, $filter, $data, $http, api
             function(res) {
                 if (res.data.code == 200) {
                     $scope.inventory = res.data.data;
-                    $scope.curList = $scope.inventory.meat;
+                    $scope.curList = $scope.inventory.meat || [];
                     $scope.switchCatetory = function(cat) {
                         $scope.selectedItems.length = 0; // Uncheck the checkboxes
-                        $scope.curList = $scope.inventory[cat];
-                        // Highlight the icon
-                        // e.target.classList.add('alt');
+                        $scope.curList = $scope.inventory[cat] || [];
                     };
                 }
             },
@@ -44,7 +42,7 @@ sg.controller('InventoryController', function($scope, $filter, $data, $http, api
     };
 
     $scope.addNewItem = function() {
-        console.log('Going to add a tasty treat to your stock');
+        $scope.navi.pushPage('addItem.html');
     };
     $scope.deleteItems = function(items) {
         var data = { api: 'inventory', method: 'deleteItems', items: items };
@@ -512,6 +510,32 @@ sg.controller('ReviewReceiptController', function($scope, $data, $timeout, api) 
 
 sg.controller('DetailController', function($scope, $data, api) {
     $scope.item = $data.selectedItem;
+});
+
+sg.controller('AddItemController', function($scope, $data, $http, api) {
+    var data = {
+        api    : 'inventory',
+        method : 'getAllInventoryItems'
+    };
+    $http.post('api/index.php', data).then(
+        function(res) {
+            console.log(res);
+            if (res.data.code == 200) {
+                $scope.allItems = res.data.data;
+                $scope.categories = [];
+                Object.keys(res.data.data).forEach(function(category) {
+                    $scope.categories.push(category);
+                });
+                console.log($scope.categories);
+            }
+        },
+        function(error) {
+            console.dir(error);
+        }).finally(function() { $scope.contentLoaded = true; });
+
+    $scope.test = function() {
+        console.log('caught!');
+    };
 });
 
 

@@ -38,6 +38,26 @@ class inventory {
     return $this->utilities->prep_response($output);
   }
 
+  public function get_all_inventory_items(){
+    $query = "SELECT * FROM inventory_items";
+    $res = $this->gdao->queryAll($query);
+    $output = array('meat'=>array(), 'produce'=>array(), 'dairy'=>array(), 'instant'=>array(), 'dry'=>array(), 'bread'=>array(), 'other'=>array(), 'can'=>array());
+
+    if ($res) {
+      for ($i=0; $i< count($res); $i++) {
+        $date = new DateTime();
+        $date->modify('+' . $res[$i]['shelf_life'] . ' days');
+
+        
+        $res[$i]['expiresOn'] = $date->format('Y-m-d');
+        // Categorize this item accordingly
+        array_push($output[$res[$i]['category']], $res[$i]);
+      }
+
+    }
+    return $this->utilities->prep_response($output);
+  }
+
   private function calc_days_left($exp) {
     $output = array();
     $curDate = time();
