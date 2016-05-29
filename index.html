@@ -491,22 +491,21 @@
             </ons-toolbar>
             <div class="loading" ng-class="{ hide : contentLoaded }"><ons-icon icon="fa-spinner" size="80px" spin="true"></ons-icon></div>
             <p class="text-center p-l-25 p-r-25">What type of food would you like to add to the inventory?</p>
-            <ons-list modifier="inset" class="settings-list p-10">
-                <ons-list-item ng-repeat="category in categories" ng-click="test()" class="addItemCategory"
-                               modifier="tappable">
+            <ons-list modifier="inset" class="settings-list p-10" ng-class="{ hideCategory : hideCategory }">
+                <ons-list-item ng-repeat="category in categories" ng-click="addCategory(category)"
+                               class="addItemCategory" modifier="tappable">
                     <div class="{{ category }}"></div>
                     {{ category | categoryTitle }}
                 </ons-list-item>
             </ons-list>
-            
-
-
-            <br>
-
+            <ons-list modifier="inset" class="m-t-10">
+                <ul class="list">
+                    <li class="list__header">A</li>
+                    <li class="list__item">asdf</li>
+                </ul>
+            </ons-list>
         </ons-page>
     </ons-template>
-
-
     <!-- ----------------------------------------- -->
     <!-- ??. GENERAL DETAIL -->
     <!-- ----------------------------------------- -->

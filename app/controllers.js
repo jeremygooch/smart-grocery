@@ -533,8 +533,24 @@ sg.controller('AddItemController', function($scope, $data, $http, api) {
             console.dir(error);
         }).finally(function() { $scope.contentLoaded = true; });
 
-    $scope.test = function() {
-        console.log('caught!');
+    $scope.addCategory = function(cat) {
+        $scope.hideCategory = true;
+        $scope.reviewCategory = $scope.allItems[cat];
+        // Sort the list alphabetically
+        $scope.reviewCategory.sort(function(a, b) { 
+            var textA = a.description.toUpperCase();
+            var textB = b.description.toUpperCase();
+            return (textA < textB) ? -1 : (textA > textB) ? 1 : 0;
+        });
+        // Group the list by letter
+        $scope.itemList = [];
+        var i=0;
+        $scope.reviewCategory.forEach(function(food) {
+            if (i === 0) {
+                // This is the first letter
+            }
+            i++;
+        });
     };
 });
 

@@ -1,3 +1,24 @@
+/*
+ * 
+ * 1. Global Styles
+ * 2. Main Screen Specific
+ * 3. Add Items To Inventory
+ * 4. Form input
+ * 5. SAVE Item Animation
+ * 6. DELETE Item Animation
+ * 7. ADD Item to Inventory Animations
+ * 8. Food Icons
+ * 9. Timeline Classes
+ * 10. Settings Classes
+ * 11. Tiled Layout
+ * 12. Standard Utility Classes
+ * 
+ */
+
+
+/* ************************************************* */
+/* 1. Global Styles */
+/* ************************************************* */
 @font-face {
   font-family: 'typicons';
   src: url("typicons/typicons.eot");
@@ -26,13 +47,6 @@ ons-toolbar.navigation-bar div {
     color: #fff;
     font-weight: bold;
 }
-
-/* .item-thum { height: 75px !important; width: 75px !important; } */
-/* .inventory-thum { background: url(images/inventory-thum.png) 50% no-repeat; } */
-/* .recipes { background: url(images/recipes.png) 50% no-repeat; } */
-/* .receipts { background: url(images/receipts.png) 50% no-repeat; } */
-/* .grocery { background: url(images/grocery.png) 50% no-repeat; } */
-
 .toolbar-button, .toolbar-button--outline, .toolbar-button--quiet {
     opacity: .65;
 }
@@ -44,7 +58,7 @@ ons-toolbar.navigation-bar div {
     padding: 10px;
     line-height: 1;
 }
-
+p { color: rgba(255,255,255,.54); }
 .item-thum {
     background-color: #ccc;
     width: 50px;
@@ -120,7 +134,7 @@ label {
 }
 
 /* ************************************************* */
-/* Main Screen Specific */
+/* 2. Main Screen Specific */
 /* ************************************************* */
 ons-toolbar + .page__background + .page__content {
     top:65px;
@@ -152,7 +166,7 @@ ons-toolbar + .page__background + .page__content {
 
 
 /* ************************************************* */
-/* Add Items To Inventory */
+/* 3. Add Items To Inventory */
 /* ************************************************* */
 .addItemCategory {
     width: 20%;
@@ -176,8 +190,9 @@ ons-toolbar + .page__background + .page__content {
     background-size: contain;
 }
 
+
 /* ************************************************* */
-/* Form input */
+/* 4. Form input */
 /* ************************************************* */
 input[type="range"] {
     output: 0;
@@ -260,7 +275,7 @@ ons-col .slider ons-switch, ons-col .slider input, ons-col .slider select, ons-c
 }
 
 /* ************************************************* */
-/* SAVE Item Animation */
+/* 5. SAVE Item Animation */
 /* ************************************************* */
 .saved {
     position: relative;
@@ -276,7 +291,7 @@ ons-col .slider ons-switch, ons-col .slider input, ons-col .slider select, ons-c
 
 
 /* ************************************************* */
-/* DELETE Item Animation */
+/* 6. DELETE Item Animation */
 /* ************************************************* */
 .deleted {
     animation: deletedRotate 550ms ease-in-out forwards,
@@ -331,9 +346,19 @@ ons-col .slider ons-switch, ons-col .slider input, ons-col .slider select, ons-c
     color: rgba(255,255,255,.87);
     font-weight: bold;
 }
+/* ************************************************* */
+/* 7. ADD Item to Inventory Animations */
+/* ************************************************* */
+.hideCategory {
+    max-height: 800px;
+    animation: collapseUp 750ms ease-in forwards,
+    fadeOut 170ms ease-in-out forwards;
+    animation-delay: 0ms, 700ms;
+}
+@keyframes collapseUp { 100% { max-height: 0px;} }
 
 /* ************************************************* */
-/* Food Icons */
+/* 8. Food Icons */
 /* ************************************************* */
 .fI {
     height: 100px;
@@ -349,27 +374,21 @@ ons-col .slider ons-switch, ons-col .slider input, ons-col .slider select, ons-c
 }
 .meat, .turkey {
     background: url(food-icons/turkey.png) bottom center no-repeat;
-    /* background-size: contain; */
 }
 .produce, .tomato {
     background: url(food-icons/tomato.png) bottom center no-repeat;
-    /* background-size: 64% auto !important; */
 }
 .dairy, .cheese {
     background: url(food-icons/cheese.png) bottom center no-repeat;
-    /* background-size: 74% auto !important; */
 }
 .bread {
     background: url(food-icons/bread.png) bottom center no-repeat;
-    /* background-size: 95% auto !important; */
 }
 .other, .bowl {
     background: url(food-icons/bowl.png) bottom center no-repeat;
-    /* background-size: 84% auto !important; */
 }
 .dry {
     background: url(food-icons/wheat.png) bottom center no-repeat;
-    /* background-size: 74% auto !important; */
 }
 .can {
     background: url(food-icons/jar.png) bottom center no-repeat;
@@ -377,13 +396,7 @@ ons-col .slider ons-switch, ons-col .slider input, ons-col .slider select, ons-c
 }
 .instant {
     background: url(food-icons/pizza.png) bottom center no-repeat;
-    /* background-size: 84% auto !important; */
 }
-/* @media screen and (min-width: 530px) { */
-/*     .dry { */
-/*         background-size:  */
-/*     } */
-/* } */
 
 .fI.turkey {
     background: url(food-icons/turkey-alt.png) bottom center no-repeat;
@@ -391,7 +404,7 @@ ons-col .slider ons-switch, ons-col .slider input, ons-col .slider select, ons-c
 
 
 /* ************************************************* */
-/* Timeline Classes */
+/* 9. Timeline Classes */
 /* ************************************************* */
 .reply-notification {
   position: absolute;
@@ -455,7 +468,7 @@ ons-col .slider ons-switch, ons-col .slider input, ons-col .slider select, ons-c
 
 
 /* ************************************************* */
-/* Settings Classes */
+/* 10. Settings Classes */
 /* ************************************************* */
 .profile-wrapper {
   padding: 16px 10px 0 10px;
@@ -505,7 +518,7 @@ ons-col .slider ons-switch, ons-col .slider input, ons-col .slider select, ons-c
 
 
 /* ************************************************* */
-/* Tiled Layout */
+/* 11. Tiled Layout */
 /* ************************************************* */
 .wrap {
     overflow: hidden;
@@ -587,7 +600,7 @@ body.no-touch .boxInner:hover .titleBox, body.touch .boxInner.touchFocus .titleB
 
 
 /* ************************************************* */
-/* Standard Utility Classes */
+/* 12. Standard Utility Classes */
 /* ************************************************* */
 .fade50 { opacity: .5; }
 .primary { color: rgba(128,203,196,.87); }
@@ -658,7 +671,3 @@ body.no-touch .boxInner:hover .titleBox, body.touch .boxInner.touchFocus .titleB
 .col7 { width: 70%; }
 .col8 { width: 80%; }
 .col9 { width: 90%; }
-
-p {
-    color: rgba(255,255,255,.54);
-}
