@@ -543,14 +543,14 @@ sg.controller('AddItemController', function($scope, $data, $http, api) {
             return (textA < textB) ? -1 : (textA > textB) ? 1 : 0;
         });
         // Group the list by letter
-        $scope.itemList = [];
-        var i=0;
+        $scope.itemList = {};
         $scope.reviewCategory.forEach(function(food) {
-            if (i === 0) {
-                // This is the first letter
-            }
-            i++;
+            $scope.itemList[food.description.charAt(0).toUpperCase()] =
+                $scope.itemList[food.description.charAt(0).toUpperCase()] || [];
+            $scope.itemList[food.description.charAt(0).toUpperCase()].push(food);
         });
+        // Bind the organized list to the dom
+        // ($scope.itemList);
     };
 });
 

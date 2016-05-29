@@ -499,9 +499,9 @@
                 </ons-list-item>
             </ons-list>
             <ons-list modifier="inset" class="m-t-10">
-                <ul class="list">
-                    <li class="list__header">A</li>
-                    <li class="list__item">asdf</li>
+                <ul class="list" ng-repeat="(alpha, item) in itemList">
+                    <li class="list__header">{{ alpha }}</li>
+                    <li class="list__item" ng-repeat="row in item">{{ row.description }}</li>
                 </ul>
             </ons-list>
         </ons-page>
