@@ -498,10 +498,16 @@
                     {{ category | categoryTitle }}
                 </ons-list-item>
             </ons-list>
-            <ons-list modifier="inset" class="m-t-10">
+            <p class="text-center m-t-0 m-b-0">{{ categoryTitle }}</p>
+            <ons-list modifier="inset" class="m-t-10" ng-class="{ fadeIn : hideCategory }">
                 <ul class="list" ng-repeat="(alpha, item) in itemList">
                     <li class="list__header">{{ alpha }}</li>
-                    <li class="list__item" ng-repeat="row in item">{{ row.description }}</li>
+                    <li class="list__item" ng-repeat="row in item" ng-click="adjustItemValues = $item">
+                        {{ row.description }}
+                        <div ng-class="{ hide : adjustItemValues == $item }">
+                            adsf
+                        </div>
+                    </li>
                 </ul>
             </ons-list>
         </ons-page>

@@ -512,7 +512,7 @@ sg.controller('DetailController', function($scope, $data, api) {
     $scope.item = $data.selectedItem;
 });
 
-sg.controller('AddItemController', function($scope, $data, $http, api) {
+sg.controller('AddItemController', function($scope, $data, $http, $filter, api) {
     var data = {
         api    : 'inventory',
         method : 'getAllInventoryItems'
@@ -549,8 +549,12 @@ sg.controller('AddItemController', function($scope, $data, $http, api) {
                 $scope.itemList[food.description.charAt(0).toUpperCase()] || [];
             $scope.itemList[food.description.charAt(0).toUpperCase()].push(food);
         });
-        // Bind the organized list to the dom
-        // ($scope.itemList);
+        $scope.categoryTitle = $filter('categoryTitle')(cat);
+    };
+
+    $scope.addItem = function(itm) {
+        console.log(itm);
+        
     };
 });
 
