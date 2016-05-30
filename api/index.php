@@ -177,6 +177,20 @@ case "inventory":
       error_missing_arguments($request);
     }
     break;
+  case "addItem":
+    if ($request['inventory_item_id'] && $request['quantity'] && $request['units'] && $request['expires']
+        && $request['purchase_date'] &&  $request['category']) {
+      //Load Class
+      $class = new receipts();
+      $data = $class->save_item($request['receipt_id'],$request['inventory_item_id'],$request['quantity'],$request['units'],$request['expires'], $request['category'],$request['freezer']);
+
+      //Send JSON Response
+      header('Content-Type: application/json');
+      echo $data;
+    } else {
+      error_missing_arguments($request);
+    }
+    break;
   case "getAllInventoryItems":
     //Load Class
     $class = new inventory();

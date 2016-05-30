@@ -7,7 +7,7 @@
 <!-- 4. Review Receipt -->
 <!-- 5. Recipes -->
 <!-- 6. Recipe -->
-<!-- 7. Add Item To Inventor -->
+<!-- 7. Add Item To Inventory -->
 <!-- ??. General Detail -->
 <!-- ------------------------------------ -->
 <html lang="en" ng-app="app" ng-csp>
@@ -78,62 +78,45 @@
                 <div class="left"><ons-back-button></ons-back-button></div>
                 <div class="center">Inventory</div>
             </ons-toolbar>
-<!-- 'meat','produce','dairy','instant','dry','bread','can','other' -->
             <div class="button-bar" style="margin: 25px auto 7px auto; padding: 0 10px;">
-                <div class="button-bar__item" id="invMeat"
-                     ng-click="switchCatetory('meat')">
-                    <input type="radio" name="navi-segment-a" checked>
+                <div class="button-bar__item" id="invMeat" ng-click="switchCatetory('meat')">
+                    <input type="radio" name="navi-segment-a" ng-checked="resetCategory">
                     <div class="button-bar__button">Meat</div>
-                    <!-- <div class="fI turkey"></div> -->
                 </div>
 
-                <div class="button-bar__item" id="invProduce"
-                     ng-click="switchCatetory('produce')">
+                <div class="button-bar__item" id="invProduce" ng-click="switchCatetory('produce')">
                     <input type="radio" name="navi-segment-a">
                     <div class="button-bar__button">Produce</div>
-                    <!-- <div class="fI tomato"></div> -->
                 </div>
 
-                <div class="button-bar__item" id="invDairy"
-                     ng-click="switchCatetory('dairy')">
+                <div class="button-bar__item" id="invDairy" ng-click="switchCatetory('dairy')">
                     <input type="radio" name="navi-segment-a">
                     <div class="button-bar__button">Dairy</div>
-                    <!-- <div class="fI cheese"></div> -->
                 </div>
 
-                <div class="button-bar__item" id="invPantry"
-                     ng-click="switchCatetory('instant')">
+                <div class="button-bar__item" id="invPantry" ng-click="switchCatetory('instant')">
                     <input type="radio" name="navi-segment-a">
                     <div class="button-bar__button">Instant</div>
-                    <!-- <div class="fI bread"></div> -->
                 </div>
 
-                <div class="button-bar__item" id="invOther"
-                     ng-click="switchCatetory('dry')">
+                <div class="button-bar__item" id="invOther" ng-click="switchCatetory('dry')">
                     <input type="radio" name="navi-segment-a">
                     <div class="button-bar__button">Dry</div>
-                    <!-- <div class="fI bowl"></div> -->
                 </div>
 
-                <div class="button-bar__item" id="invOther"
-                     ng-click="switchCatetory('bread')">
+                <div class="button-bar__item" id="invOther" ng-click="switchCatetory('bread')">
                     <input type="radio" name="navi-segment-a">
                     <div class="button-bar__button">Bread</div>
-                    <!-- <div class="fI bowl"></div> -->
                 </div>
 
-                <div class="button-bar__item" id="invOther"
-                     ng-click="switchCatetory('can')">
+                <div class="button-bar__item" id="invOther" ng-click="switchCatetory('can')">
                     <input type="radio" name="navi-segment-a">
                     <div class="button-bar__button">Can</div>
-                    <!-- <div class="fI bowl"></div> -->
                 </div>
 
-                <div class="button-bar__item" id="invOther"
-                     ng-click="switchCatetory('other')">
+                <div class="button-bar__item" id="invOther" ng-click="switchCatetory('other')">
                     <input type="radio" name="navi-segment-a">
                     <div class="button-bar__button">Other</div>
-                    <!-- <div class="fI bowl"></div> -->
                 </div>
             </div>
             <ons-list style="margin-top: 10px">
@@ -486,8 +469,9 @@
     <ons-template id="addItem.html">
         <ons-page ng-controller="AddItemController">
             <ons-toolbar>
-                <div class="left"><ons-back-button></ons-back-button></div>
+                <div class="left"><ons-back-button ng-click="getInventory();"></ons-back-button></div>
                 <div class="center">Add Food</div>
+                <div class="right m-t-20 m-r-10 primary" ng-class="{ hide : !itemSaveSuccess, fadeInOut : itemSaveSuccess }">SAVED!</div>
             </ons-toolbar>
             <div class="loading" ng-class="{ hide : contentLoaded }"><ons-icon icon="fa-spinner" size="80px" spin="true"></ons-icon></div>
             <p class="text-center p-l-25 p-r-25">What type of food would you like to add to the inventory?</p>
@@ -507,15 +491,13 @@
                               ng-click="showItemValues(true, alpha, $index)">{{ row.description }}</div>
                         <div ng-class="{ hide : adjustItemValues !== alpha + $index }" class="addItemAdjust">
 
-
-
-
+                            <!-- Edit Fields Start -->
                             <ons-list class="m-t-10 m-b-25">
                                 <ons-list-item class="item">
                                     <ons-row>
                                         <ons-col>
-                                            <label>Freezing</label>
-                                            <ons-switch id="freezer" ng-checked="row.freezer == '1'"></ons-switch>
+                                            <label>Freezing<span class="hide">{{ row.freezer = row.freezer == '1' ? true : false; }}</span></label>
+                                            <ons-switch id="freezer_{{ alpha + $index }}" ng-model="row.freezer"></ons-switch>
                                         </ons-col>
                                     </ons-row>
                                     <ons-row>
@@ -575,12 +557,11 @@
                                 <ons-list-item class="item">
                                     <ons-row>
                                         <ons-col>
-                                            <!-- <button class="button pull-right button--outline" ng-disabled="processingItem" ng-click="saveItem(receipt)"> -->
-                                            <!--     <ons-icon icon="fa-floppy-o" size="15px" ng-if="!processingItem" -->
-                                            <!--               fixed-width="false"></ons-icon> -->
-                                            <!--     <ons-icon icon="fa-spinner fa-spin" size="15px" ng-if="processingItem" fixed-width="false"></ons-icon> -->
-                                            <!--     <span class="m-l-5">Save</span> -->
-                                            <!-- </button> -->
+                                            <button class="button pull-right button--outline" ng-disabled="processingItem" ng-click="addItemToInventory(row, 'freezer_' + alpha + $index)">
+                                                <ons-icon icon="fa-floppy-o" size="15px" ng-if="!processingItem" fixed-width="false"></ons-icon>
+                                                <ons-icon icon="fa-spinner fa-spin" size="15px" ng-if="processingItem" fixed-width="false"></ons-icon>
+                                                <span class="m-l-5">Save</span>
+                                            </button>
                                             <button class="button button--quiet warning pull-left"
                                                     ng-click="showItemValues(false);">
                                                 <ons-icon icon="fa-ban" size="15px" fixed-width="false" style=""></ons-icon>
@@ -590,9 +571,7 @@
                                     </ons-row>
                                 </ons-list-item>
                             </ons-list>
-
-
-
+                            <!-- Edit Fields Stop -->
                             
                         </div>
                     </li>

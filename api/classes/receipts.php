@@ -130,9 +130,9 @@ class receipts {
 
   public function add_new_item($id, $inventory_item_id, $quantity, $units, $expires, $category, $freezer) {
     $expiresDate = new DateTime($expires);
-    $updateQry = "INSERT INTO inventory (receipt_id, inventory_item_id, quantity, units, purchase_date, expires, cooked, expired, category, freezer)
-       SELECT receipt_id, '$inventory_item_id', '$quantity', '$units', CURDATE(), '" . $expiresDate->format('Y-m-d') . "', 0, 0, '$category', '$freezer' FROM receipt_items_ref
-       WHERE id = $id;";
+    $updateQry = "INSERT INTO inventory (receipt_id, inventory_item_id, quantity, units, purchase_date, expires, cooked, expired, category, freezer)";
+    $updateQry .= $id != 0 ? "SELECT receipt_id, '$inventory_item_id', '$quantity', '$units', CURDATE(), '" . $expiresDate->format('Y-m-d') . "', 0, 0, '$category', '$freezer' FROM receipt_items_ref WHERE id = $id;" :
+      "VALUES ('$id', '$inventory_item_id', '$quantity', '$units', CURDATE(), '" . $expiresDate->format('Y-m-d') . "', 0, 0, '$category', '$freezer')";
     return $this->gdao->queryExec($updateQry);
   }
 

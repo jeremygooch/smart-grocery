@@ -46,8 +46,8 @@ class inventory {
     if ($res) {
       for ($i=0; $i< count($res); $i++) {
         $date = new DateTime();
+        $res[$i]['purchase_date'] = $date->format('Y-m-d');
         $date->modify('+' . $res[$i]['shelf_life'] . ' days');
-
         
         $res[$i]['expiresOn'] = $date->format('Y-m-d');
         $res[$i]['exp'] = array('month'=>$date->format('m'),'day'=>$date->format('d'),'year'=>$date->format('Y'));

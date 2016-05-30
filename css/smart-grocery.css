@@ -312,6 +312,12 @@ ons-col .slider ons-switch, ons-col .slider input, ons-col .slider select, ons-c
     opacity: 0;
     animation: fadeIn 200ms ease-in-out forwards;
 }
+.fadeInOut {
+    opacity: 0;
+    animation: fadeIn 200ms ease-in-out forwards,
+    fadeOut 250ms ease-in-out forwards;
+    animation-delay: 0ms, 1500ms;
+}
 
 @keyframes fadeIn { 100% { opacity: 1;} }
 @keyframes fadeOut { 100% { opacity: 0;} }
@@ -603,7 +609,7 @@ body.no-touch .boxInner:hover .titleBox, body.touch .boxInner.touchFocus .titleB
 /* 12. Standard Utility Classes */
 /* ************************************************* */
 .fade50 { opacity: .5; }
-.primary { color: rgba(128,203,196,.87); }
+.primary { color: rgba(128,203,196,.87) !important; }
 .strong { font-weight: bold; }
 .danger { color: #D6852C; }
 .warning { color: #c58505; }

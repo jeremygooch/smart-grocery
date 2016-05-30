@@ -20,30 +20,11 @@ sg.controller('InventoryController', function($scope, $filter, $data, $http, api
 
     $scope.inventory = {};
     $scope.selectedItems = [];
+    $scope.resetCategory = true;
 
     $scope.contentLoaded = false;
-    var data = {
-        api    : 'inventory',
-        method : 'getInventoryItems'
-    };
-
-    $scope.getInventory = function(e) {
-        $http.post('api/index.php', data).then(
-            function(res) {
-                if (res.data.code == 200) {
-                    $scope.inventory = res.data.data;
-                    $scope.curList = $scope.inventory.meat || [];
-                    $scope.switchCatetory = function(cat) {
-                        $scope.selectedItems.length = 0; // Uncheck the checkboxes
-                        $scope.curList = $scope.inventory[cat] || [];
-                    };
-                }
-            },
-            function(error) {
-                console.dir(error);
-            }).finally(function() { $scope.contentLoaded = true; });
-    };
-    $scope.getInventory();
+    
+    $scope.getInventory(function() { $scope.contentLoaded = true; });
 
     $scope.showActions = function(e) {
         if (e.target.checked) {
@@ -548,15 +529,16 @@ sg.controller('DetailController', function($scope, $data, api) {
  * 7. Add Item Controller
  ******************************************************************** */
 sg.controller('AddItemController', function($scope, $data, $http, $filter, api) {
+    $scope.getAllReceipts(); // Get the receipts so we get the units returned as well
+
     var data = {
         api    : 'inventory',
         method : 'getAllInventoryItems'
     };
-    $scope.getAllReceipts(); // Get the receipts so we get the units returned as well
     $http.post('api/index.php', data).then(
         function(res) {
-            console.log(res);
             if (res.data.code == 200) {
+                // res.data.data
                 $scope.allItems = res.data.data;
                 $scope.categories = [];
                 Object.keys(res.data.data).forEach(function(category) {
@@ -586,13 +568,46 @@ sg.controller('AddItemController', function($scope, $data, $http, $filter, api) 
         });
         $scope.categoryTitle = $filter('categoryTitle')(cat);
     };
-    // $scope.adjustItemValues = '';
+
     $scope.showItemValues = function(show, alpha, i) {
         if (show){
             $scope.adjustItemValues = alpha + i;
         } else {
             $scope.adjustItemValues = undefined;
         }
+    };
+
+    $scope.addItemToInventory = function(itm, freezer_id) {
+        // The freezer_id parameter needs to be passed so that the ons-switch value can be pulled using
+        // the standard document methods instead of angular's data binding
+        $scope.processingItem = true;
+        var data = {
+            api: 'inventory',
+            method: 'addItem',
+            receipt_id: 0,
+            inventory_item_id: itm.id,
+            quantity: itm.quantity || 1,
+            units: itm.units,
+            purchase_date: itm.purchase_date,
+            expires: itm.exp.year + '-' + itm.exp.month + '-' + itm.exp.day,
+            expired: 0,
+            category: itm.category,
+            freezer: itm.freezer ? 1 : 0
+        };
+
+        $http.post('api/index.php', data).then(
+            function(res) {
+                if (res.data.code == 200) {
+                    $scope.showItemValues(false);
+                    $scope.itemSaveSuccess = true;
+                    setTimeout(function() {
+                        $scope.itemSaveSuccess = false;
+                    }, 2000);
+                }
+            },
+            function(error) {
+                console.dir(error);
+            }).finally(function() { $scope.processingItem = false; });
     };
 });
 
@@ -657,6 +672,27 @@ sg.controller('AppController', function ($scope, $data, $http, api) {
     // Detect scroll height for sizing the topbar
     $scope.showMore = function() {
         console.log('show more triggered');  
+    };
+
+    $scope.getInventory = function(cb) {
+        var data = {
+            api    : 'inventory',
+            method : 'getInventoryItems'
+        };
+        $http.post('api/index.php', data).then(
+            function(res) {
+                if (res.data.code == 200) {
+                    $scope.inventory = res.data.data;
+                    $scope.curList = $scope.inventory.meat || [];
+                    $scope.switchCatetory = function(cat) {
+                        $scope.selectedItems = [];
+                        $scope.curList = $scope.inventory[cat] || [];
+                    };
+                }
+            },
+            function(error) {
+                console.dir(error);
+            }).finally(function() { resetCategory = true; if (typeof cb === 'function') { cb(); } });
     };
     
     $scope.doSomething = function() {
