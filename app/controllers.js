@@ -1,3 +1,20 @@
+/*
+ *
+ * 1. Inventory Controller
+ * 2. Recipes Controller
+ * 3. Recipe Controller
+ * 4. Receipts Controller
+ * 5. Review Receipt Controller
+ * 6. Detail Controller
+ * 7. Add Item Controller
+ * 8. Main Screen Controller
+ * 9. App Controller (Main controller wrapping entire app)
+ *
+ */
+
+/* ******************************************************************
+ * 1. Inventory Controller
+ ******************************************************************** */
 sg.controller('InventoryController', function($scope, $filter, $data, $http, api) {
     $scope.item = $data.selectedItem;
 
@@ -217,6 +234,9 @@ sg.controller('InventoryController', function($scope, $filter, $data, $http, api
     };
 });
 
+/* ******************************************************************
+ * 2. Recipes Controller
+ ******************************************************************** */
 sg.controller('recipesController', function($scope, $recipe, api) {
     $scope.contentLoaded = false;
     // Load the recipes initially
@@ -266,6 +286,9 @@ sg.controller('recipesController', function($scope, $recipe, api) {
     };
 });
 
+/* ******************************************************************
+ * 3. Recipe Controller
+ ******************************************************************** */
 sg.controller('recipeController', function($scope, $sce, $recipe, api) {
     $scope.contentLoaded = false;
     var recipe = $recipe.getRecipe();
@@ -277,6 +300,9 @@ sg.controller('recipeController', function($scope, $sce, $recipe, api) {
     $scope.recipe_url = $sce.trustAsResourceUrl($scope.recipe.source_url);
 });
 
+/* ******************************************************************
+ * 4. Receipts Controller
+ ******************************************************************** */
 sg.controller('ReceiptsController', function($scope, $data, $timeout, $http, api) {
     $scope.item = $data.selectedItem;
     // Set the loading animation
@@ -343,6 +369,9 @@ sg.controller('ReceiptsController', function($scope, $data, $timeout, $http, api
     }
 });
 
+/* ******************************************************************
+ * 5. Review Receipt Controller
+ ******************************************************************** */
 sg.controller('ReviewReceiptController', function($scope, $data, $timeout, api) {
     // Set the loading animation
     $scope.contentLoaded = false;
@@ -508,15 +537,22 @@ sg.controller('ReviewReceiptController', function($scope, $data, $timeout, api) 
 
 
 
+/* ******************************************************************
+ * 6. Detail Controller
+ ******************************************************************** */
 sg.controller('DetailController', function($scope, $data, api) {
     $scope.item = $data.selectedItem;
 });
 
+/* ******************************************************************
+ * 7. Add Item Controller
+ ******************************************************************** */
 sg.controller('AddItemController', function($scope, $data, $http, $filter, api) {
     var data = {
         api    : 'inventory',
         method : 'getAllInventoryItems'
     };
+    $scope.getAllReceipts(); // Get the receipts so we get the units returned as well
     $http.post('api/index.php', data).then(
         function(res) {
             console.log(res);
@@ -526,7 +562,6 @@ sg.controller('AddItemController', function($scope, $data, $http, $filter, api) 
                 Object.keys(res.data.data).forEach(function(category) {
                     $scope.categories.push(category);
                 });
-                console.log($scope.categories);
             }
         },
         function(error) {
@@ -551,14 +586,20 @@ sg.controller('AddItemController', function($scope, $data, $http, $filter, api) 
         });
         $scope.categoryTitle = $filter('categoryTitle')(cat);
     };
-
-    $scope.addItem = function(itm) {
-        console.log(itm);
-        
+    // $scope.adjustItemValues = '';
+    $scope.showItemValues = function(show, alpha, i) {
+        if (show){
+            $scope.adjustItemValues = alpha + i;
+        } else {
+            $scope.adjustItemValues = undefined;
+        }
     };
 });
 
 
+/* ******************************************************************
+ * 8. Main Screen Controller
+ ******************************************************************** */
 sg.controller('MainScreenController', function($scope, $data, $interval, api) {
     // Initial Page setup
     $scope.items = $data.items;
@@ -609,7 +650,9 @@ sg.controller('MainScreenController', function($scope, $data, $interval, api) {
 });
 
 
-// Main controller wrapping entire app
+/* ******************************************************************
+ * 9. App Controller
+ ******************************************************************** */
 sg.controller('AppController', function ($scope, $data, $http, api) {
     // Detect scroll height for sizing the topbar
     $scope.showMore = function() {

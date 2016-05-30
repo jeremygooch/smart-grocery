@@ -604,6 +604,7 @@ body.no-touch .boxInner:hover .titleBox, body.touch .boxInner.touchFocus .titleB
 /* ************************************************* */
 .fade50 { opacity: .5; }
 .primary { color: rgba(128,203,196,.87); }
+.strong { font-weight: bold; }
 .danger { color: #D6852C; }
 .warning { color: #c58505; }
 .text-center { text-align: center; }

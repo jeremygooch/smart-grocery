@@ -50,6 +50,7 @@ class inventory {
 
         
         $res[$i]['expiresOn'] = $date->format('Y-m-d');
+        $res[$i]['exp'] = array('month'=>$date->format('m'),'day'=>$date->format('d'),'year'=>$date->format('Y'));
         // Categorize this item accordingly
         array_push($output[$res[$i]['category']], $res[$i]);
       }

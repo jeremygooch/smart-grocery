@@ -502,10 +502,98 @@
             <ons-list modifier="inset" class="m-t-10" ng-class="{ fadeIn : hideCategory }">
                 <ul class="list" ng-repeat="(alpha, item) in itemList">
                     <li class="list__header">{{ alpha }}</li>
-                    <li class="list__item" ng-repeat="row in item" ng-click="adjustItemValues = $item">
-                        {{ row.description }}
-                        <div ng-class="{ hide : adjustItemValues == $item }">
-                            adsf
+                    <li class="list__item" ng-repeat="row in item">
+                        <div ng-class="{ 'primary strong' : adjustItemValues === alpha + $index , fade50 : adjustItemValues !== undefined && adjustItemValues !== alpha + $index }"
+                              ng-click="showItemValues(true, alpha, $index)">{{ row.description }}</div>
+                        <div ng-class="{ hide : adjustItemValues !== alpha + $index }" class="addItemAdjust">
+
+
+
+
+                            <ons-list class="m-t-10 m-b-25">
+                                <ons-list-item class="item">
+                                    <ons-row>
+                                        <ons-col>
+                                            <label>Freezing</label>
+                                            <ons-switch id="freezer" ng-checked="row.freezer == '1'"></ons-switch>
+                                        </ons-col>
+                                    </ons-row>
+                                    <ons-row>
+                                        <ons-col>
+                                            <div class="slider" ng-class="{'closed' : row.freezer == '1'}">
+                                                <label for="itemExpMo" ng-class="{'fade50' : row.freezer == '1'}">Expires: </label>
+                                                <div class="expDate" ng-class="{'fade50' : row.freezer == '1'}">
+                                                    {{ row.exp.month | monthToString }} {{ row.exp.day }},
+                                                    {{ row.exp.year }}</div>
+                                                <div class="clearfix"></div>
+                                                <label for="expMonth" class="text-right" ng-class="{'fade50' : row.freezer == '1'}">
+                                                    <em>Month</em>
+                                                </label>
+                                                <input id="expMonth" type="range" class="range" min="1" max="12"
+                                                       ng-model="row.exp.month" ng-disabled="receipt.freezer == '1'"
+                                                       value="{{ row.exp.month }}">
+                                                <div class="clearfix"></div>
+                                                <label for="expDay" class="text-right" ng-class="{'fade50' : row.freezer == '1'}">
+                                                    <em>Day</em>
+                                                </label>
+                                                <input id="expDay" type="range" class="range" min="1" max="31"
+                                                       ng-model="row.exp.day" ng-disabled="row.freezer == '1'"
+                                                       value="{{ row.exp.day }}">
+                                                <div class="clearfix"></div>
+                                                <label for="expYear" class="text-right" ng-class="{'fade50' : row.freezer == '1'}">
+                                                    <em>Year</em>
+                                                </label>
+                                                <input id="expYear" type="range" class="range" min="{{ currentYear }}"
+                                                       max="{{ currentYear +5 }}" ng-model="row.exp.year"
+                                                       ng-disabled="row.freezer == '1'" value="{{ row.exp.year }}">
+                                                <div class="clearfix"></div>
+                                            </div>
+                                        </ons-col>
+                                    </ons-row>
+                                </ons-list-item>
+                                <ons-list-item class="item">
+                                    <ons-row>
+                                        <ons-col>
+                                            <label for="itemQuantity">Quantity ({{ row.quantity || 1 }}): </label>
+                                            <input type="range" class="range" min="1" max="10" ng-model="row.quantity">
+                                        </ons-col>
+                                    </ons-row>
+                                </ons-list-item>
+                                <ons-list-item class="item">
+                                    <ons-row>
+                                        <ons-col>
+                                            <label for="itemUnits">Units: </label>
+                                            <div class="select-style">
+                                                <select>
+                                                    <option ng-repeat="unit in units"
+                                                            ng-selected="row.units == unit">{{ unit }}</option>
+                                                </select>
+                                            </div>
+                                        </ons-col>
+                                    </ons-row>
+                                </ons-list-item>
+                                <ons-list-item class="item">
+                                    <ons-row>
+                                        <ons-col>
+                                            <!-- <button class="button pull-right button--outline" ng-disabled="processingItem" ng-click="saveItem(receipt)"> -->
+                                            <!--     <ons-icon icon="fa-floppy-o" size="15px" ng-if="!processingItem" -->
+                                            <!--               fixed-width="false"></ons-icon> -->
+                                            <!--     <ons-icon icon="fa-spinner fa-spin" size="15px" ng-if="processingItem" fixed-width="false"></ons-icon> -->
+                                            <!--     <span class="m-l-5">Save</span> -->
+                                            <!-- </button> -->
+                                            <button class="button button--quiet warning pull-left"
+                                                    ng-click="showItemValues(false);">
+                                                <ons-icon icon="fa-ban" size="15px" fixed-width="false" style=""></ons-icon>
+                                                <span class="m-r-5">Cancel</span>
+                                            </button>
+                                        </ons-col>
+                                    </ons-row>
+                                </ons-list-item>
+                            </ons-list>
+
+
+
+                            
                         </div>
                     </li>
                 </ul>
