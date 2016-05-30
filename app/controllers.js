@@ -681,6 +681,7 @@ sg.controller('AppController', function ($scope, $data, $http, api) {
         };
         $http.post('api/index.php', data).then(
             function(res) {
+                console.log(res);
                 if (res.data.code == 200) {
                     $scope.inventory = res.data.data;
                     $scope.curList = $scope.inventory.meat || [];
