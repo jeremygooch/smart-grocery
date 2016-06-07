@@ -1,7 +1,9 @@
 /*
  * 
  * 1. Global Styles
- * 2. Main Screen Specific
+ * 2. Page Specific
+      -- Main Screen Specific
+      -- Login Screen Specific
  * 3. Add Items To Inventory
  * 4. Form input
  * 5. SAVE Item Animation
@@ -69,7 +71,7 @@ p { color: rgba(255,255,255,.54); }
 .item-title {
     font-size: 15px;
     font-weight: 500;
-    color: rgba(255,255,255,0.54);
+    color: rgba(255,255,255,0.87);
 }
 
 .item-desc {
@@ -91,7 +93,7 @@ p { color: rgba(255,255,255,.54); }
     line-height: 24px;
 }
 .button--outline {
-    background-color: rgba(128,203,196,0.54);
+    background-color: rgba(128,203,196,0.87);
     border: 0px;
     color: rgba(255,255,255,.87);
     text-transform: uppercase;
@@ -134,8 +136,9 @@ label {
 }
 
 /* ************************************************* */
-/* 2. Main Screen Specific */
+/* 2. Page Specific */
 /* ************************************************* */
+/* =============== Main Screen Specific =============== */
 ons-toolbar + .page__background + .page__content {
     top:65px;
 }
@@ -161,7 +164,15 @@ ons-toolbar + .page__background + .page__content {
 }
 
 .main-screen .item-title {
-    font-size: 20px;
+    font-size: 21px;
+    font-weight: bold;
+}
+
+/* =============== Login Screen Specific =============== */
+[ng-controller="loginController"] .page__content.ons-page-inner {
+    background: url(images/biscuits.jpg) 50% no-repeat !important;
+    background-size: cover !important;
+    padding-top: 40%;
 }
 
 

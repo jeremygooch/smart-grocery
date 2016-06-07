@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <!-- CSP support mode (required for Windows Universal apps): https://docs.angularjs.org/api/ng/directive/ngCsp -->
 <!-- ------------------------------------ -->
+<!-- 0. Login -->
 <!-- 1. Main Screen -->
 <!-- 2. Inventory -->
 <!-- 3. Receipts -->
@@ -46,9 +47,40 @@
 <body ng-controller="AppController">
 
     <!-- ----------------------------------------- -->
+    <!-- 0. LOGIN -->
+    <!-- ----------------------------------------- -->
+    <ons-navigator var="navi" page="login.html"></ons-navigator>
+    <ons-template id="login.html">
+        <ons-page ng-controller="loginController">
+            <ons-toolbar>
+                <div class="center">Please Sign In</div>
+            </ons-toolbar>
+
+            <div style="text-align: center; margin-top: 30px;">
+                Username: <input type="text" class="text-input--underbar" ng-model="username" value="">
+            </div>
+
+            <div style="text-align: center; margin-top: 30px;">
+                Password: <input type="password" class="text-input--underbar" ng-model="password" value="" />
+            </div>  
+
+            <div style="text-align: center;margin-top: 30px;">
+                <ons-button ng-click="checkLogin()" class="button button--outline"
+                            ng-disabled="!username || !password">
+                    <ons-icon icon="fa-sign-in" size="15px" fixed-width="false"></ons-icon>
+                    Sign In 
+                </ons-button>
+            </div>
+        </ons-page>
+    </ons-template>
+
+
+
+    
+    <!-- ----------------------------------------- -->
     <!-- 1. MAIN SCREEN -->
     <!-- ----------------------------------------- -->
-    <ons-navigator var="navi">
+    <ons-template id="main.html">
         <ons-page>
             <ons-toolbar><div class="center">Smart Grocery</div></ons-toolbar>
             <ons-list ng-controller="MainScreenController" class="main-screen">
@@ -66,8 +98,9 @@
                 </ons-list-item>
             </ons-list>
         </ons-page>
-    </ons-navigator>
+    </ons-template>
 
+    
     <!-- ----------------------------------------- -->
     <!-- 2. INVENTORY -->
     <!-- ----------------------------------------- -->
@@ -282,7 +315,7 @@
             <ons-row ng-class="{ hide : !receipt }" class="m-t-10">
                 <ons-col>
                     <ons-icon icon="fa-chevron-left" size="35px"
-                              class="reviewProgress" ng-click="changeReceipt('back')"
+                              class="reviewProgress m-l-10" ng-click="changeReceipt('back')"
                               fixed-width="false"
                               style="float: left; padding-top: 10px; color: #889460; z-index: 1; font-size: 35px; opacity: {{ prevReceipts ? '1' : '.25'}}"></ons-icon>
                 </ons-col>
@@ -295,7 +328,7 @@
 
                 <ons-col>
                     <ons-icon icon="fa-chevron-right" size="35px"
-                              class="reviewProgress" ng-click="changeReceipt('next')"
+                              class="reviewProgress m-r-10" ng-click="changeReceipt('next')"
                               fixed-width="false"
                               style="float: right; padding-top: 10px; color: #889460; z-index: 1; font-size: 35px; opacity: {{ nextReceipts ? '1' : '.25'}}"></ons-icon>
                 </ons-col>
@@ -579,6 +612,8 @@
             </ons-list>
         </ons-page>
     </ons-template>
+
+
     <!-- ----------------------------------------- -->
     <!-- ??. GENERAL DETAIL -->
     <!-- ----------------------------------------- -->

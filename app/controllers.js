@@ -8,7 +8,8 @@
  * 6. Detail Controller
  * 7. Add Item Controller
  * 8. Main Screen Controller
- * 9. App Controller (Main controller wrapping entire app)
+ * 9. Login Controller
+ * 10. App Controller (Main controller wrapping entire app)
  *
  */
 
@@ -616,6 +617,10 @@ sg.controller('AddItemController', function($scope, $data, $http, $filter, api) 
  * 8. Main Screen Controller
  ******************************************************************** */
 sg.controller('MainScreenController', function($scope, $data, $interval, api) {
+    $scope.goToLogin = function() {
+        $scope.navi.pushPage('login.html', {title : ''});
+    };
+    
     // Initial Page setup
     $scope.items = $data.items;
     $scope.loadView = function(index) {
@@ -666,7 +671,58 @@ sg.controller('MainScreenController', function($scope, $data, $interval, api) {
 
 
 /* ******************************************************************
- * 9. App Controller
+ * 9. Login Controller
+ ******************************************************************** */
+sg.controller('loginController', function($scope, $http) {
+
+    $scope.checkLogin = function() {
+        if(checkLogin()) {
+            openProtectedPage();
+        }
+    };
+
+    function openProtectedPage() {
+        navi.pushPage('main.html');    
+    }
+// switch($request['api']){
+//   // Methods
+// case "authenticate":
+//   switch($request['method']){
+//   case "signIn":
+
+    function checkLogin() {
+        var data = {
+            api: 'authenticate',
+            method: 'signIn',
+            username: $scope.username,
+            password: $scope.password
+        };
+        $http.post('api/index.php', data).then(
+            function(res) {
+                if (res.data.code == 200) {
+                    return true;
+                } else {
+                    return false;
+                }
+            },
+            function(error) {
+                console.dir(error);
+                return false;
+            }).finally(function() { resetCategory = true; if (typeof cb === 'function') { cb(); } });
+
+
+
+        
+        //temporariry return true;
+        // please write your own logic to detect user login;
+        // return true;
+    }
+});
+
+
+
+/* ******************************************************************
+ * 10. App Controller
  ******************************************************************** */
 sg.controller('AppController', function ($scope, $data, $http, api) {
     // Detect scroll height for sizing the topbar

@@ -39,6 +39,34 @@ if(empty($request['api'])){
 //----- START ----- API Controller -----//
 switch($request['api']){
   // Methods
+case "authenticate":
+  switch($request['method']){
+  case "signIn":
+    if ($request['username'] && $request['password']) {
+      //Load Class
+      $class = new authenticate();
+      $data = $class->sign_in($request['username'], $request['password']);
+
+      //Send JSON Response
+      header('Content-Type: application/json');
+      echo $data;
+    } else {
+      error_missing_arguments($request);
+    }
+    break;
+  case "signOut":
+    //Load Class
+    $DAO->admin_login($request);
+
+    //Send JSON Response
+    header('Content-Type: application/json');
+    echo $data;
+    break;
+  default:
+    //
+    break;
+  }
+  break;
 case "receipts":
   switch($request['method']){
   case "getNewReceipts":
