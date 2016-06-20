@@ -675,20 +675,11 @@ sg.controller('MainScreenController', function($scope, $data, $interval, api) {
  ******************************************************************** */
 sg.controller('loginController', function($scope, $http) {
 
-    $scope.checkLogin = function() {
-        if(checkLogin()) {
-            openProtectedPage();
-        }
-    };
+    $scope.checkLogin = function() { checkLogin() };
 
     function openProtectedPage() {
         navi.pushPage('main.html');    
     }
-// switch($request['api']){
-//   // Methods
-// case "authenticate":
-//   switch($request['method']){
-//   case "signIn":
 
     function checkLogin() {
         var data = {
@@ -700,6 +691,7 @@ sg.controller('loginController', function($scope, $http) {
         $http.post('api/index.php', data).then(
             function(res) {
                 if (res.data.code == 200) {
+                    openProtectedPage();
                     return true;
                 } else {
                     return false;
@@ -710,12 +702,6 @@ sg.controller('loginController', function($scope, $http) {
                 return false;
             }).finally(function() { resetCategory = true; if (typeof cb === 'function') { cb(); } });
 
-
-
-        
-        //temporariry return true;
-        // please write your own logic to detect user login;
-        // return true;
     }
 });
 
