@@ -22,7 +22,7 @@ class authenticate {
 
     //Prepare Response and setup session data
     if($res){
-      /* $this->admin_session_setup($args[email]); */
+      setcookie('loggedIn', true, time()+60*60*24*365, '/', $_SERVER['SERVER_NAME']);
       $res = array('code' => '200', 'message' => 'Success');
     }else{$res = array('code' => '401', 'message' => 'Unauthorized');}
     error_log(print_r($res,1));

@@ -674,12 +674,13 @@ sg.controller('MainScreenController', function($scope, $data, $interval, api) {
  * 9. Login Controller
  ******************************************************************** */
 sg.controller('loginController', function($scope, $http) {
-
     $scope.checkLogin = function() { checkLogin() };
 
     function openProtectedPage() {
         navi.pushPage('main.html');    
     }
+
+    if (loggedIn) { openProtectedPage(); }
 
     function checkLogin() {
         var data = {

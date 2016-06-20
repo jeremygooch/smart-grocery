@@ -663,6 +663,19 @@
 
 
 
-    
+<script type="text/javascript">
+    <?php
+         $loggedIn = 'var loggedIn = ';
+         if (isset($_COOKIE['loggedIn'])) {
+           if ($_COOKIE['loggedIn'] == true) {
+             $loggedIn .= 'true';
+           } else {
+             $loggedIn .= 'false';
+           }
+         } else { $loggedIn .= 'false'; }
+         
+         echo $loggedIn;
+         ?>
+</script>    
 </body>
 </html>
