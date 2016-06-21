@@ -1,4 +1,5 @@
-# Smart Grocery 
+# Smart Grocery
+For a working demo see an example [here](http://162.243.20.205/). You can login using 'demo' for both the username and password. Please note this application is intended to be run as a web based application on a [raspberry pi](https://www.raspberrypi.org/) with a 7" touchscreen. An [optional swivel](http://smarticase.com/products/smartipi-touch) can be attached so the device can be mounted in the kitchen. 
 
 ## Setting up the OCR Server
 
